@@ -6,7 +6,8 @@ import Auth from "../../utils/auth.js";
 
 function Register() {
   const [formState, setFormState] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
@@ -36,8 +37,14 @@ function Register() {
       <form onSubmit={handleFormSubmit}>
         <input
           type="text"
-          name="name"
-          value={formState.name}
+          name="first_name"
+          value={formState.first_name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="last_name"
+          value={formState.last_name}
           onChange={handleInputChange}
         />
         <input

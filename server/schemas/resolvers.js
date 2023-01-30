@@ -1,14 +1,22 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User } = require("../models");
+const { User, Pet, Matches } = require("../models");
 const { signToken } = require("../utils/auth.js");
 
 const resolvers = {
   Query: {
-    me: async (parent, args, context) => {
+    user: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError("You need to be logged in!");
+    },
+    pets: async (parent, args, context) => {
+      if (context.user.pets) {
+        return Pets.find();
+      }
+    },
+    pet: async (parent, { _id }) => {
+      return await Pet.findById(_id).populate();
     },
   },
   Mutation: {
@@ -32,6 +40,14 @@ const resolvers = {
 
       const token = signToken(user);
       return { token, user };
+    },
+    addPet: async (parent, { name, species, birthday, pictures }) => {
+      const pet = await Pet.create({ name, species, birthday, pictures });
+      return { pet };
+    },
+    addMatch: async (parent, { pet1, pet2 }) => {
+      const match = await Matches.create({ pet1, pet2 });
+      return { match };
     },
   },
 };
