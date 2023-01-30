@@ -3,7 +3,12 @@ const bcrypt = require("bcrypt");
 const Pet = require("./Pet.js");
 
 const userSchema = new Schema({
-  name: {
+  first_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  last_name: {
     type: String,
     required: true,
     trim: true,
