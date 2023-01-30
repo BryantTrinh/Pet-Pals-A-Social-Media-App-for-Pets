@@ -11,6 +11,6 @@ const matchesSchema = new Schema({
   },
 });
 
-const Matches = mongoose.model("Matches", matchesSchema);
+const Matches = model("Matches", matchesSchema);
 
 module.exports = Matches;
