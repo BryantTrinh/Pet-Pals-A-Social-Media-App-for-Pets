@@ -37,7 +37,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl" >
+      <Container maxWidth="xl" sx={{ backgroundColor: '#405C96' }}>
         <Toolbar disableGutters>
           <PetsIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
