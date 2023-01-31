@@ -42,8 +42,13 @@ const typeDefs = gql`
       location: String!
     ): Auth
     login(email: String!, password: String!): Auth
-    addPet(name: String!, species: String!, birthday: Date!, pictures: String!): Auth
-    addMatch(pet1: String!, pet2: String!)
+    addPet(
+      name: String!
+      species: String!
+      birthday: Date!
+      pictures: String!
+    ): Auth
+    addMatch(pet1: String!, pet2: String!): Auth
   }
 `;
 

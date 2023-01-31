@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
+import { Button } from "@mui/material";
 
 const LOGOUT = gql`
 	mutation Logout {
@@ -14,7 +15,7 @@ function LogoutForm() {
 
 	useEffect(() => {
 		if (data) {
-			localStorage.removeItem("token");
+			AuthService.logout();
 			setIsLoggedOut(true);
 		}
 	}, [data]);
@@ -29,9 +30,20 @@ function LogoutForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<button type="submit">Log Out</button>
-		</form>
+		<Button variant="outlined"
+			sx={{
+				color: "white",
+				borderColor: "white",
+				ml: "20px",
+				"&:hover": {
+					color: "#DE4567",
+					borderColor: "#DE4567",
+				}
+			}}
+
+		>
+			Logout
+		</Button>
 	);
 }
 
