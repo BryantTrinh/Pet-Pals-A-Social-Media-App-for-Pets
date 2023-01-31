@@ -12,7 +12,7 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user.pets) {
-        return Pets.find();
+        return Pet.find();
       }
     },
     pet: async (parent, { _id }) => {
