@@ -45,8 +45,17 @@ const resolvers = {
     },
   },
   Mutation: {
-    register: async (parent, { name, email, password, location }) => {
-      const user = await User.create({ name, email, password, location });
+    register: async (
+      parent,
+      { first_name, last_name, email, password, location }
+    ) => {
+      const user = await User.create({
+        first_name,
+        last_name,
+        email,
+        password,
+        location,
+      });
       const token = signToken(user);
       return { token, user };
     },
@@ -70,11 +79,11 @@ const resolvers = {
       if (context.user) {
         const pet = await Pet.create({ name, species, birthday, pictures });
         const updatedUserPets = await User.findByIdAndUpdate(
-          { _id: context.user.id },
+          { _id: context.user._id },
           { $push: { pets: pet } },
           { new: true }
         );
-        return { pet, updatedUserPets };
+        return pet;
       }
       throw new AuthenticationError("Please login to add a pet.");
     },

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const http = require("http");
 const io = require("socket.io");
 const express = require("express");
