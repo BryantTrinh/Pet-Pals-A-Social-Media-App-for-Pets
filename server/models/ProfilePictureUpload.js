@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import { GraphQLUpload } from 'graphql-upload';
 const express = require('express');
 // multer is a dependency that will store the image as binary data
 const multer = require('multer');
@@ -22,6 +24,8 @@ const upload = multer({
       "video/webm",
       "video/ogg"
     ];
+    // convert the files into a format GraphQL can understand
+    const convertedFiles = files.map((file) => GraphQLUpload.convertFile(file));
     if (!allowedTypes.includes(file.mimetype)) {
       const error = new Error("Invalid file type");
       error.code = "INVALID_FILE_TYPE";
