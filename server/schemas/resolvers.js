@@ -1,6 +1,17 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { User, Pet, Matches } = require("../models");
 const { signToken } = require("../utils/auth.js");
+const { GraphQLScalarType } = require("graphql");
+
+const dateResolver = new GraphQLScalarType({
+  name: "Date",
+  parseValue(value) {
+    return new Date(value);
+  },
+  serialize(value) {
+    return value.toLocaleDateString();
+  },
+});
 
 const resolvers = {
   Query: {
@@ -11,12 +22,26 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     pets: async (parent, args, context) => {
-      if (context.user.pets) {
-        return Pet.find();
+      if (context.user) {
+        if (context.user.pets) {
+          return Pet.find();
+        }
+        throw new AuthenticationError("No pets for this user.");
       }
+      throw new AuthenticationError("You need to be logged in!");
     },
     pet: async (parent, { _id }) => {
-      return await Pet.findById(_id).populate();
+      if (context.user) {
+        if (context.user.pets) {
+          const pet = await Pet.findById(_id).populate();
+          if (!pet) {
+            return "No pet found with this id.";
+          }
+          return;
+        }
+        throw new AuthenticationError("No pets for this user.");
+      }
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
   Mutation: {
@@ -41,15 +66,27 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addPet: async (parent, { name, species, birthday, pictures }) => {
-      const pet = await Pet.create({ name, species, birthday, pictures });
-      return { pet };
+    addPet: async (parent, { name, species, birthday, pictures }, context) => {
+      if (context.user) {
+        const pet = await Pet.create({ name, species, birthday, pictures });
+        const updatedUserPets = await User.findByIdAndUpdate(
+          { _id: context.user.id },
+          { $push: { pets: pet } },
+          { new: true }
+        );
+        return { pet, updatedUserPets };
+      }
+      throw new AuthenticationError("Please login to add a pet.");
     },
     addMatch: async (parent, { pet1, pet2 }) => {
-      const match = await Matches.create({ pet1, pet2 });
-      return { match };
+      if (context.user) {
+        const match = await Matches.create({ pet1, pet2 });
+        return { match };
+      }
+      throw new AuthenticationError("Please login to create a match.");
     },
   },
+  Date: dateResolver,
 };
 
 module.exports = resolvers;
