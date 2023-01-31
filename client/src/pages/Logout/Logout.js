@@ -15,7 +15,7 @@ function LogoutForm() {
 
 	useEffect(() => {
 		if (data) {
-			localStorage.removeItem("token");
+			AuthService.logout();
 			setIsLoggedOut(true);
 		}
 	}, [data]);
