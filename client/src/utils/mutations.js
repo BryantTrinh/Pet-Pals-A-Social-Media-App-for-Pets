@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
 export const REGISTER_USER = gql`
   mutation register(
@@ -37,3 +37,16 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+
+const LOGOUT_MUTATION = gql`
+	mutation LogoutMutation {
+		logout
+	}
+`;
+
+export function useLogoutMutation() {
+	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
+
+	return { logout, data, loading, error };
+}

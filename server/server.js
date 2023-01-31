@@ -1,5 +1,5 @@
-require("dotenv").config();
-
+const http = require("http");
+const io = require("socket.io");
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const { join } = require("path");
@@ -10,8 +10,10 @@ const db = require("./config");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+const server = http.createServer(app);
+const socket = io(server);
 
-const server = new ApolloServer({
+const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware,
@@ -28,11 +30,22 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "client", "build", "index.html"));
 });
 
-const startApolloServer = async (typeDefs, resolvers) => {
-  await server.start();
-  server.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app });
 
-  db.once("open", () => app.listen(PORT));
-};
+socket.on("connection", (socket) => {
+  console.log("Client is connected");
 
-startApolloServer(typeDefs, resolvers);
+  socket.on("sendMessage", (message) => {
+    socket.emit("receiveMessage", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
+server.listen(3000, () => {
+  console.log("Server is listening on port 3000");
+});
+
+db.once("open", () => app.listen(PORT));

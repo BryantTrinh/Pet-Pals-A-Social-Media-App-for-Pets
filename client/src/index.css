@@ -1,3 +1,18 @@
 body {
     margin: 0;
+    background-color: #F8F5F2;
+}
+
+.css-1t6c9ts {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.css-2s90m6-MuiAvatar-root {
+    margin-left: 20px;
+}
+
+.css-101ca9i-MuiTypography-root-MuiLink-root:hover {
+    cursor: pointer;
 }
