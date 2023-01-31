@@ -4,6 +4,8 @@ import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// incorporating GraphQlUpload mutation along with using Multer to save the binary data for GraphQLUpload to convert it. 
+
 // "e" = event
 const ProfilePictureUpload = () => {
   const [files, setFiles] = useState([]);
