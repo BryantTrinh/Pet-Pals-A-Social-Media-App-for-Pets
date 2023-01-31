@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import { Button } from "@mui/material";
 import auth from "../../utils/auth.js";
 
+import auth from "../../utils/auth";
+
 const LOGOUT = gql`
   mutation Logout {
     logout
@@ -14,12 +16,12 @@ function LogoutForm() {
   const [logout, { data }] = useMutation(LOGOUT);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
-  useEffect(() => {
-    if (data) {
-      auth.logout();
-      setIsLoggedOut(true);
-    }
-  }, [data]);
+	useEffect(() => {
+		if (data) {
+			auth.logout();
+			setIsLoggedOut(true);
+		}
+	}, [data]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,22 +32,22 @@ function LogoutForm() {
     return <p>You have successfully logged out.</p>;
   }
 
-  return (
-    <Button
-      variant="outlined"
-      sx={{
-        color: "white",
-        borderColor: "white",
-        ml: "20px",
-        "&:hover": {
-          color: "#DE4567",
-          borderColor: "#DE4567",
-        },
-      }}
-    >
-      Logout
-    </Button>
-  );
+	return (
+		<Button variant="outlined"
+			sx={{
+				color: "white",
+				borderColor: "white",
+				ml: "20px",
+				"&:hover": {
+					color: "#DE4567",
+					borderColor: "#DE4567",
+				}
+			}}
+			
+		>
+			Logout
+		</Button>
+	);
 }
 
 export default LogoutForm;

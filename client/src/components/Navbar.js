@@ -16,7 +16,7 @@ import auth from '../utils/auth';
 
 const pages = ['Feed', 'Matches', 'My Pets'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
