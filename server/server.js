@@ -1,3 +1,4 @@
+require("dotenv").config();
 const http = require("http");
 const io = require("socket.io");
 const express = require("express");
@@ -30,8 +31,6 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "client", "build", "index.html"));
 });
 
-apolloServer.applyMiddleware({ app });
-
 socket.on("connection", (socket) => {
   console.log("Client is connected");
 
@@ -44,8 +43,17 @@ socket.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("Server is listening on port 3000");
-});
+const startApolloServer = async (typeDefs, resolvers) => {
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+  db.once("open", () => {
+    server.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+      console.log(
+        `Use GraphQL at http://localhost:${PORT}${apolloServer.graphqlPath}`
+      );
+    });
+  });
+};
 
-db.once("open", () => app.listen(PORT));
+startApolloServer(typeDefs, resolvers);
