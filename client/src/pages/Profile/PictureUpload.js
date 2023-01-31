@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-
+// "e" = event
 const ProfilePictureUpload = () => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const handleFileUpload = (e) => {
-    setFile(e.target.files[0]);
+    setFiles(Array.from(e.target.files));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new formData();
-    formData.append("profilePicture", file);
+    files.forEach((file) => {
+      formData.append("profilePicture", file);
+    });
     // here we send formData to the backend using axios or fetch api....
   };
 // returning a form that contains an input field for selecting the file and a submit button for uploading file. 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="file" onChange={handleFileUpload} />
+      <input type="file" onChange={handleFileUpload} multiple />
       <button type="submit">Upload</button>
     </form>
   );
