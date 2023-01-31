@@ -56,7 +56,7 @@ function Login() {
             backgroundColor: '#F8F5F2'
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#DE4567' }}>
             <PetsIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
