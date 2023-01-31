@@ -3,6 +3,8 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { Button } from "@mui/material";
 
+import auth from "../../utils/auth";
+
 const LOGOUT = gql`
 	mutation Logout {
 		logout
@@ -15,7 +17,7 @@ function LogoutForm() {
 
 	useEffect(() => {
 		if (data) {
-			AuthService.logout();
+			auth.logout();
 			setIsLoggedOut(true);
 		}
 	}, [data]);
@@ -40,7 +42,7 @@ function LogoutForm() {
 					borderColor: "#DE4567",
 				}
 			}}
-
+			
 		>
 			Logout
 		</Button>
