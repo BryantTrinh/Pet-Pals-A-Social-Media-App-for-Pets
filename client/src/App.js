@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   ApolloClient,
   InMemoryCache,
@@ -12,6 +13,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile"
+import Navbar from "./components/Navbar.js";
+import ChatBox from "./components/ChatBox.js";
+
+import { Backdrop } from "@mui/material";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -33,10 +38,19 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+
   return (
     <ApolloProvider client={client}>
       <Router>
         <div>
+<<<<<<< HEAD
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -44,6 +58,20 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
+=======
+          {/* <Backdrop sx={{ backdropFilter: "blur(3px)" }}
+            open={open}
+            onClick={handleClose}
+          > */}
+            <Navbar />
+            <ChatBox handleToggle={handleToggle} />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          {/* </Backdrop> */}
+>>>>>>> 0aa72916f84f335b952de9cea6aded5a55091507
         </div>
       </Router>
     </ApolloProvider>
