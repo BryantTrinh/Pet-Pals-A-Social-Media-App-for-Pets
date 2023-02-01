@@ -42,35 +42,44 @@ export const LOGIN_USER = gql`
 `;
 
 
-// const LOGOUT_MUTATION = gql`
-// 	mutation LogoutMutation {
-// 		logout
-// 	}
-// `;
+const LOGOUT_MUTATION = gql`
+	mutation LogoutMutation {
+		logout
+	}
+`;
 
-// export function useLogoutMutation() {
-// 	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
+export function useLogoutMutation() {
+	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
 
-// 	return { logout, data, loading, error };
-// }
+	return { logout, data, loading, error };
+}
 
 // uploading photo mutation
-// mutation($formData: FormData!) {
-//   uploadProfilePicture(formData: $formData) {
-//     success
-//   }
-// }
 
 
-// const response = await fetch("/graphql", {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify({
-//     query: mutation,
-//     variables: {
-//       formData,
-//     },
-//   }),
-// });
+const QUERY_UPLOAD_PHOTO = `
+	mutation ($formData: FormData!) {
+		uploadProfilePicture(formData: $formData) {
+			success
+		}
+	}
+`;
+
+const formData = new FormData();
+
+async function sendMutation() {
+	const response = await fetch("/graphql", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			query: QUERY_UPLOAD_PHOTO,
+			variables: {
+				formData,
+			},
+		}),
+	});
+	console.log(response);
+}
+sendMutation();
