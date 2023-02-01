@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraphQLUpload ) from 'apollo-upload-client';
+import { GraphQLUpload } from 'apollo-upload-client';
 import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

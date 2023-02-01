@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,7 +16,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import LogoutForm from '../pages/Logout/';
 import auth from '../utils/auth';
 
-const pages = ['Feed', 'Matches', 'My Pets'];
+const pages = ['Feed', 'Profile', 'Add Pet'];
 
 function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -84,7 +86,9 @@ function ResponsiveAppBar(props) {
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}
                   >
-                    <Typography textAlign="center">{page}</Typography>
+                    <Link to={`/${page}`} style={{ textDecoration: 'none' }}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </Link>
                   </MenuItem>
                 ))}
               </Menu>
@@ -115,13 +119,15 @@ function ResponsiveAppBar(props) {
             <>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 {pages.map((page) => (
-                  <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page}
-                  </Button>
+                  <Link to={`/${page}`} style={{ textDecoration: 'none' }}>
+                    <Button
+                      key={page}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                      {page}
+                    </Button>
+                  </Link>
                 ))}
               </Box>
               <LogoutForm />
