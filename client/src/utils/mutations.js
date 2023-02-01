@@ -52,22 +52,22 @@ export function useLogoutMutation() {
 }
 
 // uploading photo mutation
-mutation($formData: FormData!) {
-  uploadProfilePicture(formData: $formData) {
-    success
-  }
-}
+// mutation($formData: FormData!) {
+//   uploadProfilePicture(formData: $formData) {
+//     success
+//   }
+// }
 
 
-const response = await fetch("/graphql", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    query: mutation,
-    variables: {
-      formData,
-    },
-  }),
-});
+// const response = await fetch("/graphql", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({
+//     query: mutation,
+//     variables: {
+//       formData,
+//     },
+//   }),
+// });
