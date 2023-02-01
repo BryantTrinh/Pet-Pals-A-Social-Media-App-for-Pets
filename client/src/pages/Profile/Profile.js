@@ -14,7 +14,7 @@ function App() {
         <ImageListItem key="Subheader" cols={3} sx={{ height: "90%" }}>
           <ListSubheader
             component="div"
-            sx={{ textAlign:"center", color: "black", fontSize: "32px", margin: "1em", padding: ".5em", fontWeight: 600 }}
+            sx={{ textAlign:"center", color: "black", fontSize: "32px", fontWeight: 600 }}
           >
             Your Pets
           </ListSubheader>

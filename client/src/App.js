@@ -13,7 +13,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile"
-import Navbar from "./components/Navbar.js";
 import ChatBox from "./components/ChatBox.js";
 
 import { Backdrop } from "@mui/material";
@@ -50,15 +49,6 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-<<<<<<< HEAD
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-=======
           {/* <Backdrop sx={{ backdropFilter: "blur(3px)" }}
             open={open}
             onClick={handleClose}
@@ -69,9 +59,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           {/* </Backdrop> */}
->>>>>>> 0aa72916f84f335b952de9cea6aded5a55091507
         </div>
       </Router>
     </ApolloProvider>
