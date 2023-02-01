@@ -105,7 +105,7 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {/* TODO: Map over messages */}
+                                {/* TODO: Map over chats */}
                                 <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
                                     <Avatar {...stringAvatar('John Doe')} />
                                     <Grid container alignItems="center">
@@ -125,7 +125,7 @@ function ChatBox() {
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {/* TODO: Map over individual chats */}
+                                        {/* TODO: Map over individual messages */}
                                         <Grid container justifyContent="flex-start">
                                             <Typography variant="h6" component="div"
                                                 sx={friendMessageStyle}>
