@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { Button } from "@mui/material";
-
-import auth from "../../utils/auth";
+import auth from "../../utils/auth.js";
 
 const LOGOUT = gql`
-	mutation Logout {
-		logout
-	}
+  mutation Logout {
+    logout
+  }
 `;
 
 function LogoutForm() {
-	const [logout, { data }] = useMutation(LOGOUT);
-	const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [logout, { data }] = useMutation(LOGOUT);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
 
 	useEffect(() => {
 		if (data) {
@@ -22,14 +21,14 @@ function LogoutForm() {
 		}
 	}, [data]);
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		await logout();
-	};
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await logout();
+  };
 
-	if (isLoggedOut) {
-		return <p>You have successfully logged out.</p>;
-	}
+  if (isLoggedOut) {
+    return <p>You have successfully logged out.</p>;
+  }
 
 	return (
 		<Button variant="outlined"
