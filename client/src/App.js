@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar.js";
+import Profile from "./pages/Profile";
 import ChatBox from "./components/ChatBox.js";
 import Feed from './pages/Feed';
 
@@ -41,7 +42,8 @@ function App() {
           <ChatBox />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path='/Feed' element={<Feed />}/>
+            <Route path='/Feed' element={<Feed />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </Router>
