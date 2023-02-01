@@ -8,6 +8,8 @@ function Profile() {
     <section id="pet">
       <h1>YOUR PETS</h1>
       <div className="container pet__container">
+
+{/* pet card */}
         <article className="pet__item">
           <div className="pet__item-image">
             <img
@@ -18,10 +20,10 @@ function Profile() {
           <div className="pet__item-cnt">
             <div className="petname-titles">
               <h3>Pet Name</h3>
-              <h4>Location</h4>
             </div>
           </div>
         </article>
+
       </div>
     </section>
   );
