@@ -4,8 +4,6 @@ import gql from "graphql-tag";
 import { Button } from "@mui/material";
 import auth from "../../utils/auth.js";
 
-import auth from "../../utils/auth";
-
 const LOGOUT = gql`
   mutation Logout {
     logout
