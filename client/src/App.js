@@ -48,18 +48,13 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-          {/* <Backdrop sx={{ backdropFilter: "blur(3px)" }}
-            open={open}
-            onClick={handleClose}
-          > */}
-            <Navbar />
-            <ChatBox handleToggle={handleToggle} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </Routes>
-          {/* </Backdrop> */}
+          <Navbar />
+          <ChatBox />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
         </div>
       </Router>
     </ApolloProvider>
