@@ -54,7 +54,7 @@ export const LOGIN_USER = gql`
 // 	return { logout, data, loading, error };
 // }
 
-// // uploading photo mutation
+// uploading photo mutation
 // mutation($formData: FormData!) {
 //   uploadProfilePicture(formData: $formData) {
 //     success
