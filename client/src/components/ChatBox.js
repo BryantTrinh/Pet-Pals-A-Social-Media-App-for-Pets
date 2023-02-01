@@ -2,6 +2,7 @@ import * as React from 'react';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
 import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack } from '@mui/material';
+import BasicTabs from './mobileChatBox'
 
 // Colored avatars with initials
 function stringToColor(string) {
@@ -95,15 +96,16 @@ function ChatBox() {
                         p: 2,
                         borderRadius: 5
                     }}>
-                        <Grid container sx={{ height: "100%" }}>
+                        {/* Medium screen breakpoint chat layout */}
+                        <Grid container sx={{ height: "100%", display: { xs: "none", md: "flex" } }}>
                             <Grid item sm={3} sx={{
                                 borderRight: "2px solid #E4E4E4",
                                 p: "0 16px 0 0"
                             }}>
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
-                                    Messages
+                                    Chats
                                 </Typography>
-                                {/* TODO: Map over messages */}
+                                {/* TODO: Map over chats */}
                                 <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
                                     <Avatar {...stringAvatar('John Doe')} />
                                     <Grid container alignItems="center">
@@ -122,8 +124,8 @@ function ChatBox() {
                                 height: "100%"
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
-                                    {/* TODO: Map over individual chats */}
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
+                                        {/* TODO: Map over individual messages */}
                                         <Grid container justifyContent="flex-start">
                                             <Typography variant="h6" component="div"
                                                 sx={friendMessageStyle}>
@@ -187,6 +189,14 @@ function ChatBox() {
                                     </Grid>
                                 </Grid>
                             </Grid>
+                        </Grid>
+                        {/* Small screen breakpoint chat layout */}
+                        <Grid container sx={{ height: "100%", display: { xs: "flex", md: "none" } }}>
+                            <BasicTabs
+                                stringAvatar={stringAvatar}
+                                friendMessageStyle={friendMessageStyle}
+                                userMessageStyle={userMessageStyle}
+                            />
                         </Grid>
                     </Box>
                 </Modal >
