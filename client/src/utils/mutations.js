@@ -42,17 +42,17 @@ export const LOGIN_USER = gql`
 `;
 
 
-const LOGOUT_MUTATION = gql`
-	mutation LogoutMutation {
-		logout
-	}
-`;
+// const LOGOUT_MUTATION = gql`
+// 	mutation LogoutMutation {
+// 		logout
+// 	}
+// `;
 
-export function useLogoutMutation() {
-	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
+// export function useLogoutMutation() {
+// 	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
 
-	return { logout, data, loading, error };
-}
+// 	return { logout, data, loading, error };
+// }
 
 // uploading photo mutation
 // mutation($formData: FormData!) {
