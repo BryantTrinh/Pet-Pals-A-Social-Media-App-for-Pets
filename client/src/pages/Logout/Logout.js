@@ -23,7 +23,7 @@ function LogoutForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await logout();
+    await auth.logout();
   };
 
   if (isLoggedOut) {
@@ -31,7 +31,9 @@ function LogoutForm() {
   }
 
 	return (
-		<Button variant="outlined"
+		<Button 
+			onClick={handleSubmit()}
+			variant="outlined"
 			sx={{
 				color: "white",
 				borderColor: "white",

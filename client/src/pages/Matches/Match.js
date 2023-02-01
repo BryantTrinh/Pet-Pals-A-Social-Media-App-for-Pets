@@ -30,12 +30,12 @@ async function distanceCalc(userLocation, otherLocation) {
   );
   distance = distance / 1609;
   const finalDistance = Math.round(distance);
-  return finalDistance
+  return finalDistance;
 }
 
 function Match() {
   const user = auth.getProfile();
-  
+
   console.log(user);
 }
 
