@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "./Profile.css";
-import { WrapText } from "@material-ui/icons";
-import { maxWidth } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -46,7 +44,6 @@ export default function Profile() {
                     backgroundSize: "100%",
                     backgroundColor: "rgba(0, 0, 0, 0.484)",
                     backgroundBlendMode: "soft-light",
-                    flexWrap: "wrap",
                     transitionDuration: "1s",
                     backgroundImage:
                       'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
@@ -56,7 +53,7 @@ export default function Profile() {
                     },
                   }}
                 >
-                  <div class="text-background">
+                  <div className="text-background">
                     <h3>Kuro</h3>
                   </div>
                 </Button>
