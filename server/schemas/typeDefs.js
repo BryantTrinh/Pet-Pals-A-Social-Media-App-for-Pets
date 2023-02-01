@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     _id: ID
     first_name: String
@@ -31,6 +33,8 @@ const typeDefs = gql`
 
   type Query {
     user: User
+    pets: Pet
+    pet: Pet
   }
 
   type Mutation {
@@ -47,8 +51,8 @@ const typeDefs = gql`
       species: String!
       birthday: Date!
       pictures: String!
-    ): Auth
-    addMatch(pet1: String!, pet2: String!): Auth
+    ): Pet
+    addMatch(pet1: String!, pet2: String!): Matches
   }
 `;
 

@@ -6,12 +6,14 @@ export const REGISTER_USER = gql`
     $last_name: String!
     $email: String!
     $password: String!
+    $location: String!
   ) {
     register(
       first_name: $first_name
       last_name: $last_name
       email: $email
       password: $password
+      location: $location
     ) {
       token
       user {
@@ -19,6 +21,7 @@ export const REGISTER_USER = gql`
         first_name
         last_name
         email
+        location
       }
     }
   }
@@ -39,17 +42,17 @@ export const LOGIN_USER = gql`
 `;
 
 
-const LOGOUT_MUTATION = gql`
-	mutation LogoutMutation {
-		logout
-	}
-`;
+// const LOGOUT_MUTATION = gql`
+// 	mutation LogoutMutation {
+// 		logout
+// 	}
+// `;
 
-export function useLogoutMutation() {
-	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
+// export function useLogoutMutation() {
+// 	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
 
-	return { logout, data, loading, error };
-}
+// 	return { logout, data, loading, error };
+// }
 
 // uploading photo mutation
 // mutation($formData: FormData!) {
