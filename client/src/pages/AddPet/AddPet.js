@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
     Card,
     CardHeader,
@@ -8,19 +8,23 @@ import {
     Grid,
     TextField,
     Box,
-    Typography
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+    Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useMutation } from "@apollo/client";
+import { ADD_PET } from "../../utils/mutations";
 
 export default function RecipeReviewCard() {
     const [formState, setFormState] = React.useState({
         pet_name: "",
         species: "",
         birthday: "",
+        pictures: "...",
     });
 
     const [imageFile, setImageFile] = React.useState();
-    const [preview, setPreview] = React.useState()
+    const [preview, setPreview] = React.useState();
+    const [addPet] = useMutation(ADD_PET);
 
     const handleInputChange = ({ target: { name, value } }) => {
         setFormState({ ...formState, [name]: value });
@@ -28,13 +32,26 @@ export default function RecipeReviewCard() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+        try {
+            const addPetForm = await addPet({
+                variables: {
+                    pet_name: formState.pet_name,
+                    species: formState.species,
+                    birthday: formState.birthday,
+                    pictures: formState.pictures,
+                },
+            });
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     React.useEffect(() => {
         if (!imageFile) {
-            setPreview('https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg')
-            return
+            setPreview(
+                "https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
+            );
+            return;
         }
 
         const objectUrl = URL.createObjectURL(imageFile)
@@ -42,18 +59,17 @@ export default function RecipeReviewCard() {
         console.log(typeof (objectUrl));
         setPreview(objectUrl)
 
-        return () => URL.revokeObjectURL(objectUrl)
-
-    }, [imageFile])
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [imageFile]);
 
     const onSelectFile = (event) => {
         if (!event.target.files || event.target.files.length === 0) {
-            setImageFile(undefined)
-            return
+            setImageFile(undefined);
+            return;
         }
 
-        setImageFile(event.target.files[0])
-    }
+        setImageFile(event.target.files[0]);
+    };
 
     return (
         <Card sx={{ maxWidth: 500, margin: "50px auto" }}>
