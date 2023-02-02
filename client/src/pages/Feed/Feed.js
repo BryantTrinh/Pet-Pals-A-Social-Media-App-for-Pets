@@ -11,13 +11,16 @@ import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
 import { useQuery } from "@apollo/client";
 import { QUERY_PETS } from "../../utils/queries.js";
+import { useState, useEffect } from "react";
+import dayjs from "dayjs";
 
 export default function RecipeReviewCard() {
-  const { loading, data } = useQuery(QUERY_PETS, {
-    fetchPolicy: "no-cache",
-  });
-
+  //   const { petList, setPetList } = useState();
+  const { loading, data } = useQuery(QUERY_PETS);
+  //   setPetList(data?.pets || []);
   const petList = data?.pets || [];
+  const now = dayjs().format();
+  console.log(now);
   return (
     <Grid
       container
@@ -45,7 +48,7 @@ export default function RecipeReviewCard() {
                       {pet.birthday}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {pet.species}
+                      Species: {pet.species}
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing>

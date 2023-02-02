@@ -33,7 +33,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    pets: Pet
+    pets: [Pet]
     pet: Pet
   }
 

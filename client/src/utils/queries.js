@@ -13,13 +13,13 @@ export const QUERY_USER = gql`
 `;
 
 export const QUERY_PETS = gql`
-  query pets {
+  query Pets {
     pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
+      _id
+      name
+      species
+      birthday
+      pictures
     }
   }
 `;
@@ -27,19 +27,19 @@ export const QUERY_PETS = gql`
 export const QUERY_PET = gql`
   query pets {
     pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
+      _id
+      name
+      species
+      birthday
+      pictures
     }
   }
 `;
 
 export const QUERY_MATCH = gql`
   query matches {
-  _id: ID
-  pet1: String
+  _id
+  pet1
   pet2: String
 }
 `
