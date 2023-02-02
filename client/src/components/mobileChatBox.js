@@ -45,7 +45,7 @@ export default function BasicTabs(props) {
     };
 
     return (
-        <Grid container direction="column" wrap='none' sx={{ height: "100%" }}>
+        <Grid container direction="column" flexWrap='nowrap' sx={{ height: "100%" }}>
             <Grid item xs={1} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} centered>
                     <Tab label="Chats" {...a11yProps(0)} />
