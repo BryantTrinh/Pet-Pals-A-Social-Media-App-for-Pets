@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
-import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, FormControl } from '@mui/material';
+import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
 
 import io from 'socket.io-client'
@@ -65,12 +65,17 @@ function ChatBox() {
     const [messageReceived, setMessageReceived] = React.useState([]);
 
     const sendMessage = () => {
-        socket.emit("sendMessage", { message })
+        if (message === '') {
+            return
+        }
+        socket.emit("sendMessage", { message });
     }
 
     React.useEffect(() => {
         socket.on("receiveMessage", (data) => {
+            console.log(data);
             setMessageReceived(data);
+            setMessage('')
         })
     }, [socket])
 
@@ -152,47 +157,32 @@ function ChatBox() {
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {/* TODO: Map over individual messages */}
-                                        {/* <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid> */}
-                                        {/* <Grid container justifyContent="flex-end">
-                                            <Typography variant="h6" component="div"
-                                                sx={userMessageStyle}>
-                                                {messageReceived}
-                                            </Typography>
-                                        </Grid> */}
-                                        {messageReceived.map((data) => <ChatBubble socketID={data.socketID} message={data.message}/>)}
+                                        {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
                                     </Grid>
                                     <Grid item>
-                                        <Grid container justifyContent="center">
-                                            <Grid item xs={11}>
-                                                <Box component="form"
-                                                    onSubmit={(event) => {
-                                                        event.preventDefault();
-                                                        sendMessage()
-                                                    }}
-                                                >
-                                                    <TextField fullWidth size='small' placeholder='Your message here...' id="textfield"
+                                        <Box component="form"
+                                            onSubmit={(event) => {
+                                                event.preventDefault();
+                                                sendMessage()
+                                            }}
+                                        >
+                                            <Grid container justifyContent="center" gap={1}>
+                                                <Grid item xs>
+                                                    <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
                                                         onChange={(event) => {
                                                             setMessage(event.target.value)
                                                         }}
                                                     />
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={1}>
-                                                <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
-                                                    <SendIcon sx={{ color: "#405C96", "&:hover": { cursor: "pointer" } }}
-                                                        onClick={() => {
-                                                            sendMessage()
-                                                        }}
-                                                    />
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
+                                                        <Button variant="contained" endIcon={<SendIcon />} type='submit'>
+                                                            Send
+                                                        </Button>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
+                                        </Box>
                                     </Grid>
                                 </Grid>
                             </Grid>

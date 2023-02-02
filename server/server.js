@@ -44,15 +44,16 @@ io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
   let messageArr = [];
-
+  
   socket.on("sendMessage", (message) => {
-    messageArr.push({  socketID: socket.id, message: message.message})
-    socket.emit("receiveMessage", messageArr);
+    messageArr.push({ socketID: socket.id, message: message.message })
+    console.log(messageArr);
+    io.emit("receiveMessage", messageArr);
   });
 
-  // socket.on("disconnect", () => {
-  //   console.log("Client disconnected");
-  // });
+  socket.on("disconnect", () => {
+    console.log(`Client ${socket.id} disconnected`);
+  });
 });
 
 const startApolloServer = async (typeDefs, resolvers) => {
