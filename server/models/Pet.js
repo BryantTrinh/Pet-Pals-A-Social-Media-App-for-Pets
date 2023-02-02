@@ -18,6 +18,10 @@ const petSchema = new Schema({
     type: String,
     required: true,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const Pet = model("Pet", petSchema);

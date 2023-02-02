@@ -18,6 +18,7 @@ const typeDefs = gql`
     species: String
     birthday: Date
     pictures: String
+    owner: ID
   }
 
   type Matches {
@@ -33,7 +34,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    pets: Pet
+    pets: [Pet]
     pet: Pet
   }
 
@@ -51,6 +52,7 @@ const typeDefs = gql`
       species: String!
       birthday: Date!
       pictures: String!
+      owner: ID!
     ): Pet
     addMatch(pet1: String!, pet2: String!): Matches
   }

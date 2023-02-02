@@ -1,7 +1,4 @@
-import { useQuery } from "@apollo/client";
-import { QUERY_USER } from "../../utils/queries";
-import { getDistance } from "geolib";
-import auth from "../../utils/auth.js";
+const { getDistance } = require("geolib");
 
 async function findLatLon(city) {
   let latLon = { lat: "", lon: "" };
@@ -16,10 +13,14 @@ async function findLatLon(city) {
 async function distanceCalc(userLocation, otherLocation) {
   let location1 = userLocation.toLowerCase();
   location1 = location1.replace(" ", "_");
+  console.log(location1);
   let location2 = otherLocation.toLowerCase();
   location2 = location2.replace(" ", "_");
+  console.log(location2);
   const userLatLon = await findLatLon(location1);
+  console.log("distance calc", userLatLon);
   const otherLatLon = await findLatLon(location2);
+  console.log(otherLatLon);
   const userLat = userLatLon.lat;
   const userLon = userLatLon.lon;
   const otherLat = otherLatLon.lat;
@@ -30,15 +31,6 @@ async function distanceCalc(userLocation, otherLocation) {
   );
   distance = distance / 1609;
   const finalDistance = Math.round(distance);
-  return finalDistance;
 }
 
-function Match() {
-  const user = auth.getProfile();
-  return console.log(user);
-}
-
-// findLatLon("fountain_valley");
-
-
-export default Match;
+distanceCalc("Fountain Valley", "Irvine");

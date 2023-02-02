@@ -15,6 +15,7 @@ import Feed from './pages/Feed';
 import Uploads from './components/Upload';
 import UploadFile from "./components/UploadFile";
 
+import AddPet from './pages/AddPet'
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -36,35 +37,21 @@ const client = new ApolloClient({
 });
 
 function App() {
-	return (
-		<ApolloProvider client={client}>
-			<Router>
-				<div>
-					<Navbar />
-					<ChatBox />
-					<Routes>
-						<Route
-							path="/"
-							element={
-								<React.Fragment>
-									<div>
-										<h1>Upload File</h1>
-										<UploadFile />
-									</div>
-									<div>
-										<h1>Uploads</h1>
-										<Uploads />
-									</div>
-								</React.Fragment>
-							}
-						/>
-						<Route path="/Feed" element={<Feed />} />
-						<Route path="/profile" element={<Profile />} />
-					</Routes>
-				</div>
-			</Router>
-		</ApolloProvider>
-	);
+  return (
+    <ApolloProvider client={client}>
+      <Router>
+        <div>
+          <Navbar />
+          <ChatBox />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path='/Feed' element={<Feed />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </div>
+      </Router>
+    </ApolloProvider>
+  );
 }
 
 export default App;
