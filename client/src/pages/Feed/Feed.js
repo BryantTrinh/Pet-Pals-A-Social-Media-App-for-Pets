@@ -15,12 +15,9 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 export default function RecipeReviewCard() {
-  //   const { petList, setPetList } = useState();
   const { loading, data } = useQuery(QUERY_PETS);
-  //   setPetList(data?.pets || []);
   const petList = data?.pets || [];
-  const now = dayjs().format();
-  console.log(now);
+  const now = dayjs().format("YYYY-MM-DD");
   return (
     <Grid
       container
@@ -45,7 +42,7 @@ export default function RecipeReviewCard() {
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                      {pet.birthday}
+                      Age: {dayjs(now).diff(dayjs(pet.birthday), "year")}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Species: {pet.species}

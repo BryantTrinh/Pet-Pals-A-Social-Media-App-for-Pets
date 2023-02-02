@@ -2,7 +2,6 @@ const { AuthenticationError } = require("apollo-server-express");
 const { User, Pet, Matches } = require("../models");
 const { signToken } = require("../utils/auth.js");
 const { GraphQLScalarType } = require("graphql");
-const dayjs =
 
 const dateResolver = new GraphQLScalarType({
   name: "Date",
@@ -10,7 +9,7 @@ const dateResolver = new GraphQLScalarType({
     return new Date(value);
   },
   serialize(value) {
-    return dayjs(value).format("YYYY-MM-DD");
+    return value.toJSON();
   },
 });
 
@@ -24,7 +23,10 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        return Pet.find({});
+        return Pet.find({ owner: { $ne: context.user._id } }).populate(
+          "owner",
+          "_id"
+        );
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -75,7 +77,13 @@ const resolvers = {
     },
     addPet: async (parent, { name, species, birthday, pictures }, context) => {
       if (context.user) {
-        const pet = await Pet.create({ name, species, birthday, pictures });
+        const pet = await Pet.create({
+          name,
+          species,
+          birthday,
+          pictures,
+          owner: context.user._id,
+        });
         const updatedUserPets = await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { pets: pet } },

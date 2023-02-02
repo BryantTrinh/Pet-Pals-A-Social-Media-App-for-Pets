@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar.js";
 import Profile from "./pages/Profile";
 import ChatBox from "./components/ChatBox.js";
 import Feed from './pages/Feed';
+import AddPet from './pages/AddPet'
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -44,6 +45,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path='/Feed' element={<Feed />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/Add Pet" element={<AddPet />} />
           </Routes>
         </div>
       </Router>
