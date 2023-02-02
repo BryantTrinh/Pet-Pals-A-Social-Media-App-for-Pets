@@ -130,8 +130,6 @@ function Register(props) {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
-            </Grid>
           </Grid>
           <Button
             type="submit"
