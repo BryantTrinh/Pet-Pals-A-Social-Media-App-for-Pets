@@ -67,19 +67,19 @@ const QUERY_UPLOAD_PHOTO = `
 
 const formData = new FormData();
 
-async function sendMutation() {
-	const response = await fetch("/graphql", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			query: QUERY_UPLOAD_PHOTO,
-			variables: {
-				formData,
-			},
-		}),
-	});
-	console.log(response);
-}
-sendMutation();
+// async function sendMutation() {
+// 	const response = await fetch("/graphql", {
+// 		method: "POST",
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: JSON.stringify({
+// 			query: QUERY_UPLOAD_PHOTO,
+// 			variables: {
+// 				formData,
+// 			},
+// 		}),
+// 	});
+// 	console.log(response);
+// }
+// sendMutation();

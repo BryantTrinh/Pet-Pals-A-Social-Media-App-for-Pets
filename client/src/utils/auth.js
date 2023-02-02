@@ -16,12 +16,12 @@ class AuthService {
 
   login(token) {
     localStorage.setItem("auth_token", token);
-    window.location.assign("/");
+    window.location.assign("/feed");
   }
 
   logout() {
     localStorage.removeItem("auth_token");
-    window.location.reload();
+    window.location.assign("/");
   }
 }
 
