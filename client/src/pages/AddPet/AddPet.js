@@ -86,7 +86,7 @@ export default function RecipeReviewCard() {
                                 required
                                 fullWidth
                                 id="species"
-                                label="Species/Breed"
+                                label="Species"
                                 name="species"
                                 value={formState.species}
                                 onChange={handleInputChange}
