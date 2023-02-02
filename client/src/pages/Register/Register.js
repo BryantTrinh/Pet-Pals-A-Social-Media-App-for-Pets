@@ -30,6 +30,7 @@ function Register(props) {
       });
       console.log(data);
       Auth.login(data.register.token);
+      window.location('/Feed')
     } catch (err) {
       console.error(err);
     }
