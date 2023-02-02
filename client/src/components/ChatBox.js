@@ -1,8 +1,11 @@
 import * as React from 'react';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
-import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack } from '@mui/material';
+import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
+
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:3001');
 
 // Colored avatars with initials
 function stringToColor(string) {
@@ -56,6 +59,34 @@ function ChatBox() {
         borderRadius: "16px 16px 16px 0px",
         maxWidth: "40%",
         overflowWrap: "break-word"
+    }
+
+    const [message, setMessage] = React.useState('');
+    const [messageReceived, setMessageReceived] = React.useState([]);
+
+    const sendMessage = () => {
+        if (message === '') {
+            return
+        }
+        socket.emit("sendMessage", { message });
+    }
+
+    React.useEffect(() => {
+        socket.on("receiveMessage", (data) => {
+            setMessageReceived(data);
+            setMessage('')
+        })
+    }, [socket])
+
+    function ChatBubble(props) {
+        return (
+            <Grid container justifyContent="flex-end">
+                <Typography variant="h6" component="div"
+                    sx={userMessageStyle}>
+                    {props.message}
+                </Typography>
+            </Grid>
+        )
     }
 
     return (
@@ -125,67 +156,32 @@ function ChatBox() {
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {/* TODO: Map over individual messages */}
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-start">
-                                            <Typography variant="h6" component="div"
-                                                sx={friendMessageStyle}>
-                                                Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                            </Typography>
-                                        </Grid>
-                                        <Grid container justifyContent="flex-end">
-                                            <Typography variant="h6" component="div"
-                                                sx={userMessageStyle}>
-                                                Hi, friend!
-                                            </Typography>
-                                        </Grid>
+                                        {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
                                     </Grid>
                                     <Grid item>
-                                        <Grid container justifyContent="center">
-                                            <Grid item xs={11}>
-                                                <TextField fullWidth size='small' placeholder='Your message here...' />
-                                            </Grid>
-                                            <Grid item xs={1}>
-                                                <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
-                                                    <SendIcon sx={{ color: "#405C96", "&:hover": { cursor: "pointer" } }}
-                                                        onClick={() => {
-                                                            console.log("Send")
-                                                            const messageField = document.getElementById("messageField");
-                                                            messageField.scrollTop = messageField.scrollHeight;
+                                        <Box component="form"
+                                            onSubmit={(event) => {
+                                                event.preventDefault();
+                                                sendMessage()
+                                            }}
+                                        >
+                                            <Grid container justifyContent="center" gap={1}>
+                                                <Grid item xs>
+                                                    <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
+                                                        onChange={(event) => {
+                                                            setMessage(event.target.value)
                                                         }}
                                                     />
                                                 </Grid>
+                                                <Grid item xs={2}>
+                                                    <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
+                                                        <Button variant="contained" endIcon={<SendIcon />} type='submit'>
+                                                            Send
+                                                        </Button>
+                                                    </Grid>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
+                                        </Box>
                                     </Grid>
                                 </Grid>
                             </Grid>
