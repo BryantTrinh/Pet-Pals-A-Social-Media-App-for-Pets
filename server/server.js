@@ -1,6 +1,4 @@
 require("dotenv").config();
-const http = require("http");
-const io = require("socket.io");
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const { join } = require("path");
@@ -11,8 +9,19 @@ const db = require("./config");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+// Socket.io setup
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require('cors');
+app.use(cors())
 const server = http.createServer(app);
-const socket = io(server);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST']
+  }
+});
 
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -31,15 +40,17 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "client", "build", "index.html"));
 });
 
-socket.on("connection", (socket) => {
-  console.log("Client is connected");
+let messageArr = [];
+io.on("connection", (socket) => {
+  console.log(`Client is connected with ID: ${socket.id}`);
 
   socket.on("sendMessage", (message) => {
-    socket.emit("receiveMessage", message);
+    messageArr.push({ socketID: socket.id, message: message.message })
+    io.emit("receiveMessage", messageArr);
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    console.log(`Client ${socket.id} disconnected`);
   });
 });
 
