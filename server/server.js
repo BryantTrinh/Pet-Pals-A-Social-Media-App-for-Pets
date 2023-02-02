@@ -40,14 +40,12 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "client", "build", "index.html"));
 });
 
+let messageArr = [];
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
-  let messageArr = [];
-  
   socket.on("sendMessage", (message) => {
     messageArr.push({ socketID: socket.id, message: message.message })
-    console.log(messageArr);
     io.emit("receiveMessage", messageArr);
   });
 

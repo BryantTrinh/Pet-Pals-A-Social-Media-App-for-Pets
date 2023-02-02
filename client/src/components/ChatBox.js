@@ -73,7 +73,6 @@ function ChatBox() {
 
     React.useEffect(() => {
         socket.on("receiveMessage", (data) => {
-            console.log(data);
             setMessageReceived(data);
             setMessage('')
         })
