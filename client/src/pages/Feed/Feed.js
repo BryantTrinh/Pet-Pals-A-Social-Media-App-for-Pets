@@ -10,7 +10,7 @@ import { Grid } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
 import { useQuery } from "@apollo/client";
-import { QUERY_PETS } from "../../utils/queries.js";
+import { QUERY_PETS, QUERY_USER } from "../../utils/queries.js";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
@@ -18,6 +18,8 @@ export default function RecipeReviewCard() {
   const { loading, data } = useQuery(QUERY_PETS);
   const petList = data?.pets || [];
   const now = dayjs().format("YYYY-MM-DD");
+//   const { loading1, data1 } = useQuery(QUERY_USER);
+//   console.log(data1);
   return (
     <Grid
       container

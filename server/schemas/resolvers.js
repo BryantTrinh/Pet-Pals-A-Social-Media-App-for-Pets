@@ -23,10 +23,7 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        return Pet.find({ owner: { $ne: context.user._id } }).populate(
-          "owner",
-          "_id"
-        );
+        return Pet.find({ owner: { $ne: context.user._id } });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
