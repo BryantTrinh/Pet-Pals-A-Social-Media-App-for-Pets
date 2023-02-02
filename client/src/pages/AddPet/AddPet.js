@@ -7,7 +7,8 @@ import {
     Button,
     Grid,
     TextField,
-    Box
+    Box,
+    Typography
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -38,7 +39,7 @@ export default function RecipeReviewCard() {
 
         const objectUrl = URL.createObjectURL(imageFile)
         console.log(objectUrl);
-        console.log(typeof(objectUrl));
+        console.log(typeof (objectUrl));
         setPreview(objectUrl)
 
         return () => URL.revokeObjectURL(objectUrl)
@@ -86,7 +87,7 @@ export default function RecipeReviewCard() {
                                 required
                                 fullWidth
                                 id="species"
-                                label="Species/Breed"
+                                label="Species"
                                 name="species"
                                 value={formState.species}
                                 onChange={handleInputChange}
@@ -104,10 +105,15 @@ export default function RecipeReviewCard() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="contained" component="label" startIcon={<AddIcon />}>
-                                Add Image
-                                <input hidden accept="image/*" multiple type="file" onChange={onSelectFile} />
-                            </Button>
+                            <Grid container direction="row" alignItems="center" wrap='nowrap'>
+                                <Grid item xs={4}>
+                                    <Button variant="contained" component="label" startIcon={<AddIcon />}>
+                                        Add Image
+                                        <input hidden accept="image/*" multiple type="file" onChange={onSelectFile} />
+                                    </Button>
+                                </Grid>
+                                <Typography noWrap>No File Chosen</Typography>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Grid container justifyContent="center">
