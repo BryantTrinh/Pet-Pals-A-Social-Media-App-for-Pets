@@ -9,6 +9,7 @@ import {
     TextField,
     Box
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function RecipeReviewCard() {
     const [formState, setFormState] = React.useState({
@@ -16,6 +17,9 @@ export default function RecipeReviewCard() {
         species: "",
         birthday: "",
     });
+
+    const [imageFile, setImageFile] = React.useState();
+    const [preview, setPreview] = React.useState()
 
     const handleInputChange = ({ target: { name, value } }) => {
         setFormState({ ...formState, [name]: value });
@@ -26,6 +30,30 @@ export default function RecipeReviewCard() {
 
     };
 
+    React.useEffect(() => {
+        if (!imageFile) {
+            setPreview('https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg')
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(imageFile)
+        console.log(objectUrl);
+        console.log(typeof(objectUrl));
+        setPreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+
+    }, [imageFile])
+
+    const onSelectFile = (event) => {
+        if (!event.target.files || event.target.files.length === 0) {
+            setImageFile(undefined)
+            return
+        }
+
+        setImageFile(event.target.files[0])
+    }
+
     return (
         <Card sx={{ maxWidth: 500, margin: "50px auto" }}>
             <CardHeader
@@ -35,7 +63,7 @@ export default function RecipeReviewCard() {
             <CardMedia
                 component="img"
                 height="300"
-                image="https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
+                image={preview}
                 alt="pet profile"
             />
             <CardContent>
@@ -75,15 +103,22 @@ export default function RecipeReviewCard() {
                                 onChange={handleInputChange}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="contained" component="label" startIcon={<AddIcon />}>
+                                Add Image
+                                <input hidden accept="image/*" multiple type="file" onChange={onSelectFile} />
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2, backgroundColor: '#405C96' }}
-                    >
-                        Sign Up
-                    </Button>
+                    <Grid container justifyContent="center">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2, backgroundColor: '#405C96', right: "0" }}
+                        >
+                            Save
+                        </Button>
+                    </Grid>
                 </Box>
             </CardContent>
         </Card>
