@@ -57,29 +57,29 @@ export function useLogoutMutation() {
 // uploading photo mutation
 
 
-const QUERY_UPLOAD_PHOTO = `
-	mutation ($formData: FormData!) {
-		uploadProfilePicture(formData: $formData) {
-			success
-		}
-	}
-`;
+// const QUERY_UPLOAD_PHOTO = `
+// 	mutation ($formData: FormData!) {
+// 		uploadProfilePicture(formData: $formData) {
+// 			success
+// 		}
+// 	}
+// `;
 
-const formData = new FormData();
+// const formData = new FormData();
 
-async function sendMutation() {
-	const response = await fetch("/graphql", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			query: QUERY_UPLOAD_PHOTO,
-			variables: {
-				formData,
-			},
-		}),
-	});
-	console.log(response);
-}
-sendMutation();
+// async function sendMutation() {
+// 	const response = await fetch("/graphql", {
+// 		method: "POST",
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		body: JSON.stringify({
+// 			query: QUERY_UPLOAD_PHOTO,
+// 			variables: {
+// 				formData,
+// 			},
+// 		}),
+// 	});
+// 	console.log(response);
+// }
+// sendMutation();
