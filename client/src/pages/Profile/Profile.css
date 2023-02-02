@@ -28,3 +28,44 @@
   padding-right: 1em;
   opacity: 80%;
 }
+
+
+.modal-body {
+  height: 1000px;
+  overflow-y: auto;
+  background-color: #f8f5f2;
+  padding: 2em;
+  border: .3px solid black;
+}
+
+.profile-posts {
+  padding: 2em;
+}
+
+.profile-posts img {
+  width: 800px;
+  height: 800px;
+  object-fit: contain;
+}
+
+.profile-posts-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  overflow: hidden;
+  padding: 1em;
+}
+
+.modal-footer img {
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+  border-radius: 3em;
+}
+

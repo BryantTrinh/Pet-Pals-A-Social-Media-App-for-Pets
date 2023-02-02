@@ -10,7 +10,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "1200px",
+  height: "1200px",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -47,9 +48,9 @@ export default function Profile() {
                     transitionDuration: "1s",
                     backgroundImage:
                       'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
-                    '&:hover' : {
-                      transition: '1s',
-                      backgroundColor: 'rgba(0,0,0,0)',
+                    "&:hover": {
+                      transition: "1s",
+                      backgroundColor: "rgba(0,0,0,0)",
                     },
                   }}
                 >
@@ -57,23 +58,34 @@ export default function Profile() {
                     <h3>Kuro</h3>
                   </div>
                 </Button>
-                <Modal 
+                <Modal
                   open={open}
                   onClose={handleClose}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
+                  className="modal"
                 >
                   <Box sx={style}>
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      Meow
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Meow.. Meow meow meow meow? meow, mewoemowmeowme..
-                    </Typography>
+                    <div className="modal-body">
+                      <div className="profile-posts-center">
+                        <div className="profile-posts">
+                          <img src="https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg"></img>
+                        </div>
+                        <div className="profile-posts">
+                          <img src="https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg"></img>
+                        </div>
+                        <div className="profile-posts">
+                          <img src="https://i0.wp.com/suddenlycat.com/wp-content/uploads/2020/09/Screenshot-2020-08-30-at-2.41.56-AM.png?resize=814%2C1024&ssl=1"></img>
+                        </div>
+                        <div className="profile-posts">
+                          <img src="https://i.pinimg.com/originals/59/54/b4/5954b408c66525ad932faa693a647e3f.jpg"></img>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <img src="https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg"></img>
+                      <h1>Kuro</h1>
+                    </div>
                   </Box>
                 </Modal>
               </div>
