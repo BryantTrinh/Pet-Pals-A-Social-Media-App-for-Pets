@@ -35,13 +35,10 @@ async function distanceCalc(userLocation, otherLocation) {
 
 function Match() {
   const user = auth.getProfile();
-
-  console.log(user);
+  return console.log(user);
 }
 
 // findLatLon("fountain_valley");
 
-distanceCalc("Fountain Valley", "Irvine");
-Match();
 
 export default Match;

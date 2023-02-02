@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const QUERY_USER = gql`
+export const QUERY_USER = gql`
   query user {
     user {
       _id
@@ -12,7 +12,7 @@ const QUERY_USER = gql`
   }
 `;
 
-const QUERY_PETS = gql`
+export const QUERY_PETS = gql`
   query pets {
     pets {
       _id: ID
@@ -24,7 +24,7 @@ const QUERY_PETS = gql`
   }
 `;
 
-const QUERY_PET = gql`
+export const QUERY_PET = gql`
   query pets {
     pets {
       _id: ID
@@ -36,7 +36,7 @@ const QUERY_PET = gql`
   }
 `;
 
-const QUERY_MATCH = gql`
+export const QUERY_MATCH = gql`
   query matches {
   _id: ID
   pet1: String
