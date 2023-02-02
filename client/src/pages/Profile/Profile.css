@@ -45,7 +45,7 @@
 .profile-posts img {
   width: 800px;
   height: 800px;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .profile-posts-center {

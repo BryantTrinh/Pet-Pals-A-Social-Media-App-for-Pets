@@ -69,13 +69,13 @@ export default function Profile() {
                     <div className="modal-body">
                       <div className="profile-posts-center">
                         <div className="profile-posts">
-                          <img src="https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg"></img>
+                          <img src="https://i.pinimg.com/564x/a9/dd/d5/a9ddd5dcd620e17c3f2932e272837ca7.jpg"></img>
                         </div>
                         <div className="profile-posts">
-                          <img src="https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg"></img>
+                          <img src="https://i.pinimg.com/564x/da/e0/3b/dae03bf3e58a5fa50ace50b6e9d88ca9.jpg"></img>
                         </div>
                         <div className="profile-posts">
-                          <img src="https://i0.wp.com/suddenlycat.com/wp-content/uploads/2020/09/Screenshot-2020-08-30-at-2.41.56-AM.png?resize=814%2C1024&ssl=1"></img>
+                          <img src="https://i.pinimg.com/564x/d5/7b/0d/d57b0d640c784655c100c4cf08d1ae1c.jpg"></img>
                         </div>
                         <div className="profile-posts">
                           <img src="https://i.pinimg.com/originals/59/54/b4/5954b408c66525ad932faa693a647e3f.jpg"></img>
