@@ -37,21 +37,22 @@ export const QUERY_PETS = gql`
   }
 `;
 
-export const QUERY_PET = gql`
-  query pets {
-    pets {
+export const QUERY_MYPETS = gql`
+  query MyPets {
+    myPets {
       _id
       name
       species
       birthday
       pictures
+      owner
     }
   }
 `;
 
 export const QUERY_CHAT = gql`
   query getChat($roomId: String) {
-    getChat (roomID: $roomId) {
+    getChat(roomID: $roomId) {
       roomID
       messages {
         sender
@@ -60,5 +61,5 @@ export const QUERY_CHAT = gql`
         createdAt
       }
     }
-}
-`
+  }
+`;

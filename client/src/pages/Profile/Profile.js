@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "./Profile.css";
+import { QUERY_MYPETS } from "../../utils/queries";
+import { useQuery } from "@apollo/client";
 
 const style = {
   position: "absolute",
@@ -47,9 +49,9 @@ export default function Profile() {
                     transitionDuration: "1s",
                     backgroundImage:
                       'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
-                    '&:hover' : {
-                      transition: '1s',
-                      backgroundColor: 'rgba(0,0,0,0)',
+                    "&:hover": {
+                      transition: "1s",
+                      backgroundColor: "rgba(0,0,0,0)",
                     },
                   }}
                 >
@@ -57,7 +59,7 @@ export default function Profile() {
                     <h3>Kuro</h3>
                   </div>
                 </Button>
-                <Modal 
+                <Modal
                   open={open}
                   onClose={handleClose}
                   aria-labelledby="modal-modal-title"
