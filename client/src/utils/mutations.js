@@ -48,7 +48,7 @@ const LOGOUT_MUTATION = gql`
 `;
 
 export const ADD_PET = gql`
-  mutation AddPet(
+  mutation addPet(
     $name: String!
     $species: String!
     $birthday: Date!
@@ -68,6 +68,32 @@ export const ADD_PET = gql`
       birthday
       pictures
       owner
+    }
+  }
+`;
+
+export const CREATE_CHAT = gql`
+  mutation createChat($roomID: String, $messages: [MessageInput]) {
+    createChat (roomID: $roomID, messages: $messages) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
+    }
+  }
+`;
+
+export const ADD_MESSAGE = gql`
+  mutation addMessage($roomID: String, $message: MessageInput) {
+    addMessage (roomID: $roomID, message: $message) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
     }
   }
 `;

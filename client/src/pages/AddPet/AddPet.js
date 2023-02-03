@@ -14,12 +14,15 @@ import AddIcon from "@mui/icons-material/Add";
 import { useMutation } from "@apollo/client";
 import { ADD_PET } from "../../utils/mutations";
 
+import auth from "../../utils/auth";
+
 export default function RecipeReviewCard() {
     const [formState, setFormState] = React.useState({
         pet_name: "",
         species: "",
         birthday: "",
         pictures: "...",
+        owner: ""
     });
 
     const [imageFile, setImageFile] = React.useState();
@@ -33,16 +36,18 @@ export default function RecipeReviewCard() {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            const addPetForm = await addPet({
+            const { data } = await addPet({
                 variables: {
-                    pet_name: formState.pet_name,
+                    name: formState.pet_name,
                     species: formState.species,
                     birthday: formState.birthday,
                     pictures: formState.pictures,
+                    owner: auth.getToken()
                 },
             });
+            window.location('/Feed')
         } catch (err) {
-            console.error(err);
+            console.error("Error:", err);
         }
     };
 
