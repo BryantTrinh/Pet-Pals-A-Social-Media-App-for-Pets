@@ -1,4 +1,5 @@
 const { gql } = require("apollo-server-express");
+const { Upload } = require("../../server/schemas/resolvers");
 
 const typeDefs = gql`
 	scalar Date
@@ -23,7 +24,7 @@ const typeDefs = gql`
 		name: String
 		species: String
 		birthday: Date
-		pictures: String
+		pictures: Upload!
 		owner: ID
 	}
 
@@ -58,14 +59,12 @@ const typeDefs = gql`
 			name: String!
 			species: String!
 			birthday: Date!
-			pictures: String!
+			pictures: Upload!
 			owner: ID!
 		): Pet
 		addMatch(pet1: String!, pet2: String!): Matches
 		singleUpload(file: Upload!): File!
-		multipleUpload(files: [Upload!]!): [File!]!
 	}
 `;
-// Not sure if singleUpload/multipleUpload goes into Pet or addPet
 
 module.exports = typeDefs;

@@ -12,8 +12,8 @@ import Navbar from "./components/Navbar.js";
 import Profile from "./pages/Profile";
 import ChatBox from "./components/ChatBox.js";
 import Feed from './pages/Feed';
-import Uploads from './components/Upload';
-import UploadFile from "./components/UploadFile";
+import Uploads from './pages/AddPet';
+import UploadFile from "./pages/AddPet";
 import AddPet from './pages/AddPet'
 
 const httpLink = createHttpLink({

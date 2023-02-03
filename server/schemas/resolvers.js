@@ -17,6 +17,19 @@ const dateResolver = new GraphQLScalarType({
   },
 });
 
+const uploadResolver = new GraphQLScalarType({
+  name: "Upload",
+  async parseValue(value) {
+    return await processUpload(value);
+},
+  serialize(value) {
+    return value;
+},
+  async parseLiteral(ast) {
+    return await processUpload(ast.value);
+  }
+});
+
 const resolvers = {
   Query: {
     user: async (parent, args, context) => {
@@ -81,11 +94,12 @@ const resolvers = {
     },
     addPet: async (parent, { name, species, birthday, pictures }, context) => {
       if (context.user) {
+        const picture = await processUpload(file);
         const pet = await Pet.create({
           name,
           species,
           birthday,
-          pictures,
+          pictures: picture,
           owner: context.user._id,
         });
         const updatedUserPets = await User.findByIdAndUpdate(
@@ -97,7 +111,10 @@ const resolvers = {
         }
         throw new AuthenticationError("Please login to add a pet.");
       },
-      addMatch: async (parent, { pet1, pet2 }) => {
+        singleUpload: async (parent, { file }) => {
+          return processUpload(file);
+        },
+      addMatch: async (parent, { pet1, pet2 }, context) => {
         if (context.user) {
           const match = await Matches.create({ pet1, pet2 });
           return { match };
@@ -107,43 +124,6 @@ const resolvers = {
     },
     Date: dateResolver,
   };
-
-  module.exports = {
-		Upload: graphQLUpload, //Resolves the `Upload` scalar
-		Query: {
-			// Retrieves files in our local filesystem
-			uploads: async () => {
-				return (await fs.promises.readdir(UPLOAD_DIRECTORY_URL)).map(
-					(filename) => {
-						return {
-							filename,
-							mimetype: "",
-							encoding: "",
-						};
-					}
-				);
-			},
-		},
-		Mutation: {
-			// Store a single file
-			singleUpload: async (parent, args) => {
-				return storeUpload(args.file);
-			},
-			// Store multiple files
-			multipleUpload: async (parent, { files }) => {
-				if (!files) files = []; // Turn files into an empty list if it's undefined or null
-				// Ensure an error storing one upload doesn’t prevent storing the rest.
-				const results = await Promise.allSettled(files.map(storeUpload));
-				return results.reduce((storedFiles, { value, reason }) => {
-					if (value) storedFiles.push(value);
-					else console.error(`Failed to store upload: ${reason}`);
-					return storedFiles;
-				}, []);
-			},
-		},
-	};
-
-
 
   module.exports = resolvers;
   

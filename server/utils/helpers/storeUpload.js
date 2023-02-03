@@ -4,15 +4,9 @@ const path = require('path');
 
 const UPLOAD_DIRECTORY_URL = require('../../config/UPLOAD_DIRECTORY_URL');
 
-/**
- * Stores a GraphQL file upload in the filesystem and uploads file metadata to MongoDB.
- * @param {Promise<object>} upload GraphQL file upload.
- * @returns {Promise<object>} Resolves the upload as our graphql File type.
- */
 const storeUpload = async (upload) => {
 	const { createReadStream, filename, mimetype, encoding } = await upload.promise;
 
-	// For information of javascript streams, refer to https://nodesource.com/blog/understanding-streams-in-nodejs/
 	const stream = createReadStream();
 	const storedFileName = `${shortId.generate()}-${filename}`;
 	const storedFileUrl = path.join(UPLOAD_DIRECTORY_URL, storedFileName);
@@ -33,8 +27,7 @@ const storeUpload = async (upload) => {
 			});
 		});
 
-		// In Node.js v13, errors are not automatically propagated between piped
-		// streams. If there is an error receiving the upload, destroy the write
+//  If there is an error receiving the upload, destroy the write
 		// stream with the corresponding error.
 		stream.on('error', (error) => writeStream.destroy(error));
 
