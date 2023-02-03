@@ -13,6 +13,16 @@ export default function RecipeReviewCard() {
   const petList = petsData?.pets || [];
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
+
+  const createRoomID = () => {
+    let roomIDArr = []
+    
+  }
+
+  // const { data: newChat } = useMutation(CREATE_CHAT, {
+  //   variables: { roomID }
+  // })
+
   return (
     <Grid
       container
