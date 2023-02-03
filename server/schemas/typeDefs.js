@@ -56,7 +56,7 @@ const typeDefs = gql`
     user: User
     pets: [Pet]
     pet: Pet
-    owner: User
+    owner(ownerId: ID): User
     getChat(roomID: String): Chat
   }
 

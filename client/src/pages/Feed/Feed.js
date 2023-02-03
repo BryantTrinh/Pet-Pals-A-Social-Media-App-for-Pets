@@ -19,9 +19,6 @@ export default function RecipeReviewCard() {
   const petList = petsData?.pets || [];
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
-  if (!userLoading) {
-    console.log(userData);
-  }
   return (
     <Grid
       container
