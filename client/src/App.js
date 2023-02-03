@@ -14,7 +14,6 @@ import ChatBox from "./components/ChatBox.js";
 import Feed from './pages/Feed';
 import Uploads from './components/Upload';
 import UploadFile from "./components/UploadFile";
-
 import AddPet from './pages/AddPet'
 
 const httpLink = createHttpLink({
@@ -47,6 +46,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path='/Feed' element={<Feed />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/Add Pet" element={<AddPet/>} />
           </Routes>
         </div>
       </Router>
