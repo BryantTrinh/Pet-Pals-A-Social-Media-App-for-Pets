@@ -17,13 +17,13 @@ import { UploadFile } from "./UploadFile";
 import auth from "../../utils/auth";
 
 export default function RecipeReviewCard() {
-	const [formState, setFormState] = React.useState({
-		pet_name: "",
-		species: "",
-		birthday: "",
-		pictures: "...",
-		owner: "",
-	});
+  const [formState, setFormState] = React.useState({
+    pet_name: "",
+    species: "",
+    birthday: "",
+    pictures: "...",
+    owner: "",
+  });
 
 	const [imageFile, setImageFile] = React.useState();
 	const [preview, setPreview] = React.useState();
@@ -52,13 +52,13 @@ export default function RecipeReviewCard() {
 		}
 	};
 
-	React.useEffect(() => {
-		if (!imageFile) {
-			setPreview(
-				"https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
-			);
-			return;
-		}
+  React.useEffect(() => {
+    if (!imageFile) {
+      setPreview(
+        "https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
+      );
+      return;
+    }
 
 		const objectUrl = URL.createObjectURL(imageFile);
 		console.log(objectUrl);
@@ -68,14 +68,14 @@ export default function RecipeReviewCard() {
 		return () => URL.revokeObjectURL(objectUrl);
 	}, [imageFile]);
 
-	const onSelectFile = (event) => {
-		if (!event.target.files || event.target.files.length === 0) {
-			setImageFile(undefined);
-			return;
-		}
+  const onSelectFile = (event) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      setImageFile(undefined);
+      return;
+    }
 
-		setImageFile(event.target.files[0]);
-	};
+    setImageFile(event.target.files[0]);
+  };
 
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>

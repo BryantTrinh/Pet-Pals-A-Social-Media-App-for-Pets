@@ -38,6 +38,7 @@ function ChatBox() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
+        joinRoom()
     };
     const handleClose = () => setOpen(false);
 
@@ -65,12 +66,17 @@ function ChatBox() {
 
     const [message, setMessage] = React.useState('');
     const [messageReceived, setMessageReceived] = React.useState([]);
+    const [room, setRoom] = React.useState('test room 1')
+
+    const joinRoom = () => {
+        socket.emit('joinRoom', room);
+    }
 
     const sendMessage = () => {
         if (message === '') {
             return
         }
-        socket.emit("sendMessage", { message });
+        socket.emit("sendMessage", { message, room });
     }
 
     React.useEffect(() => {

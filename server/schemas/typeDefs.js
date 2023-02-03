@@ -17,6 +17,8 @@ const typeDefs = gql`
 		email: String
 		password: String
 		location: String
+    pets: [Pet]
+    chats: [Chat]
 	}
 
 	type Pet {
@@ -39,10 +41,31 @@ const typeDefs = gql`
 		user: User
 	}
 
+  type Message {
+    sender: ID
+    receiver: ID
+    message: String
+    createdAt: String
+  }
+
+  type Chat {
+    roomID: String
+    messages: [Message]
+  }
+
+  input MessageInput {
+    sender: String
+    receiver: String
+    message: String
+  }
+
 	type Query {
 		user: User
 		pets: [Pet]
+    myPets: [Pet]
 		pet: Pet
+    owner(ownerId: ID): User
+    getChat(roomID: String): Chat
 		uploads: [File!]!
 	}
 
@@ -60,9 +83,11 @@ const typeDefs = gql`
 			species: String!
 			birthday: Date!
 			pictures: Upload!
-			owner: ID!
+			owner: ID
 		): Pet
 		addMatch(pet1: String!, pet2: String!): Matches
+    createChat(roomID: String): Chat
+    addMessage(roomID: String, message: MessageInput): Chat
 		singleUpload(file: Upload!): File!
 	}
 `;

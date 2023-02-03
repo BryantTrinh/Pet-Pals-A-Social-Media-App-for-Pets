@@ -1,19 +1,34 @@
 const { Schema, model } = require("mongoose");
 
+const messageSchema = new Schema(
+  {
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    receiver: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const chatSchema = new Schema({
-  user1: {
+  roomID: {
     type: String,
     required: true,
-    trim: true,
+    unique: true
   },
-  user2: {
-    type: String,
-    required: true,
-  },
-  text: {
-    type: String,
-    required: true,
-  },
+  messages: [messageSchema],
 });
 
 const Chat = model("Chat", chatSchema);

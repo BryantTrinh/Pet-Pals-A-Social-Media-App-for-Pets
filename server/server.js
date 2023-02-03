@@ -13,6 +13,7 @@ const { authMiddleware } = require("./utils/auth");
 const { typeDefs, resolvers } = require("./schemas");
 const UPLOAD_DIRECTORY_URL = require("./config/UPLOAD_DIRECTORY_URL");
 const db = require("./config");
+// const Chat = require('./config/Chat')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -58,18 +59,24 @@ if (process.env.NODE_ENV === "production") {
 			],
 		});
 
-    await server.start();
+let messageArr = [];
+io.on("connection", (socket) => {
+  console.log(`Client is connected with ID: ${socket.id}`);
+
+  socket.on('joinRoom', (data) => {
+    socket.join(data);
+  })
+
+  socket.on("sendMessage", (message) => {
+    messageArr.push({ message: message.message })
     
-		server.applyMiddleware({
-			app,
-			path: "/graphql",
-			cors: {
-				origin: "*",
-				methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-				preflightContinue: false,
-				optionsSuccessStatus: 204,
-			},
-		});
+    io.to(message.room).emit("receiveMessage", messageArr);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Client ${socket.id} disconnected`);
+  });
+});
 
     db.once("open", () => {
 		app.listen(PORT, () => {

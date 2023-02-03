@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Pet, Matches, File } = require("../models");
+const { User, Pet, Chat, File } = require("../models");
 const { signToken } = require("../utils/auth.js");
 const { GraphQLScalarType } = require("graphql");
 const graphQLUpload = require("graphql-upload");
@@ -38,12 +38,18 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    owner: async (parent, { ownerId }, context) => {
+      return User.findOne({ _id: ownerId });
+    },
     pets: async (parent, args, context) => {
       if (context.user) {
-        return Pet.find({ owner: { $ne: context.user._id } }).populate(
-          "owner",
-          "_id"
-        );
+        return Pet.find({ owner: { $ne: context.user._id } });
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    myPets: async (parent, args, context) => {
+      if (context.user) {
+        return Pet.find({ owner: { $eq: context.user._id } });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -57,6 +63,12 @@ const resolvers = {
           return;
         }
         throw new AuthenticationError("No pets for this user.");
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    getChat: async (parent, { roomID }, context) => {
+      if (context.user) {
+        return await Chat.findOne({ roomID });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -114,12 +126,50 @@ const resolvers = {
         singleUpload: async (parent, { file }) => {
           return processUpload(file);
         },
-      addMatch: async (parent, { pet1, pet2 }, context) => {
-        if (context.user) {
-          const match = await Matches.create({ pet1, pet2 });
-          return { match };
+      // addMatch: async (parent, { pet1, pet2 }, context) => {
+    //   if (context.user) {
+    //     const match = await Matches.create({ pet1, pet2 });
+    //     return { match };
+    //   }
+    //   throw new AuthenticationError("Please login to create a match.");
+    // },
+    createChat: async (parent, { roomID }, context) => {
+      if (context.user) {
+        const existingChat = await Chat.findOne({ roomID });
+
+        if (existingChat) {
+          throw new AuthenticationError("Chat with this roomID already exists!")
         }
-        throw new AuthenticationError("Please login to create a match.");
+
+        const chatId = await Chat.create({ roomID });
+        const usersId = chatId.roomID.split(',')
+
+        console.log(chatId);
+        console.log(usersId); 
+
+        usersId.map(item => console.log(item))
+
+        usersId.map(async (userId) => {
+          const updateUserChats = await User.findByIdAndUpdate(
+            userId,
+            { $push: { chats: { roomID } } },
+            { new: true }
+          )
+        })
+
+        return chatId
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    addMessage: async (parent, { roomID, message }, context) => {
+        if (context.user) {
+          return await Chat.findOneAndUpdate(
+          { roomID },
+            { $push: { messages: message } },
+          { new: true }
+        );
+        }
+        throw new AuthenticationError("You need to be logged in!");
       },
     },
     Date: dateResolver,
