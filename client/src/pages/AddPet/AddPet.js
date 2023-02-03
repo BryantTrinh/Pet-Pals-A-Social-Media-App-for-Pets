@@ -44,7 +44,7 @@ export default function RecipeReviewCard() {
           pictures: formState.pictures,
         },
       });
-      window.location("/Feed");
+      window.location.replace("/profile");
     } catch (err) {
       console.error(err);
     }

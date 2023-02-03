@@ -72,8 +72,8 @@ export const ADD_PET = gql`
 `;
 
 export const CREATE_CHAT = gql`
-  mutation createChat($roomID: String, $messages: [MessageInput]) {
-    createChat (roomID: $roomID, messages: $messages) {
+  mutation createChat($roomID: String) {
+    createChat (roomID: $roomID) {
       roomID
       messages {
         sender

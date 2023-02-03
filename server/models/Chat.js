@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const User = require("./User.js");
 
 const messageSchema = new Schema(
   {
@@ -27,6 +26,7 @@ const chatSchema = new Schema({
   roomID: {
     type: String,
     required: true,
+    unique: true
   },
   messages: [messageSchema],
 });

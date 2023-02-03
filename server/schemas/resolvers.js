@@ -106,9 +106,31 @@ const resolvers = {
     //   }
     //   throw new AuthenticationError("Please login to create a match.");
     // },
-    createChat: async (parent, { roomID, messages }, context) => {
+    createChat: async (parent, { roomID }, context) => {
       if (context.user) {
-        return await Chat.create({ roomID, messages });
+        const existingChat = await Chat.findOne({ roomID });
+
+        if (existingChat) {
+          throw new AuthenticationError("Chat with this roomID already exists!")
+        }
+
+        const chatId = await Chat.create({ roomID });
+        const usersId = chatId.roomID.split(',')
+
+        console.log(chatId);
+        console.log(usersId); 
+
+        usersId.map(item => console.log(item))
+
+        usersId.map(async (userId) => {
+          const updateUserChats = await User.findByIdAndUpdate(
+            userId,
+            { $push: { chats: { roomID } } },
+            { new: true }
+          )
+        })
+
+        return chatId
       }
       throw new AuthenticationError("You need to be logged in!");
     },

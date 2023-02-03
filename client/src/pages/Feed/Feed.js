@@ -1,16 +1,10 @@
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import { Grid, Button, Card, CardHeader, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_PETS, QUERY_USER, QUERY_OWNER } from "../../utils/queries.js";
+import { CREATE_CHAT } from "../../utils/mutations";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
@@ -19,6 +13,25 @@ export default function RecipeReviewCard() {
   const petList = petsData?.pets || [];
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
+
+  const [createChat] = useMutation(CREATE_CHAT);
+
+  // Creating roomID using pet's owner and user ID
+  const addToChat = async (event) => {
+    if (!petsLoading && !userLoading) {
+      const IdArr = []
+      IdArr.push(event.target.firstElementChild.id)
+      IdArr.push(userData.user._id)
+      IdArr.sort()
+      const roomID = IdArr.toString()
+      
+      const addChat = await createChat({
+        variables: { roomID: roomID }
+      })
+    }
+    
+  }
+
   return (
     <Grid
       container
@@ -50,10 +63,11 @@ export default function RecipeReviewCard() {
                       Species: {pet.species}
                     </Typography>
                   </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                      <ChatIcon />
-                    </IconButton>
+                  <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button variant="contained" endIcon={<ChatIcon />} onClick={addToChat}>
+                      ADD TO CHAT
+                      <input hidden={true} id={pet.owner}></input>
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
