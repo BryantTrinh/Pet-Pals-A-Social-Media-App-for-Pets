@@ -42,9 +42,7 @@ function Match(props) {
   });
   const owner = ownerData?.owner || {};
   const ownerLocation = owner.location;
-  console.log(ownerLocation);
   const userLocation = props.userData.user.location;
-  console.log(userLocation);
   function calculateDistance() {
     distanceCalc(ownerLocation, userLocation).then((res) => {
       setDistance(res);

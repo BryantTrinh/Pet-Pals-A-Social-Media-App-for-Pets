@@ -30,6 +30,12 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    myPets: async (parent, args, context) => {
+      if (context.user) {
+        return Pet.find({ owner: { $eq: context.user._id } });
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
     pet: async (parent, { _id }) => {
       if (context.user) {
         if (context.user.pets) {
