@@ -15,8 +15,11 @@ export default function RecipeReviewCard() {
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
 
   const createRoomID = () => {
-    let roomIDArr = []
-    
+    const IdArr = []
+    IdArr.push(petsData.pets[0].owner)
+    IdArr.push(userData.user._id)
+    IdArr.sort()
+    const roomID = IdArr.toString()
   }
 
   // const { data: newChat } = useMutation(CREATE_CHAT, {
@@ -55,7 +58,7 @@ export default function RecipeReviewCard() {
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button variant="contained" endIcon={<ChatIcon />}>
+                    <Button variant="contained" endIcon={<ChatIcon />} onClick={createRoomID}>
                       ADD TO CHAT
                     </Button>
                   </CardActions>
