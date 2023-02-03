@@ -67,7 +67,7 @@ const resolvers = {
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
-      
+
       if (!user) {
         throw new AuthenticationError("No user with this email found!");
       }
@@ -108,12 +108,29 @@ const resolvers = {
     // },
     createChat: async (parent, { roomID }, context) => {
       if (context.user) {
-        const existingChat = await Chat.findOne({ roomID: roomID });
-        
-        if (!existingChat) {
-          return await Chat.create({ roomID });
+        const existingChat = await Chat.findOne({ roomID });
+
+        if (existingChat) {
+          throw new AuthenticationError("Chat with this roomID already exists!")
         }
-        throw new AuthenticationError("Chat with this roomID already exists!")
+
+        const chatId = await Chat.create({ roomID });
+        const usersId = chatId.roomID.split(',')
+
+        console.log(chatId);
+        console.log(usersId); 
+
+        usersId.map(item => console.log(item))
+
+        usersId.map(async (userId) => {
+          const updateUserChats = await User.findByIdAndUpdate(
+            userId,
+            { $push: { chats: { roomID } } },
+            { new: true }
+          )
+        })
+
+        return chatId
       }
       throw new AuthenticationError("You need to be logged in!");
     },

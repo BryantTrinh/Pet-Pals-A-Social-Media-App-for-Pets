@@ -14,17 +14,23 @@ export default function RecipeReviewCard() {
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
 
-  const createRoomID = () => {
-    const IdArr = []
-    IdArr.push(petsData.pets[0].owner)
-    IdArr.push(userData.user._id)
-    IdArr.sort()
-    const roomID = IdArr.toString()
-  }
+  const [createChat] = useMutation(CREATE_CHAT);
 
-  // const { data: newChat } = useMutation(CREATE_CHAT, {
-  //   variables: { roomID }
-  // })
+  // Creating roomID using pet's owner and user ID
+  const addToChat = async (event) => {
+    if (!petsLoading && !userLoading) {
+      const IdArr = []
+      IdArr.push(event.target.firstElementChild.id)
+      IdArr.push(userData.user._id)
+      IdArr.sort()
+      const roomID = IdArr.toString()
+      
+      const addChat = await createChat({
+        variables: { roomID: roomID }
+      })
+    }
+    
+  }
 
   return (
     <Grid
@@ -58,8 +64,9 @@ export default function RecipeReviewCard() {
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button variant="contained" endIcon={<ChatIcon />} onClick={createRoomID}>
+                    <Button variant="contained" endIcon={<ChatIcon />} onClick={addToChat}>
                       ADD TO CHAT
+                      <input hidden={true} id={pet.owner}></input>
                     </Button>
                   </CardActions>
                 </Card>
