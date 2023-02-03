@@ -84,7 +84,7 @@ export default function Profile() {
                     </div>
                     <div className="modal-footer">
                       <img src="https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg"></img>
-                      <h1>Kuro</h1>
+                      <h1>Kuro</h1>                      
                     </div>
                   </Box>
                 </Modal>
