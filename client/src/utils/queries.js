@@ -39,14 +39,15 @@ export const QUERY_PETS = gql`
   }
 `;
 
-export const QUERY_PET = gql`
-  query pets {
-    pets {
+export const QUERY_MYPETS = gql`
+  query MyPets {
+    myPets {
       _id
       name
       species
       birthday
       pictures
+      owner
     }
   }
 `;

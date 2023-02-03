@@ -44,7 +44,6 @@ const typeDefs = gql`
   type Chat {
     roomID: String
     messages: [Message]
-
   }
 
   input MessageInput {
@@ -56,6 +55,7 @@ const typeDefs = gql`
   type Query {
     user: User
     pets: [Pet]
+    myPets: [Pet]
     pet: Pet
     owner(ownerId: ID): User
     getChat(roomID: String): Chat
