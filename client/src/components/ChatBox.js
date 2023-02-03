@@ -4,6 +4,8 @@ import SendIcon from '@mui/icons-material/Send';
 import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
 
+import auth from '../utils/auth'
+
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:3001');
 
@@ -91,20 +93,22 @@ function ChatBox() {
 
     return (
         <>
-            <ForumIcon
-                sx={{
-                    position: "fixed",
-                    zIndex: 50,
-                    right: "3%",
-                    bottom: "3%",
-                    width: 40,
-                    height: 40,
-                    "&:hover": {
-                        cursor: "pointer"
-                    }
-                }}
-                onClick={handleOpen}
-            />
+            {auth.loggedIn() ? (
+                <ForumIcon
+                    sx={{
+                        position: "fixed",
+                        zIndex: 50,
+                        right: "3%",
+                        bottom: "3%",
+                        width: 40,
+                        height: 40,
+                        "&:hover": {
+                            cursor: "pointer"
+                        }
+                    }}
+                    onClick={handleOpen}
+                />
+            ) : (<></>)}
             <Backdrop sx={{ color: '#fff', zIndex: 10 }}
                 open={open}
             >
