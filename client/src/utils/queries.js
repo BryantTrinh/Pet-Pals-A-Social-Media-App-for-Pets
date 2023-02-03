@@ -8,6 +8,7 @@ export const QUERY_USER = gql`
       last_name
       email
       location
+      chats
     }
   }
 `;

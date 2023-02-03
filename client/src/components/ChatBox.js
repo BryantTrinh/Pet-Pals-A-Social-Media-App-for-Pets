@@ -9,6 +9,7 @@ import auth from '../utils/auth'
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:3001');
 
+
 // Colored avatars with initials
 function stringToColor(string) {
     let hash = 0;
@@ -66,7 +67,7 @@ function ChatBox() {
 
     const [message, setMessage] = React.useState('');
     const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('test room 1')
+    const [room, setRoom] = React.useState('')
 
     const joinRoom = () => {
         socket.emit('joinRoom', room);
