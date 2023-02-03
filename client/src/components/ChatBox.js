@@ -66,7 +66,7 @@ function ChatBox() {
 
     const [message, setMessage] = React.useState('');
     const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('TestRoom')
+    const [room, setRoom] = React.useState('test room 1')
 
     const joinRoom = () => {
         socket.emit('joinRoom', room);

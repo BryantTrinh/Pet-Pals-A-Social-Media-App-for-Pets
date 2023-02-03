@@ -11,6 +11,7 @@ const typeDefs = gql`
     password: String
     location: String
     pets: [Pet]
+    chats: [Chat]
   }
 
   type Pet {
@@ -77,7 +78,7 @@ const typeDefs = gql`
       owner: ID
     ): Pet
     addMatch(pet1: String!, pet2: String!): Matches
-    createChat(roomID: String, messages: [MessageInput]): Chat
+    createChat(roomID: String): Chat
     addMessage(roomID: String, message: MessageInput): Chat
   }
 `;
