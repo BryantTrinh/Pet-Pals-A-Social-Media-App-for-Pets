@@ -52,13 +52,19 @@ function Match(props) {
   }
   return (
     <>
-      {calculateDistance()}
-      <Typography variant="body2" color="text.secondary">
-        Owner: {owner.first_name} {owner.last_name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {distance} Miles Away
-      </Typography>
+      {ownerLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          {calculateDistance()}
+          <Typography variant="body2" color="text.secondary">
+            Owner: {owner.first_name} {owner.last_name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {distance} Miles Away
+          </Typography>
+        </>
+      )}
     </>
   );
 }
