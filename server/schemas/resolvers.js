@@ -64,7 +64,7 @@ const resolvers = {
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
-
+      
       if (!user) {
         throw new AuthenticationError("No user with this email found!");
       }
@@ -105,7 +105,12 @@ const resolvers = {
     // },
     createChat: async (parent, { roomID, messages }, context) => {
       if (context.user) {
-        return await Chat.create({ roomID, messages });
+        const existingChat = await Chat.findOne({ roomID: roomID });
+        
+        if (!existingChat) {
+          return await Chat.create({ roomID, messages });
+        }
+        throw new AuthenticationError("Chat with this roomID already exists!")
       }
       throw new AuthenticationError("You need to be logged in!");
     },

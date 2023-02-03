@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, ObjectId } = require("mongoose");
 
 const messageSchema = new Schema(
   {
@@ -18,17 +18,20 @@ const messageSchema = new Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-const chatSchema = new Schema({
-  roomID: {
-    type: String,
-    required: true
+const chatSchema = new Schema(
+  {
+    roomID: {
+      ObjectId,
+      type: String,
+      required: true,
+    },
+    messages: [messageSchema]
   },
-  messages: [messageSchema]
-})
+)
 
 const Chat = model("Chat", chatSchema);
 
