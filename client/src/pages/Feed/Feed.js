@@ -20,6 +20,11 @@ export default function RecipeReviewCard() {
   const now = dayjs().format("YYYY-MM-DD");
 //   const { loading1, data1 } = useQuery(QUERY_USER);
 //   console.log(data1);
+
+  const initiateChat = () => {
+    console.log('Chat initiated');
+  }
+
   return (
     <Grid
       container
@@ -50,8 +55,8 @@ export default function RecipeReviewCard() {
                       Species: {pet.species}
                     </Typography>
                   </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
+                  <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <IconButton aria-label="add to favorites" onClick={initiateChat}>
                       <ChatIcon />
                     </IconButton>
                   </CardActions>
@@ -61,78 +66,6 @@ export default function RecipeReviewCard() {
           })}
         </>
       )}
-      {/* <Grid item xs={12} sm={6} md={3}>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardHeader title="Chorizo" />
-          <CardMedia
-            component="img"
-            height="194"
-            image="https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0"
-            alt="pet profile"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              Location
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Breed/Species
-            </Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <ChatIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} md={3}>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardHeader title="Chorizo" />
-          <CardMedia
-            component="img"
-            height="194"
-            image="https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0"
-            alt="pet profile"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              Location
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Breed/Species
-            </Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <ChatIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} md={3}>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardHeader title="Chorizo" />
-          <CardMedia
-            component="img"
-            height="194"
-            image="https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0"
-            alt="pet profile"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              Location
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Breed/Species
-            </Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <ChatIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid> */}
     </Grid>
   );
 }

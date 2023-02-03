@@ -103,12 +103,12 @@ const resolvers = {
     //   }
     //   throw new AuthenticationError("Please login to create a match.");
     // },
-    createChat: async (parent, { roomID, messages }, context) => {
+    createChat: async (parent, { roomID }, context) => {
       if (context.user) {
         const existingChat = await Chat.findOne({ roomID: roomID });
         
         if (!existingChat) {
-          return await Chat.create({ roomID, messages });
+          return await Chat.create({ roomID });
         }
         throw new AuthenticationError("Chat with this roomID already exists!")
       }
