@@ -13,12 +13,13 @@ export const QUERY_USER = gql`
 `;
 
 export const QUERY_OWNER = gql`
-  query owner {
-    user {
+  query Owner($ownerId: ID) {
+    owner(ownerId: $ownerId) {
       _id
       first_name
       last_name
       email
+      password
       location
     }
   }
@@ -51,7 +52,7 @@ export const QUERY_PET = gql`
 
 export const QUERY_CHAT = gql`
   query getChat($roomId: String) {
-    getChat (roomID: $roomId) {
+    getChat(roomID: $roomId) {
       roomID
       messages {
         sender
@@ -60,5 +61,5 @@ export const QUERY_CHAT = gql`
         createdAt
       }
     }
-}
-`
+  }
+`;
