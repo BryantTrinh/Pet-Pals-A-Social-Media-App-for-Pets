@@ -13,12 +13,13 @@ export const QUERY_USER = gql`
 `;
 
 export const QUERY_OWNER = gql`
-  query owner {
-    user {
+  query Owner($ownerId: ID) {
+    owner(ownerId: $ownerId) {
       _id
       first_name
       last_name
       email
+      password
       location
     }
   }

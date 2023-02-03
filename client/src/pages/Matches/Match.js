@@ -3,6 +3,7 @@ import { QUERY_USER, QUERY_OWNER } from "../../utils/queries";
 import { getDistance } from "geolib";
 import auth from "../../utils/auth.js";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
 async function findLatLon(city) {
   let latLon = { lat: "", lon: "" };
@@ -35,21 +36,33 @@ async function distanceCalc(userLocation, otherLocation) {
 }
 
 function Match(props) {
+  const [distance, setDistance] = useState(0);
   const { loading: ownerLoading, data: ownerData } = useQuery(QUERY_OWNER, {
     variables: { ownerId: props.pet.owner },
   });
-  const ownerLocation = ownerData.user.location;
+  const owner = ownerData?.owner || {};
+  const ownerLocation = owner.location;
   const userLocation = props.userData.user.location;
-  const distance = distanceCalc(ownerLocation, userLocation);
-  console.log(distance);
+  function calculateDistance() {
+    distanceCalc(ownerLocation, userLocation).then((res) => {
+      setDistance(res);
+    });
+  }
   return (
     <>
-      <Typography variant="body2" color="text.secondary">
-        Owner: {ownerData.user.first_name} {ownerData.user.last_name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Miles Away
-      </Typography>
+      {ownerLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          {calculateDistance()}
+          <Typography variant="body2" color="text.secondary">
+            Owner: {owner.first_name} {owner.last_name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {distance} Miles Away
+          </Typography>
+        </>
+      )}
     </>
   );
 }
