@@ -71,6 +71,32 @@ export const ADD_PET = gql`
   }
 `;
 
+export const CREATE_CHAT = gql`
+  mutation createChat($roomID: String, $messages: [MessageInput]) {
+    createChat (roomID: $roomID, messages: $messages) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
+    }
+  }
+`;
+
+export const ADD_MESSAGE = gql`
+  mutation addMessage($roomID: String, $message: MessageInput) {
+    addMessage (roomID: $roomID, message: $message) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
+    }
+  }
+`;
+
 export function useLogoutMutation() {
   const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
 

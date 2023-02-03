@@ -49,10 +49,16 @@ export const QUERY_PET = gql`
   }
 `;
 
-export const QUERY_MATCH = gql`
-  query matches {
-    _id
-    pet1
-    pet2: String
-  }
-`;
+export const QUERY_CHAT = gql`
+  query getChat($roomId: String) {
+    getChat (roomID: $roomId) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+        createdAt
+      }
+    }
+}
+`

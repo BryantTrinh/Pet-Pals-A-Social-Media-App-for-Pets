@@ -8,10 +8,13 @@ import {
   Grid,
   TextField,
   Box,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useMutation } from "@apollo/client";
 import { ADD_PET } from "../../utils/mutations";
+
+import auth from "../../utils/auth";
 
 export default function RecipeReviewCard() {
   const [formState, setFormState] = React.useState({
@@ -19,6 +22,7 @@ export default function RecipeReviewCard() {
     species: "",
     birthday: "",
     pictures: "...",
+    owner: "",
   });
 
   const [imageFile, setImageFile] = React.useState();
@@ -40,6 +44,7 @@ export default function RecipeReviewCard() {
           pictures: formState.pictures,
         },
       });
+      window.location("/Feed");
     } catch (err) {
       console.error(err);
     }
@@ -122,20 +127,25 @@ export default function RecipeReviewCard() {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant="contained"
-                component="label"
-                startIcon={<AddIcon />}
-              >
-                Add Image
-                <input
-                  hidden
-                  accept="image/*"
-                  multiple
-                  type="file"
-                  onChange={onSelectFile}
-                />
-              </Button>
+              <Grid container direction="row" alignItems="center" wrap="nowrap">
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    startIcon={<AddIcon />}
+                  >
+                    Add Image
+                    <input
+                      hidden
+                      accept="image/*"
+                      multiple
+                      type="file"
+                      onChange={onSelectFile}
+                    />
+                  </Button>
+                </Grid>
+                <Typography noWrap>No File Chosen</Typography>
+              </Grid>
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
