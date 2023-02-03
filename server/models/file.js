@@ -1,7 +1,7 @@
 // mongoose model representing the 'File' type defined in our graphql/index.js
-const mongoose = require("mongoose");
+const {Schema, model } = require("mongoose");
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
 const fileSchema = new Schema({
 	filename: {
@@ -18,4 +18,6 @@ const fileSchema = new Schema({
 	},
 });
 
-module.exports = mongoose.model("File", fileSchema);
+const File = model("File", fileSchema);
+
+module.exports = File;

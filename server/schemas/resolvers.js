@@ -1,8 +1,11 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Pet, Matches } = require("../models");
+const { User, Pet, Matches, File } = require("../models");
 const { signToken } = require("../utils/auth.js");
 const { GraphQLScalarType } = require("graphql");
-
+const graphQLUpload = require("graphql-upload");
+const fs = require("fs");
+const UPLOAD_DIRECTORY_URL = require("../../server/config");
+const storeUpload = require("../utils/helpers/storeUpload");
 
 const dateResolver = new GraphQLScalarType({
   name: "Date",
@@ -13,7 +16,6 @@ const dateResolver = new GraphQLScalarType({
     return value.toJSON();
   },
 });
-
 
 const resolvers = {
   Query: {
@@ -105,32 +107,43 @@ const resolvers = {
     },
     Date: dateResolver,
   };
-  
+
+  module.exports = {
+		Upload: graphQLUpload, //Resolves the `Upload` scalar
+		Query: {
+			// Retrieves files in our local filesystem
+			uploads: async () => {
+				return (await fs.promises.readdir(UPLOAD_DIRECTORY_URL)).map(
+					(filename) => {
+						return {
+							filename,
+							mimetype: "",
+							encoding: "",
+						};
+					}
+				);
+			},
+		},
+		Mutation: {
+			// Store a single file
+			singleUpload: async (parent, args) => {
+				return storeUpload(args.file);
+			},
+			// Store multiple files
+			multipleUpload: async (parent, { files }) => {
+				if (!files) files = []; // Turn files into an empty list if it's undefined or null
+				// Ensure an error storing one upload doesn’t prevent storing the rest.
+				const results = await Promise.allSettled(files.map(storeUpload));
+				return results.reduce((storedFiles, { value, reason }) => {
+					if (value) storedFiles.push(value);
+					else console.error(`Failed to store upload: ${reason}`);
+					return storedFiles;
+				}, []);
+			},
+		},
+	};
+
+
+
   module.exports = resolvers;
   
-  
-  
-  const uploadPhoto = async (parent, args, context, info) => {
-    const graphQLUploadObjects = args.files.map((file) => GraphQLUpload.convertFile(file));
-    const uploader = upload.any({ maxCount: 1 });
-    uploader(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-        res.status(400).send(err);
-      } else if (err) {
-        res.status(400).send(err);
-      }
-      req.filesforEach((file) => {
-        FormData.append("profilePicture", file);
-      });
-      // sending formData to the backend using fetch api
-      try {
-        const response = await fetch ('/api/upload', {
-          method: 'POST',
-          body: formData
-        });
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        throw new Error(error);
-      }
-    };

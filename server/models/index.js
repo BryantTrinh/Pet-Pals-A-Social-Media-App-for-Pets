@@ -3,4 +3,5 @@ module.exports = {
   Pet: require("./Pet.js"),
   // Matches: require("./Matches.js"),
   Chat: require("./Chat.js"),
+  File: require("./File.js"),
 };

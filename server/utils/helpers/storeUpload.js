@@ -2,7 +2,7 @@ const { createWriteStream, unlink } = require('fs');
 const shortId = require('shortid');
 const path = require('path');
 
-const UPLOAD_DIRECTORY_URL = require('../../../config/UPLOAD_DIRECTORY_URL');
+const UPLOAD_DIRECTORY_URL = require('../../config/UPLOAD_DIRECTORY_URL');
 
 /**
  * Stores a GraphQL file upload in the filesystem and uploads file metadata to MongoDB.
