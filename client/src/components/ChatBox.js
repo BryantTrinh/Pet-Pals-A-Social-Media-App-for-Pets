@@ -33,10 +33,6 @@ function stringAvatar(name) {
     };
 }
 
-const openChatContext = React.createContext();
-
-export const useOpenChatContext = () => React.useContext(openChatContext);
-
 function ChatBox() {
     // Show chat box modal use state
     const [open, setOpen] = React.useState(false);

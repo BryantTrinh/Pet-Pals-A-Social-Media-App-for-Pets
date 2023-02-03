@@ -1,16 +1,10 @@
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import { Grid, Button, Card, CardHeader, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_PETS, QUERY_USER, QUERY_OWNER } from "../../utils/queries.js";
+import { CREATE_CHAT } from "../../utils/mutations";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
@@ -22,6 +16,11 @@ export default function RecipeReviewCard() {
   if (!userLoading) {
     console.log(userData);
   }
+
+  // const { data: chatData } = useMutation(CREATE_CHAT, {
+  //   variables: { roomID }
+  // });
+
   return (
     <Grid
       container
@@ -54,9 +53,9 @@ export default function RecipeReviewCard() {
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton aria-label="add to favorites" onClick={initiateChat}>
-                      <ChatIcon />
-                    </IconButton>
+                    <Button variant="contained" endIcon={<ChatIcon />}>
+                      ADD TO CHAT
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>

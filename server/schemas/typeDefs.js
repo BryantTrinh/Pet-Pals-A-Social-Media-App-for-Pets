@@ -78,7 +78,7 @@ const typeDefs = gql`
     ): Pet
     addMatch(pet1: String!, pet2: String!): Matches
     createChat(roomID: String): Chat
-    addMessage(roomID: String, message: [Message]): Chat
+    addMessage(roomID: String, message: MessageInput): Chat
   }
 `;
 
