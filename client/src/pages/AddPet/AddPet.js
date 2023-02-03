@@ -34,7 +34,7 @@ export default function RecipeReviewCard() {
     try {
       const addPetForm = await addPet({
         variables: {
-          pet_name: formState.pet_name,
+          name: formState.pet_name,
           species: formState.species,
           birthday: formState.birthday,
           pictures: formState.pictures,

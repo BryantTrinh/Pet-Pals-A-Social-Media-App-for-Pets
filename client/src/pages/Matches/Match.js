@@ -1,7 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { QUERY_USER } from "../../utils/queries";
+import { QUERY_USER, QUERY_OWNER } from "../../utils/queries";
 import { getDistance } from "geolib";
 import auth from "../../utils/auth.js";
+import Typography from "@mui/material/Typography";
 
 async function findLatLon(city) {
   let latLon = { lat: "", lon: "" };
@@ -33,12 +34,26 @@ async function distanceCalc(userLocation, otherLocation) {
   return finalDistance;
 }
 
-function Match() {
-  const user = auth.getProfile();
-  return console.log(user);
+function Match(props) {
+  const { loading: ownerLoading, data: ownerData } = useQuery(QUERY_OWNER, {
+    variables: { ownerId: props.pet.owner },
+  });
+  const ownerLocation = ownerData.user.location;
+  const userLocation = props.userData.user.location;
+  const distance = distanceCalc(ownerLocation, userLocation);
+  console.log(distance);
+  return (
+    <>
+      <Typography variant="body2" color="text.secondary">
+        Owner: {ownerData.user.first_name} {ownerData.user.last_name}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Miles Away
+      </Typography>
+    </>
+  );
 }
 
 // findLatLon("fountain_valley");
-
 
 export default Match;

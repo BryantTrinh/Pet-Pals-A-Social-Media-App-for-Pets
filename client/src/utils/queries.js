@@ -12,6 +12,18 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const QUERY_OWNER = gql`
+  query owner {
+    user {
+      _id
+      first_name
+      last_name
+      email
+      location
+    }
+  }
+`;
+
 export const QUERY_PETS = gql`
   query Pets {
     pets {
@@ -20,6 +32,7 @@ export const QUERY_PETS = gql`
       species
       birthday
       pictures
+      owner
     }
   }
 `;
@@ -38,8 +51,8 @@ export const QUERY_PET = gql`
 
 export const QUERY_MATCH = gql`
   query matches {
-  _id
-  pet1
-  pet2: String
-}
-`
+    _id
+    pet1
+    pet2: String
+  }
+`;

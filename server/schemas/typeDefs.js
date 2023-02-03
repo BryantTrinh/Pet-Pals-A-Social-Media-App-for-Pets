@@ -10,6 +10,7 @@ const typeDefs = gql`
     email: String
     password: String
     location: String
+    pets: [Pet]
   }
 
   type Pet {
@@ -34,9 +35,9 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    owner: User
     pets: [Pet]
     pet: Pet
+    owner: User
   }
 
   type Mutation {
