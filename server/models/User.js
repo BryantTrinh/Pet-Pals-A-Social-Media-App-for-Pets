@@ -29,6 +29,10 @@ const userSchema = new Schema({
     required: true,
   },
   pets: [Pet.schema],
+  chats: {
+    type: Schema.Types.ObjectId,
+    ref: "Chats",
+  },
 });
 
 userSchema.pre("save", async function (next) {

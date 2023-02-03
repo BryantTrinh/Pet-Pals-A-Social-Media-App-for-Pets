@@ -10,7 +10,7 @@ const typeDefs = gql`
     email: String
     password: String
     location: String
-    pets: Pet
+    pets: [Pet]
   }
 
   type Pet {
@@ -34,8 +34,8 @@ const typeDefs = gql`
   }
 
   type Message {
-    sender: String
-    receiver: String
+    sender: ID
+    receiver: ID
     message: String
     createdAt: String
   }
@@ -54,9 +54,9 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    owner: User
     pets: [Pet]
     pet: Pet
+    owner: User
     getChat(roomID: String): Chat
   }
 
