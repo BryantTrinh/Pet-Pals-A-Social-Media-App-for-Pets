@@ -55,6 +55,12 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    getUserChats: async (parent, { userId }, context) => {
+      if (context.user) {
+        return await User.findOne({ _id: userId })        
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    }
   },
   Mutation: {
     register: async (

@@ -8,7 +8,6 @@ export const QUERY_USER = gql`
       last_name
       email
       location
-      chats
     }
   }
 `;
@@ -51,6 +50,10 @@ export const QUERY_MYPETS = gql`
     }
   }
 `;
+
+export const QUERY_CHATS = gql`
+  
+`
 
 export const QUERY_CHAT = gql`
   query getChat($roomId: String) {

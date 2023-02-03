@@ -59,6 +59,7 @@ const typeDefs = gql`
     pet: Pet
     owner(ownerId: ID): User
     getChat(roomID: String): Chat
+    getUserChats(userId: ID): User
   }
 
   type Mutation {
