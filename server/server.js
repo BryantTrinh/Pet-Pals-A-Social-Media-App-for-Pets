@@ -6,6 +6,7 @@ const { authMiddleware } = require("./utils/auth.js");
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config");
+// const Chat = require('./config/Chat')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -44,9 +45,14 @@ let messageArr = [];
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
+  socket.on('joinRoom', (data) => {
+    socket.join(data);
+  })
+
   socket.on("sendMessage", (message) => {
-    messageArr.push({ socketID: socket.id, message: message.message })
-    io.emit("receiveMessage", messageArr);
+    messageArr.push({ message: message.message })
+    
+    io.to(message.room).emit("receiveMessage", messageArr);
   });
 
   socket.on("disconnect", () => {

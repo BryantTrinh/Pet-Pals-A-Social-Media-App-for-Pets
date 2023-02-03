@@ -41,21 +41,70 @@ export const LOGIN_USER = gql`
   }
 `;
 
-
 const LOGOUT_MUTATION = gql`
-	mutation LogoutMutation {
-		logout
-	}
+  mutation LogoutMutation {
+    logout
+  }
+`;
+
+export const ADD_PET = gql`
+  mutation addPet(
+    $name: String!
+    $species: String!
+    $birthday: Date!
+    $pictures: String!
+    $owner: ID!
+  ) {
+    addPet(
+      name: $name
+      species: $species
+      birthday: $birthday
+      pictures: $pictures
+      owner: $owner
+    ) {
+      _id
+      name
+      species
+      birthday
+      pictures
+      owner
+    }
+  }
+`;
+
+export const CREATE_CHAT = gql`
+  mutation createChat($roomID: String, $messages: [MessageInput]) {
+    createChat (roomID: $roomID, messages: $messages) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
+    }
+  }
+`;
+
+export const ADD_MESSAGE = gql`
+  mutation addMessage($roomID: String, $message: MessageInput) {
+    addMessage (roomID: $roomID, message: $message) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+      }
+    }
+  }
 `;
 
 export function useLogoutMutation() {
-	const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
+  const [logout, { data, loading, error }] = useMutation(LOGOUT_MUTATION);
 
-	return { logout, data, loading, error };
+  return { logout, data, loading, error };
 }
 
 // uploading photo mutation
-
 
 const QUERY_UPLOAD_PHOTO = `
 	mutation ($formData: FormData!) {

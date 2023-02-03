@@ -43,3 +43,17 @@ export const QUERY_MATCH = gql`
   pet2: String
 }
 `
+
+export const QUERY_CHAT = gql`
+  query getChat($roomId: String) {
+    getChat (roomID: $roomId) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+        createdAt
+      }
+    }
+}
+`
