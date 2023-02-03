@@ -4,14 +4,14 @@ const User = require("./User.js");
 const messageSchema = new Schema(
   {
     sender: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      trim: true,
     },
     receiver: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      trim: true,
     },
     message: {
       type: String,
@@ -19,17 +19,17 @@ const messageSchema = new Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
 const chatSchema = new Schema({
   roomID: {
     type: String,
-    required: true
+    required: true,
   },
-  messages: [messageSchema]
-})
+  messages: [messageSchema],
+});
 
 const Chat = model("Chat", chatSchema);
 

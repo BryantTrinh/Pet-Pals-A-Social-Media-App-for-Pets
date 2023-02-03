@@ -34,8 +34,8 @@ const typeDefs = gql`
   }
 
   type Message {
-    sender: String
-    receiver: String
+    sender: ID
+    receiver: ID
     message: String
     createdAt: String
   }
