@@ -10,6 +10,7 @@ const typeDefs = gql`
     email: String
     password: String
     location: String
+    pets: Pet
   }
 
   type Pet {
@@ -18,6 +19,7 @@ const typeDefs = gql`
     species: String
     birthday: Date
     pictures: String
+    owner: ID
   }
 
   type Matches {
@@ -31,10 +33,31 @@ const typeDefs = gql`
     user: User
   }
 
+  type Message {
+    sender: String
+    receiver: String
+    message: String
+    createdAt: String
+  }
+
+  type Chat {
+    roomID: String
+    messages: [Message]
+
+  }
+
+  input MessageInput {
+    sender: String
+    receiver: String
+    message: String
+  }
+
   type Query {
     user: User
-    pets: Pet
+    owner: User
+    pets: [Pet]
     pet: Pet
+    getChat(roomID: String): Chat
   }
 
   type Mutation {
@@ -51,8 +74,11 @@ const typeDefs = gql`
       species: String!
       birthday: Date!
       pictures: String!
+      owner: ID
     ): Pet
     addMatch(pet1: String!, pet2: String!): Matches
+    createChat(roomID: String, messages: [MessageInput]): Chat
+    addMessage(roomID: String, message: MessageInput): Chat
   }
 `;
 

@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const QUERY_USER = gql`
+export const QUERY_USER = gql`
   query user {
     user {
       _id
@@ -12,34 +12,48 @@ const QUERY_USER = gql`
   }
 `;
 
-const QUERY_PETS = gql`
-  query pets {
+export const QUERY_PETS = gql`
+  query Pets {
     pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
+      _id
+      name
+      species
+      birthday
+      pictures
     }
   }
 `;
 
-const QUERY_PET = gql`
+export const QUERY_PET = gql`
   query pets {
     pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
+      _id
+      name
+      species
+      birthday
+      pictures
     }
   }
 `;
 
-const QUERY_MATCH = gql`
+export const QUERY_MATCH = gql`
   query matches {
-  _id: ID
-  pet1: String
+  _id
+  pet1
   pet2: String
+}
+`
+
+export const QUERY_CHAT = gql`
+  query getChat($roomId: String) {
+    getChat (roomID: $roomId) {
+      roomID
+      messages {
+        sender
+        receiver
+        message
+        createdAt
+      }
+    }
 }
 `

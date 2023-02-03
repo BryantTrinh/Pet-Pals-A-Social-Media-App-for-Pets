@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Pet, Matches } = require("../models");
+const { User, Pet, Chat } = require("../models");
 const { signToken } = require("../utils/auth.js");
 const { GraphQLScalarType } = require("graphql");
 
@@ -9,7 +9,7 @@ const dateResolver = new GraphQLScalarType({
     return new Date(value);
   },
   serialize(value) {
-    return value.toLocaleDateString();
+    return value.toJSON();
   },
 });
 
@@ -23,10 +23,7 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        if (context.user.pets) {
-          return Pet.find();
-        }
-        throw new AuthenticationError("No pets for this user.");
+        return Pet.find({ owner: { $ne: context.user._id } });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -40,6 +37,12 @@ const resolvers = {
           return;
         }
         throw new AuthenticationError("No pets for this user.");
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    getChat: async (parent, { roomID }, context) => {
+      if (context.user) {
+        return await Chat.findOne({ roomID });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -77,7 +80,13 @@ const resolvers = {
     },
     addPet: async (parent, { name, species, birthday, pictures }, context) => {
       if (context.user) {
-        const pet = await Pet.create({ name, species, birthday, pictures });
+        const pet = await Pet.create({
+          name,
+          species,
+          birthday,
+          pictures,
+          owner: context.user._id,
+        });
         const updatedUserPets = await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { pets: pet } },
@@ -87,12 +96,28 @@ const resolvers = {
       }
       throw new AuthenticationError("Please login to add a pet.");
     },
-    addMatch: async (parent, { pet1, pet2 }) => {
+    // addMatch: async (parent, { pet1, pet2 }) => {
+    //   if (context.user) {
+    //     const match = await Matches.create({ pet1, pet2 });
+    //     return { match };
+    //   }
+    //   throw new AuthenticationError("Please login to create a match.");
+    // },
+    createChat: async (parent, { roomID, messages }, context) => {
       if (context.user) {
-        const match = await Matches.create({ pet1, pet2 });
-        return { match };
+        return await Chat.create({ roomID, messages });
       }
-      throw new AuthenticationError("Please login to create a match.");
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    addMessage: async (parent, { roomID, message }, context) => {
+      if (context.user) {
+        return await Chat.findOneAndUpdate(
+          { roomID },
+          { $push: { messages: message } },
+          { new: true }
+        );
+      }
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
   Date: dateResolver,

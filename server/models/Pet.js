@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const User = require("./User.js");
 
 const petSchema = new Schema({
   name: {
@@ -17,6 +18,10 @@ const petSchema = new Schema({
   pictures: {
     type: String,
     required: true,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 
