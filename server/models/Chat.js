@@ -1,16 +1,17 @@
-const { Schema, model, ObjectId } = require("mongoose");
+const { Schema, model } = require("mongoose");
+const User = require("./User.js");
 
 const messageSchema = new Schema(
   {
     sender: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      trim: true,
     },
     receiver: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      trim: true,
     },
     message: {
       type: String,
@@ -22,16 +23,13 @@ const messageSchema = new Schema(
   }
 );
 
-const chatSchema = new Schema(
-  {
-    roomID: {
-      ObjectId,
-      type: String,
-      required: true,
-    },
-    messages: [messageSchema]
+const chatSchema = new Schema({
+  roomID: {
+    type: String,
+    required: true,
   },
-)
+  messages: [messageSchema],
+});
 
 const Chat = model("Chat", chatSchema);
 

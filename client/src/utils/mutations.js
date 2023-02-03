@@ -53,7 +53,7 @@ export const ADD_PET = gql`
     $species: String!
     $birthday: Date!
     $pictures: String!
-    $owner: ID!
+    $owner: ID
   ) {
     addPet(
       name: $name
@@ -67,7 +67,6 @@ export const ADD_PET = gql`
       species
       birthday
       pictures
-      owner
     }
   }
 `;
