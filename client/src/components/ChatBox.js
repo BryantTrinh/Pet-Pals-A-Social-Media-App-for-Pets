@@ -67,9 +67,34 @@ function ChatBox() {
         overflowWrap: "break-word"
     }
 
-    const [message, setMessage] = React.useState('');
-    const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('')
+    // Getting array of user's chats
+    const { loading: chatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
+    const chats = userChats?.getUserChats.chats || [];
+    const myId = userChats?.getUserChats._id || "";
+    console.log(chats);
+
+    // Getting array of friends object ID
+    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
+        variables: { ownerId: myId }
+    })
+    const userFriendsList = userFriends?.owner.friends || []
+    
+        // Socket.io stuff
+        const [message, setMessage] = React.useState('');
+        const [messageReceived, setMessageReceived] = React.useState([]);
+        const [room, setRoom] = React.useState('')
+
+    // Logic to create chatroom ID
+    const setChatRoomID = (event) => {
+        const IdArr = []
+        IdArr.push(event.target.firstElementChild.id)
+        IdArr.push(myId)
+        IdArr.sort()
+        const roomID = IdArr.toString()
+
+        console.log(roomID);
+
+    }
 
     const joinRoom = () => {
         socket.emit('joinRoom', room);
@@ -89,6 +114,22 @@ function ChatBox() {
         })
     }, [socket])
 
+    // React components to map
+    function DisplayChats(props) {
+        return (
+            <Button variant='outlined' sx={{ width: '100%' }} onClick={setChatRoomID}>
+                <input hidden={true} id={props.friendID} />
+                {props.fullName}
+                {/* <Grid container direction="row" flexWrap="nowrap" gap={1} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
+                    <Avatar {...stringAvatar(props.fullName)} />
+                    <Grid container alignItems="center">
+                        <Typography noWrap sx={{ lineHeight: "1", fontSize: "14px", width: "80%" }}>Message</Typography>
+                    </Grid>
+                </Grid> */}
+            </Button>
+        )
+    }
+
     function ChatBubble(props) {
         return (
             <Grid container justifyContent="flex-end">
@@ -97,29 +138,6 @@ function ChatBox() {
                     {props.message}
                 </Typography>
             </Grid>
-        )
-    }
-
-    // Getting array of user's chats
-    const { loading: chatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
-    const chats = userChats?.getUserChats.chats || [];
-    const myId = userChats?.getUserChats._id || "";
-
-    // Getting array of friends object ID
-    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
-        variables: { ownerId: myId }
-    })
-    const userFriendsList = userFriends?.owner.friends || []
-    console.log(userFriendsList);
-    
-    function DisplayChats(props) {
-        return (
-            <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                <Avatar {...stringAvatar("John Doe")} />
-                <Grid container alignItems="center">
-                    <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message...</Typography>
-                </Grid>
-            </Stack>
         )
     }
 
@@ -172,14 +190,7 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {/* TODO: Map over chats */}
-                                {/* <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('John Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
-                                    </Grid>
-                                </Stack> */}
-                                {/* {userFriendsList.map((friend) => <DisplayChats key={chat.roomID} fullName={`${friend.}`}/>)} */}
+                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
