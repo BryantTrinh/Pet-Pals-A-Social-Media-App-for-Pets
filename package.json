@@ -25,7 +25,6 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/joy": "^5.0.0-alpha.65",
     "@mui/material": "^5.11.6",
-    "apollo-server-core": "^3.11.1",
     "geolib": "^3.3.3",
     "react-icons": "^4.7.1"
   }

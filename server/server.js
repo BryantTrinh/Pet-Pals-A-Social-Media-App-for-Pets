@@ -1,91 +1,77 @@
 require("dotenv").config();
-const makeDir = require("make-dir");
 const express = require("express");
-const http = require("http");
-const io = require("socket.io");
 const { ApolloServer } = require("apollo-server-express");
-const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
-const { graphqlUploadExpress } = require("graphql-upload");
-const mongoose = require("mongoose");
-mongoose.set("strictQuery", true);
 const { join } = require("path");
-const { authMiddleware } = require("./utils/auth");
+const { authMiddleware } = require("./utils/auth.js");
+
 const { typeDefs, resolvers } = require("./schemas");
-const UPLOAD_DIRECTORY_URL = require("./config/UPLOAD_DIRECTORY_URL");
 const db = require("./config");
 // const Chat = require('./config/Chat')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-const httpServer = http.createServer(app);
-// const socket = io(httpServer);
 
-app.use(express.json());
-app.use(
-	express.urlencoded({
-		extended: false,
-	})
-);
-
-app.use((req, res, next) => {
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
-	res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-	if (req.method === "OPTIONS") {
-		return res.sendStatus(200);
-	}
-	next();
+// Socket.io setup
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+app.use(cors());
+const server = http.createServer(app);
+const io = new Server(server, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+	},
 });
+
+const apolloServer = new ApolloServer({
+	typeDefs,
+	resolvers,
+	context: authMiddleware,
+});
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(join(__dirname, "..", "client", "build")));
-
-	app.get("/", (req, res) => {
-		res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
-	});
 }
 
-	const startApolloServer = async (typeDefs, resolvers) => {
-		await makeDir(UPLOAD_DIRECTORY_URL);
-
-		const server = new ApolloServer({
-			typeDefs,
-			resolvers,
-			context: authMiddleware,
-			plugins: [
-				ApolloServerPluginDrainHttpServer({
-					httpServer,
-				}),
-			],
-		});
+app.get("/", (req, res) => {
+	res.sendFile(join(__dirname, "client", "build", "index.html"));
+});
 
 let messageArr = [];
 io.on("connection", (socket) => {
-  console.log(`Client is connected with ID: ${socket.id}`);
+	console.log(`Client is connected with ID: ${socket.id}`);
 
-  socket.on('joinRoom', (data) => {
-    socket.join(data);
-  })
+	socket.on("joinRoom", (data) => {
+		socket.join(data);
+	});
 
-  socket.on("sendMessage", (message) => {
-    messageArr.push({ message: message.message })
-    
-    io.to(message.room).emit("receiveMessage", messageArr);
-  });
+	socket.on("sendMessage", (message) => {
+		messageArr.push({ message: message.message });
+		console.log(messageArr);
 
-  socket.on("disconnect", () => {
-    console.log(`Client ${socket.id} disconnected`);
-  });
+		io.to(message.room).emit("receiveMessage", messageArr);
+	});
+
+	socket.on("disconnect", () => {
+		console.log(`Client ${socket.id} disconnected`);
+	});
 });
 
-    db.once("open", () => {
-		app.listen(PORT, () => {
-			console.log(`API server running on port ${PORT}!`);
+const startApolloServer = async (typeDefs, resolvers) => {
+	await apolloServer.start();
+	apolloServer.applyMiddleware({ app });
+	db.once("open", () => {
+		server.listen(PORT, () => {
+			console.log(`Server is listening on port ${PORT}`);
 			console.log(
-				`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
+				`Use GraphQL at http://localhost:${PORT}${apolloServer.graphqlPath}`
 			);
 		});
 	});
-  };
+};
 
-  startApolloServer(typeDefs, resolvers);
+startApolloServer(typeDefs, resolvers);

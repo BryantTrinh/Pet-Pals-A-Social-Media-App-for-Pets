@@ -12,23 +12,23 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useMutation } from "@apollo/client";
-import { ADD_PET, SINGLE_UPLOAD_MUTATION } from "../../utils/mutations";
-import { UploadFile } from "./UploadFile";
+import { ADD_PET } from "../../utils/mutations";
+
 import auth from "../../utils/auth";
 
 export default function RecipeReviewCard() {
-  const [formState, setFormState] = React.useState({
-    pet_name: "",
-    species: "",
-    birthday: "",
-    pictures: "...",
-    owner: "",
-  });
+	const [formState, setFormState] = React.useState({
+		pet_name: "",
+		species: "",
+		birthday: "",
+		pictures: "...",
+		owner: "",
+	});
 
 	const [imageFile, setImageFile] = React.useState();
 	const [preview, setPreview] = React.useState();
 	const [addPet] = useMutation(ADD_PET);
-	const [uploadFileMutation, { data }] = useMutation(SINGLE_UPLOAD_MUTATION);
+
 	const handleInputChange = ({ target: { name, value } }) => {
 		setFormState({ ...formState, [name]: value });
 	};
@@ -36,29 +36,27 @@ export default function RecipeReviewCard() {
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			await uploadFileMutation({ variables: { file: imageFile } });
-			const { data } = await addPet({
+			const addPetForm = await addPet({
 				variables: {
 					name: formState.pet_name,
 					species: formState.species,
 					birthday: formState.birthday,
 					pictures: formState.pictures,
-					owner: auth.getToken(),
 				},
 			});
-			window.location("/Feed");
+			window.location.replace("/Profile");
 		} catch (err) {
-			console.error("Error:", err);
+			console.error(err);
 		}
 	};
 
-  React.useEffect(() => {
-    if (!imageFile) {
-      setPreview(
-        "https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
-      );
-      return;
-    }
+	React.useEffect(() => {
+		if (!imageFile) {
+			setPreview(
+				"https://sugarplumnannies.com/wp-content/uploads/2015/11/dog-placeholder.jpg"
+			);
+			return;
+		}
 
 		const objectUrl = URL.createObjectURL(imageFile);
 		console.log(objectUrl);
@@ -68,14 +66,14 @@ export default function RecipeReviewCard() {
 		return () => URL.revokeObjectURL(objectUrl);
 	}, [imageFile]);
 
-  const onSelectFile = (event) => {
-    if (!event.target.files || event.target.files.length === 0) {
-      setImageFile(undefined);
-      return;
-    }
+	const onSelectFile = (event) => {
+		if (!event.target.files || event.target.files.length === 0) {
+			setImageFile(undefined);
+			return;
+		}
 
-    setImageFile(event.target.files[0]);
-  };
+		setImageFile(event.target.files[0]);
+	};
 
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>
@@ -128,23 +126,37 @@ export default function RecipeReviewCard() {
 								onChange={handleInputChange}
 							/>
 						</Grid>
-						<Grid item xs>
-							<UploadFile
-								onSelectFile={onSelectFile}
-								uploadFileMutation={uploadFileMutation}
-							/>
+						<Grid item xs={12}>
+							<Grid container direction='row' alignItems='center' wrap='nowrap'>
+								<Grid item xs={4}>
+									<Button
+										variant='contained'
+										component='label'
+										startIcon={<AddIcon />}
+									>
+										Add Image
+										<input
+											hidden
+											accept='image/*'
+											multiple
+											type='file'
+											onChange={onSelectFile}
+										/>
+									</Button>
+								</Grid>
+								<Typography noWrap>No File Chosen</Typography>
+							</Grid>
 						</Grid>
 					</Grid>
-					<Box sx={{ mt: 2, textAlign: "right" }}>
+					<Grid container justifyContent='center'>
 						<Button
-							variant='contained'
-							color='primary'
-							startIcon={<AddIcon />}
 							type='submit'
+							variant='contained'
+							sx={{ mt: 3, mb: 2, backgroundColor: "#405C96", right: "0" }}
 						>
-							Add Pet
+							Save
 						</Button>
-					</Box>
+					</Grid>
 				</Box>
 			</CardContent>
 		</Card>
