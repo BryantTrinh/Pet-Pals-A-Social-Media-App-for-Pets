@@ -49,9 +49,12 @@ io.on("connection", (socket) => {
 		socket.join(data);
 	});
 
-	socket.on("sendMessage", (message) => {
-		messageArr.push({ message: message.message });
-		console.log(messageArr);
+  socket.on("sendMessage", (message) => {
+    messageArr.push({ message: message.message })
+    console.log(messageArr);
+    
+    io.to(message.room).emit("receiveMessage", messageArr);
+  });
 
 		io.to(message.room).emit("receiveMessage", messageArr);
 	});

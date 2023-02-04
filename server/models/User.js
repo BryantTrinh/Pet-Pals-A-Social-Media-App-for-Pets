@@ -4,40 +4,38 @@ const Pet = require("./Pet.js");
 const Chat = require("./Chat.js");
 
 const userSchema = new Schema({
-	first_name: {
-		type: String,
-		required: true,
-		trim: true,
-	},
-	last_name: {
-		type: String,
-		required: true,
-		trim: true,
-	},
-	email: {
-		type: String,
-		required: true,
-		unique: true,
-		match: [/.+@.+\..+/, "Must match an email address!"],
-	},
-	password: {
-		type: String,
-		required: true,
-		minlength: 5,
-	},
-	location: {
-		type: String,
-		required: true,
-	},
-	pets: [Pet.schema],
-	chats: [Chat.schema],
-	friends: [
-		{
-			_id: { type: Schema.Types.ObjectId, ref: "User" },
-			first_name: { type: String },
-			last_name: { type: String },
-		},
-	],
+  first_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/.+@.+\..+/, "Must match an email address!"],
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 5,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  pets: [Pet.schema],
+  chats: [Chat.schema],
+  friends: [{
+    _id: { type: Schema.Types.ObjectId, ref: "User" },
+    first_name: { type: String },
+    last_name: {type: String},
+  }] 
 });
 
 userSchema.pre("save", async function (next) {

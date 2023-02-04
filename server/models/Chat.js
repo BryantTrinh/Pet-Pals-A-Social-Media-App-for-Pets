@@ -23,11 +23,11 @@ const messageSchema = new Schema(
 );
 
 const chatSchema = new Schema({
-	roomID: {
-		type: String,
-		required: true,
-	},
-	messages: [messageSchema],
+  roomID: {
+    type: String,
+    required: true,
+  },
+  messages: [messageSchema],
 });
 
 const Chat = model("Chat", chatSchema);
