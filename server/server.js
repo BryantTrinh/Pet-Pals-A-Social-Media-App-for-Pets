@@ -51,6 +51,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (message) => {
     messageArr.push({ message: message.message })
+    console.log(messageArr);
     
     io.to(message.room).emit("receiveMessage", messageArr);
   });
