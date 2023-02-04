@@ -62,7 +62,6 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log(`Client ${socket.id} disconnected`);
 	});
-});
 
 const startApolloServer = async (typeDefs, resolvers) => {
 	await apolloServer.start();
