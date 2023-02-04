@@ -12,6 +12,7 @@ const typeDefs = gql`
     location: String
     pets: [Pet]
     chats: [Chat]
+    friends: [User]
   }
 
   type Pet {

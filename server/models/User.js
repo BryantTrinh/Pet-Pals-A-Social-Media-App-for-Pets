@@ -31,6 +31,11 @@ const userSchema = new Schema({
   },
   pets: [Pet.schema],
   chats: [Chat.schema],
+  friends: [{
+    _id: { type: Schema.Types.ObjectId, ref: "User" },
+    first_name: { type: String },
+    last_name: {type: String},
+  }] 
 });
 
 userSchema.pre("save", async function (next) {

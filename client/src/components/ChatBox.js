@@ -3,6 +3,8 @@ import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
 import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
+import { useQuery } from '@apollo/client'
+import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from '../utils/queries';
 
 import auth from '../utils/auth'
 
@@ -98,6 +100,29 @@ function ChatBox() {
         )
     }
 
+    // Getting array of user's chats
+    const { loading: chatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
+    const chats = userChats?.getUserChats.chats || [];
+    const myId = userChats?.getUserChats._id || "";
+
+    // Getting array of friends object ID
+    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
+        variables: { ownerId: myId }
+    })
+    const userFriendsList = userFriends?.owner.friends || []
+    console.log(userFriendsList);
+    
+    function DisplayChats(props) {
+        return (
+            <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
+                <Avatar {...stringAvatar("John Doe")} />
+                <Grid container alignItems="center">
+                    <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message...</Typography>
+                </Grid>
+            </Stack>
+        )
+    }
+
     return (
         <>
             {auth.loggedIn() ? (
@@ -148,18 +173,13 @@ function ChatBox() {
                                     Chats
                                 </Typography>
                                 {/* TODO: Map over chats */}
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
+                                {/* <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
                                     <Avatar {...stringAvatar('John Doe')} />
                                     <Grid container alignItems="center">
                                         <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
                                     </Grid>
-                                </Stack>
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('Tim Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from Tim Doe.</Typography>
-                                    </Grid>
-                                </Stack>
+                                </Stack> */}
+                                {/* {userFriendsList.map((friend) => <DisplayChats key={chat.roomID} fullName={`${friend.}`}/>)} */}
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
