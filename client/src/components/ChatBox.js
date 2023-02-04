@@ -41,7 +41,6 @@ function ChatBox() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
-        joinRoom()
     };
     const handleClose = () => setOpen(false);
 
@@ -71,7 +70,6 @@ function ChatBox() {
     const { loading: chatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
     const chats = userChats?.getUserChats.chats || [];
     const myId = userChats?.getUserChats._id || "";
-    console.log(chats);
 
     // Getting array of friends object ID
     const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
@@ -83,6 +81,7 @@ function ChatBox() {
         const [message, setMessage] = React.useState('');
         const [messageReceived, setMessageReceived] = React.useState([]);
         const [room, setRoom] = React.useState('')
+        const [chatAnnounce, setChatAnnounce] = React.useState('')
 
     // Logic to create chatroom ID
     const setChatRoomID = (event) => {
@@ -92,16 +91,16 @@ function ChatBox() {
         IdArr.sort()
         const roomID = IdArr.toString()
 
-        console.log(roomID);
-
-    }
-
-    const joinRoom = () => {
-        socket.emit('joinRoom', room);
+        setChatAnnounce(`You're in a chat with ${event.target.id}`)
+        setRoom(roomID)
+        socket.emit('joinRoom', roomID);
     }
 
     const sendMessage = () => {
         if (message === '') {
+            return
+        } else if (room === '') {
+            console.log("You're not in a room!");
             return
         }
         socket.emit("sendMessage", { message, room });
@@ -117,15 +116,9 @@ function ChatBox() {
     // React components to map
     function DisplayChats(props) {
         return (
-            <Button variant='outlined' sx={{ width: '100%' }} onClick={setChatRoomID}>
+            <Button variant='outlined' sx={{ width: '100%' }} onClick={setChatRoomID} id={props.fullName}>
                 <input hidden={true} id={props.friendID} />
                 {props.fullName}
-                {/* <Grid container direction="row" flexWrap="nowrap" gap={1} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                    <Avatar {...stringAvatar(props.fullName)} />
-                    <Grid container alignItems="center">
-                        <Typography noWrap sx={{ lineHeight: "1", fontSize: "14px", width: "80%" }}>Message</Typography>
-                    </Grid>
-                </Grid> */}
             </Button>
         )
     }
@@ -197,6 +190,11 @@ function ChatBox() {
                                 height: "100%"
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
+                                    <Grid item>
+                                        <Typography>
+                                            {chatAnnounce}
+                                        </Typography>
+                                    </Grid>
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
                                         {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
                                     </Grid>
