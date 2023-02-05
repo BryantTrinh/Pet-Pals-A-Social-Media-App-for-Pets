@@ -118,10 +118,10 @@ function ChatBox() {
 
     // Socket.io stuff
     const [message, setMessage] = React.useState('');
-    const [sender, setSender] = React.useState('')
     const [messageReceived, setMessageReceived] = React.useState([]);
     const [room, setRoom] = React.useState('')
     const [chatAnnounce, setChatAnnounce] = React.useState('')
+    const [chatStyle, setChatStyle] = React.useState('')
 
     // Logic to create chatroom ID
     const createChatRoomID = (event) => {
@@ -133,6 +133,7 @@ function ChatBox() {
 
         setChatAnnounce(`You're in a chat with ${event.target.id}`)
         setRoom(roomID)
+        setChatStyle(event.target.firstElementChild.id)
         socket.emit('joinRoom', roomID);
     }
 
@@ -156,7 +157,7 @@ function ChatBox() {
     // React components to map
     function DisplayChats(props) {
         return (
-            <Button variant='outlined' sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
+            <Button variant={chatStyle === props.friendID ? 'contained' : 'outlined'} sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
                 <input hidden={true} id={props.friendID} />
                 {props.fullName}
             </Button>
