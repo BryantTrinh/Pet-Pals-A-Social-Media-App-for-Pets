@@ -5,6 +5,8 @@
   "proxy": "http://127.0.0.1:3001/",
   "dependencies": {
     "@apollo/client": "^3.7.5",
+    "@cloudinary/react": "^1.9.0",
+    "@cloudinary/url-gen": "^1.9.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",

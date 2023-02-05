@@ -1,43 +1,53 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { AdvancedImage } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { Transformation } from "@cloudinary/url-gen";
+import { thumbnail, scale } from "@cloudinary/url-gen/actions/resize";
+import { image } from "@cloudinary/url-gen/qualifiers/source";
 
-class CloudinaryUploadWidget extends Component {
-	myWidget = null;
+const UploadWidget = () => {
+	const [pictureURL, setPictureURL] = useState("");
+	const [isMounted, setIsMounted] = useState(false);
 
-	componentDidMount() {
-		if (window.cloudinary) {
-			this.myWidget = window.cloudinary.createUploadWidget(
-				{
-					cloudName: "dkm1ip3w2",
-					uploadPreset: "ABCDE12345",
-					sources: ["url", "camera", "local"],
-					showSkipCropButton: false,
-					multiple: false,
-					defaultSource: "local",
-				},
-				(error, result) => {
-					if (!error && result && result.event === "success") {
-						console.log("Done! Here is the image URL: ", result.info.url);
-						this.props.setPictureURL(result.info.url);
-					}
-				}
-			);
-			document
-				.getElementById("upload_widget")
-				.addEventListener("click", this.openWidget, false);
+	// Create a Cloudinary instance and set your cloud name.
+	const cld = new Cloudinary({
+		cloud: {
+			cloudName: "dkm1ip3w2",
+		},
+	});
+
+	const handleUpload = (error, result) => {
+		if (error) {
+			console.error(error);
+			return;
 		}
-	}
-
-	openWidget = () => {
-		this.myWidget.open();
+		setPictureURL(result.secure_url);
 	};
 
-	render() {
-		return (
-			<button id='upload_widget' className='cloudinary-button'>
-				Add a Photo
-			</button>
-		);
-	}
-}
+	React.useEffect(() => {
+		setIsMounted(true);
+		return () => setIsMounted(false);
+	}, []);
 
-export default CloudinaryUploadWidget;
+	if (!isMounted) {
+		return null;
+	}
+
+	return (
+		<div>
+			<div>
+				<input
+					type='file'
+					name='file'
+					data-cloudinary-field='image_id'
+					data-form-data="{ 'upload_preset': 'ABCDE12345' }"
+					onChange={handleUpload}
+				/>
+			</div>
+			{pictureURL && <AdvancedImage cldImg={cld.image(pictureURL)} />}
+		</div>
+	);
+};
+
+export default UploadWidget;
+

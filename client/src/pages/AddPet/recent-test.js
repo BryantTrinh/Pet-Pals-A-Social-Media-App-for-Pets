@@ -15,22 +15,17 @@ import AddIcon from "@mui/icons-material/Add";
 import UploadWidget from "../../components/UploadWidget";
 import auth from "../../utils/auth";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { ADD_PET } from "../../utils/mutations";
 
-
 const RecipeReviewCard = () => {
-  const [pictureURL, setPictureURL ] = React.useState("");
+	const [pictureURL, setPictureURL] = React.useState("");
 	const [formState, setFormState] = React.useState({
 		pet_name: "",
 		species: "",
 		birthday: "",
-		pictureURL: pictureURL,
+		// pictureURL: "",
 	});
-
-    const handlePictureUpload = (pictureURL) => {
-			setFormState({ ...formState, pictureURL });
-		};
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
@@ -49,6 +44,12 @@ const RecipeReviewCard = () => {
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>
 			<CardHeader title='Add a new pet!' sx={{ textAlign: "center" }} />
+			<CardMedia
+				component='img'
+				height='300'
+				image={pictureURL}
+				alt='pet profile'
+			/>
 			<CardContent>
 				<Box
 					component='form'
