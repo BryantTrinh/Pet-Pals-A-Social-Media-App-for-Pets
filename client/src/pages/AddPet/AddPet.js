@@ -67,7 +67,7 @@ const RecipeReviewCard = () => {
 				<Box
 					component='form'
 					noValidate
-					onSubmit={handleFormSubmit}
+          onSubmit={event => event.preventDefault()}
 					sx={{ mt: 3 }}
 				>
 					<Grid container spacing={2}>
