@@ -44,7 +44,7 @@ export const QUERY_PETS = gql`
 			name
 			species
 			birthday
-			pictures
+			pictureURL
 			owner
 		}
 	}
@@ -57,41 +57,40 @@ export const QUERY_MYPETS = gql`
 			name
 			species
 			birthday
-			pictures
+			picturesURL
 			owner
 		}
 	}
 `;
 
 export const QUERY_USER_CHATS = gql`
-  query Query($userId: ID) {
-    getUserChats(userId: $userId) {
-      _id
-      chats {
-        roomID
-        messages {
-          sender
-          message
-          createdAt
-        }
-      }
-      friends {
-        _id
-      }
-    }
-  }
-`
+	query Query($userId: ID) {
+		getUserChats(userId: $userId) {
+			_id
+			chats {
+				roomID
+				messages {
+					sender
+					message
+					createdAt
+				}
+			}
+			friends {
+				_id
+			}
+		}
+	}
+`;
 
 export const QUERY_CHAT = gql`
-  query getChat($roomId: String) {
-    getChat(roomID: $roomId) {
-      roomID
-      messages {
-        sender
-        receiver
-        message
-        createdAt
-      }
-    }
-  }
+	query getChat($roomId: String) {
+		getChat(roomID: $roomId) {
+			roomID
+			messages {
+				sender
+				message
+				createdAt
+			}
+		}
+	}
 `;

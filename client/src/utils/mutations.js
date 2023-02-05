@@ -52,48 +52,47 @@ export const ADD_PET = gql`
 		$name: String!
 		$species: String!
 		$birthday: Date!
-		$pictures: String!
+		$picturesURL: String!
 		$owner: ID
 	) {
 		addPet(
 			name: $name
 			species: $species
 			birthday: $birthday
-			pictures: $pictures
+			picturesURL: $picturesURL
 			owner: $owner
 		) {
 			_id
 			name
 			species
 			birthday
-			pictures
+			picturesURL
 		}
 	}
 `;
 
 export const CREATE_CHAT = gql`
-  mutation createChat($roomID: String) {
-    createChat (roomID: $roomID) {
-      roomID
-      messages {
-        sender
-        message
-      }
-    }
-  }
+	mutation createChat($roomID: String) {
+		createChat(roomID: $roomID) {
+			roomID
+			messages {
+				sender
+				message
+			}
+		}
+	}
 `;
 
 export const ADD_MESSAGE = gql`
-  mutation addMessage($roomID: String, $message: MessageInput) {
-    addMessage (roomID: $roomID, message: $message) {
-      roomID
-      messages {
-        sender
-        receiver
-        message
-      }
-    }
-  }
+	mutation addMessage($roomID: String, $message: MessageInput) {
+		addMessage(roomID: $roomID, message: $message) {
+			roomID
+			messages {
+				sender
+				message
+			}
+		}
+	}
 `;
 
 export function useLogoutMutation() {

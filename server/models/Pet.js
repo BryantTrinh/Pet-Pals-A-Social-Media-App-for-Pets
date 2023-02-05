@@ -15,7 +15,7 @@ const petSchema = new Schema({
 		type: Date,
 		required: true,
 	},
-	pictures: {
+	pictureURL: {
 		type: String,
 		required: true,
 	},

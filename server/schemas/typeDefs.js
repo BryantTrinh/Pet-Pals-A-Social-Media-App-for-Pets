@@ -20,7 +20,7 @@ const typeDefs = gql`
 		name: String
 		species: String
 		birthday: Date
-		pictures: String
+		pictureURL: String
 		owner: ID
 	}
 
@@ -35,21 +35,21 @@ const typeDefs = gql`
 		user: User
 	}
 
-  type Message {
-    sender: ID
-    message: String
-    createdAt: String
-  }
+	type Message {
+		sender: ID
+		message: String
+		createdAt: String
+	}
 
 	type Chat {
 		roomID: String
 		messages: [Message]
 	}
 
-  input MessageInput {
-    sender: String
-    message: String
-  }
+	input MessageInput {
+		sender: String
+		message: String
+	}
 
 	type Query {
 		user: User
@@ -62,6 +62,7 @@ const typeDefs = gql`
 	}
 
 	type Mutation {
+
 		register(
 			first_name: String!
 			last_name: String!
@@ -69,17 +70,21 @@ const typeDefs = gql`
 			password: String!
 			location: String!
 		): Auth
+
 		login(email: String!, password: String!): Auth
+
 		addPet(
 			name: String!
 			species: String!
 			birthday: Date!
-			pictures: String!
+			pictureURL: String!
 			owner: ID
 		): Pet
+    
 		addMatch(pet1: String!, pet2: String!): Matches
 		createChat(roomID: String): Chat
 		addMessage(roomID: String, message: MessageInput): Chat
+
 	}
 `;
 
