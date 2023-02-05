@@ -123,6 +123,8 @@ function ChatBox() {
     const [chatAnnounce, setChatAnnounce] = React.useState('')
     const [chatStyle, setChatStyle] = React.useState('')
 
+    const ChatBubblesRef = React.useRef(null);
+
     // Logic to create chatroom ID
     const createChatRoomID = (event) => {
         const IdArr = []
@@ -134,9 +136,10 @@ function ChatBox() {
         setChatAnnounce(`You're in a chat with ${event.target.id}`)
         setRoom(roomID)
         setChatStyle(event.target.firstElementChild.id)
+        
         socket.emit('joinRoom', roomID);
     }
-
+    
     const sendMessage = () => {
         if (message === '') {
             return
@@ -146,13 +149,17 @@ function ChatBox() {
         }
         socket.emit("sendMessage", { message, myId, room });
     }
-
+    
     React.useEffect(() => {
         socket.on("receiveMessage", (data) => {
             setMessageReceived(data);
             setMessage('')
         })
     }, [socket])
+    
+    React.useEffect(() => {
+        ChatBubblesRef.current?.scrollIntoView()
+    }, [messageReceived])
 
     // React components to map
     function DisplayChats(props) {
@@ -236,8 +243,9 @@ function ChatBox() {
                                             {chatAnnounce}
                                         </Typography>
                                     </Grid>
-                                    <Grid item sx={{ overflow: "auto" }}>
+                                    <Grid item sx={{ overflow: "auto" }} >
                                         {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                        <div ref={ChatBubblesRef}/>
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
