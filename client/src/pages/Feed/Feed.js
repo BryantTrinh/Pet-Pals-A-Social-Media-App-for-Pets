@@ -1,5 +1,14 @@
 import * as React from "react";
-import { Grid, Button, Card, CardHeader, CardMedia, CardContent, CardActions, Typography } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+} from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
 import { useQuery, useMutation } from "@apollo/client";
@@ -8,11 +17,10 @@ import { CREATE_CHAT } from "../../utils/mutations";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
-
 export default function RecipeReviewCard() {
   const { loading: petsLoading, data: petsData } = useQuery(QUERY_PETS);
   let petList = petsData?.pets || [];
-  
+
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
 
@@ -21,18 +29,17 @@ export default function RecipeReviewCard() {
   // Creating roomID using pet's owner and user ID
   const addToChat = async (event) => {
     if (!petsLoading && !userLoading) {
-      const IdArr = []
-      IdArr.push(event.target.firstElementChild.id)
-      IdArr.push(userData.user._id)
-      IdArr.sort()
-      const roomID = IdArr.toString()
-      
+      const IdArr = [];
+      IdArr.push(event.target.firstElementChild.id);
+      IdArr.push(userData.user._id);
+      IdArr.sort();
+      const roomID = IdArr.toString();
+
       const addChat = await createChat({
-        variables: { roomID: roomID }
-      })
+        variables: { roomID: roomID },
+      });
     }
-    
-  }
+  };
 
   return (
     <Grid
@@ -53,8 +60,8 @@ export default function RecipeReviewCard() {
                   <CardMedia
                     component="img"
                     height="194"
-                    image="https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0"
-                    alt="pet profile"
+                    image={pet.picture}
+                    alt="pet profile picture"
                   />
                   <CardContent>
                     <Match pet={pet} userData={userData} />
@@ -65,8 +72,15 @@ export default function RecipeReviewCard() {
                       Species: {pet.species}
                     </Typography>
                   </CardContent>
-                  <CardActions disableSpacing sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button variant="contained" endIcon={<ChatIcon />} onClick={addToChat}>
+                  <CardActions
+                    disableSpacing
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <Button
+                      variant="contained"
+                      endIcon={<ChatIcon />}
+                      onClick={addToChat}
+                    >
                       ADD TO CHAT
                       <input hidden={true} id={pet.owner}></input>
                     </Button>
