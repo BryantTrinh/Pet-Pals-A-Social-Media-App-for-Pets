@@ -46,9 +46,12 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
-  socket.on('joinRoom', (data) => {
+  socket.on('joinRoom', async (data) => {
     socket.join(data);
-    // io.to(data).emit('receiveMessage', messageArr);
+
+    const chatData = await Chat.findOne({ roomID: data })
+
+    io.to(data).emit("receiveMessage", chatData.messages);
   })
 
   socket.on("sendMessage", async (data) => {
@@ -59,7 +62,6 @@ io.on("connection", (socket) => {
     )
     
     io.to(data.room).emit("receiveMessage", addMessage.messages);
-
   });
 
   socket.on("disconnect", () => {
