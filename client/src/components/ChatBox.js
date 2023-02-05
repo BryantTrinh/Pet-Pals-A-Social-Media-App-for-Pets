@@ -3,8 +3,8 @@ import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
 import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
-import { useQuery } from '@apollo/client'
-import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from '../utils/queries';
+import { useQuery, useLazyQuery } from '@apollo/client'
+import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST, QUERY_CHAT } from '../utils/queries';
 
 import auth from '../utils/auth'
 
@@ -67,8 +67,7 @@ function ChatBox() {
     }
 
     // Getting array of user's chats
-    const { loading: chatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
-    const chats = userChats?.getUserChats.chats || [];
+    const { loading: userChatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
     const myId = userChats?.getUserChats._id || "";
 
     // Getting array of friends object ID
@@ -76,15 +75,21 @@ function ChatBox() {
         variables: { ownerId: myId }
     })
     const userFriendsList = userFriends?.owner.friends || []
-    
-        // Socket.io stuff
-        const [message, setMessage] = React.useState('');
-        const [messageReceived, setMessageReceived] = React.useState([]);
-        const [room, setRoom] = React.useState('')
-        const [chatAnnounce, setChatAnnounce] = React.useState('')
+
+    // Query for chats based on given roomID
+    const [getChatData, { loading: chatLoading, data: chatData }] = useLazyQuery(QUERY_CHAT);
+    const chat = !chatLoading ? chatData : {}
+    console.log(chat);
+
+    // Socket.io stuff
+    const [message, setMessage] = React.useState('');
+    const [sender, setSender] = React.useState('')
+    const [messageReceived, setMessageReceived] = React.useState([]);
+    const [room, setRoom] = React.useState('')
+    const [chatAnnounce, setChatAnnounce] = React.useState('')
 
     // Logic to create chatroom ID
-    const setChatRoomID = (event) => {
+    const createChatRoomID = (event) => {
         const IdArr = []
         IdArr.push(event.target.firstElementChild.id)
         IdArr.push(myId)
@@ -94,7 +99,13 @@ function ChatBox() {
         setChatAnnounce(`You're in a chat with ${event.target.id}`)
         setRoom(roomID)
         socket.emit('joinRoom', roomID);
+
+        getChatData({ variables: { roomID: roomID } })
+        console.log(chat);
     }
+
+
+
 
     const sendMessage = () => {
         if (message === '') {
@@ -103,7 +114,7 @@ function ChatBox() {
             console.log("You're not in a room!");
             return
         }
-        socket.emit("sendMessage", { message, room });
+        socket.emit("sendMessage", { message, myId, room });
     }
 
     React.useEffect(() => {
@@ -116,7 +127,7 @@ function ChatBox() {
     // React components to map
     function DisplayChats(props) {
         return (
-            <Button variant='outlined' sx={{ width: '100%' }} onClick={setChatRoomID} id={props.fullName}>
+            <Button variant='outlined' sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
                 <input hidden={true} id={props.friendID} />
                 {props.fullName}
             </Button>
@@ -125,9 +136,9 @@ function ChatBox() {
 
     function ChatBubble(props) {
         return (
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent={props.sender === myId ? "flex-end" : 'flex-start'}>
                 <Typography variant="h6" component="div"
-                    sx={userMessageStyle}>
+                    sx={props.sender === myId ? userMessageStyle : friendMessageStyle}>
                     {props.message}
                 </Typography>
             </Grid>
@@ -196,7 +207,7 @@ function ChatBox() {
                                         </Typography>
                                     </Grid>
                                     <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
+                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
