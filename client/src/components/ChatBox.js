@@ -1,10 +1,11 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
-import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
-import BasicTabs from './mobileChatBox'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Button, Tabs, Tab } from '@mui/material';
+import { useQuery } from '@apollo/client'
 import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST, QUERY_CHAT } from '../utils/queries';
+import { Stack } from '@mui/system';
 
 import auth from '../utils/auth'
 
@@ -36,6 +37,39 @@ function stringAvatar(name) {
     };
 }
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+            style={{ height: "92%" }}
+        >
+            {value === index && (
+                <Box sx={{ p: 2, height: "92%" }}>
+                    <Box sx={{ height: "100%" }}>{children}</Box>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
 function ChatBox() {
     // Show chat box modal use state
     const [open, setOpen] = React.useState(false);
@@ -43,6 +77,12 @@ function ChatBox() {
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     const userMessageStyle = {
         color: "white",
@@ -117,7 +157,7 @@ function ChatBox() {
     function DisplayChats(props) {
         return (
             <Button variant='outlined' sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
-                <input hidden={true} id={props.friendID}/>
+                <input hidden={true} id={props.friendID} />
                 {props.fullName}
             </Button>
         )
@@ -183,7 +223,7 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id}/>)}
+                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
@@ -196,7 +236,7 @@ function ChatBox() {
                                         </Typography>
                                     </Grid>
                                     <Grid item sx={{ overflow: "auto" }}>
-                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt}/>)}
+                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
@@ -228,11 +268,72 @@ function ChatBox() {
                         </Grid>
                         {/* Small screen breakpoint chat layout */}
                         <Grid container sx={{ height: "100%", display: { xs: "flex", md: "none" } }}>
-                            <BasicTabs
-                                stringAvatar={stringAvatar}
-                                friendMessageStyle={friendMessageStyle}
-                                userMessageStyle={userMessageStyle}
-                            />
+                            <Grid container direction="column" flexWrap='nowrap' sx={{ height: "100%" }}>
+                                <Grid item xs={1} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                    <Tabs value={value} onChange={handleChange} centered>
+                                        <Tab label="Chats" {...a11yProps(0)} />
+                                        <Tab label="Message" {...a11yProps(1)} />
+                                    </Tabs>
+                                </Grid>
+                                <TabPanel value={value} index={0}>
+                                    {/* TODO: Map over individual chats */}
+                                    <Stack direction="row" spacing={2} sx={{ width: "100%", borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
+                                        <Avatar {...stringAvatar('John Doe')} />
+                                        <Grid container alignItems="center">
+                                            <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
+                                        </Grid>
+                                    </Stack>
+                                    <Stack direction="row" spacing={2} sx={{ width: "100%", borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
+                                        <Avatar {...stringAvatar('Tim Doe')} />
+                                        <Grid container alignItems="center">
+                                            <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from Tim Doe.</Typography>
+                                        </Grid>
+                                    </Stack>
+                                </TabPanel>
+                                <TabPanel value={value} index={1} >
+                                    <Grid container direction="column" justifyContent="flex-end" flexWrap="nowrap" height="100%">
+                                        <Grid item sx={{ overflow: "auto" }} id="messageField">
+                                            {/* TODO: Map over individual messages */}
+                                            <Grid container justifyContent="flex-start">
+                                                <Typography variant="h6" component="div"
+                                                    sx={friendMessageStyle}>
+                                                    Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
+                                                </Typography>
+                                            </Grid>
+                                            <Grid container justifyContent="flex-start">
+                                                <Typography variant="h6" component="div"
+                                                    sx={friendMessageStyle}>
+                                                    Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
+                                                </Typography>
+                                            </Grid>
+                                            <Grid container justifyContent="flex-end">
+                                                <Typography variant="h6" component="div"
+                                                    sx={userMessageStyle}>
+                                                    Hi, friend!
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item width="100%">
+                                            <Grid container justifyContent="center">
+                                                <Grid item xs={11}>
+                                                    <TextField fullWidth size='small' placeholder='Your message here...' />
+                                                </Grid>
+                                                <Grid item xs={1}>
+                                                    <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
+                                                        <SendIcon sx={{ color: "#405C96", "&:hover": { cursor: "pointer" } }}
+                                                            onClick={() => {
+                                                                console.log("Send")
+                                                                const messageField = document.getElementById("messageField");
+                                                                messageField.scrollTop = messageField.scrollHeight;
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </TabPanel>
+                            </Grid>
                         </Grid>
                     </Box>
                 </Modal >
