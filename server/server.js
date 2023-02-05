@@ -3,6 +3,7 @@ const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const { join } = require("path");
 const { authMiddleware } = require("./utils/auth.js");
+const { User, Chat } = require('./models')
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config");
@@ -41,23 +42,32 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "client", "build", "index.html"));
 });
 
-let messageArr = [];
+// Socket server side code
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
-  socket.on('joinRoom', (data) => {
+  socket.on('joinRoom', async (data) => {
     socket.join(data);
+
+    const chatData = await Chat.findOne({ roomID: data })
+
+    io.to(data).emit("receiveMessage", chatData.messages);
   })
 
-  socket.on("sendMessage", (message) => {
-    messageArr.push({ message: message.message })
+  socket.on("sendMessage", async (data) => {
+    const addMessage = await Chat.findOneAndUpdate(
+      { roomID: data.room },
+      { $push: { messages: { sender: data.myId, message: data.message } } },
+      { new: true }
+    )
     
-    io.to(message.room).emit("receiveMessage", messageArr);
+    io.to(data.room).emit("receiveMessage", addMessage.messages);
   });
 
   socket.on("disconnect", () => {
     console.log(`Client ${socket.id} disconnected`);
   });
+
 });
 
 const startApolloServer = async (typeDefs, resolvers) => {

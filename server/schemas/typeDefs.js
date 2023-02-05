@@ -12,6 +12,7 @@ const typeDefs = gql`
     location: String
     pets: [Pet]
     chats: [Chat]
+    friends: [User]
   }
 
   type Pet {
@@ -36,7 +37,6 @@ const typeDefs = gql`
 
   type Message {
     sender: ID
-    receiver: ID
     message: String
     createdAt: String
   }
@@ -48,7 +48,6 @@ const typeDefs = gql`
 
   input MessageInput {
     sender: String
-    receiver: String
     message: String
   }
 
@@ -59,6 +58,7 @@ const typeDefs = gql`
     pet: Pet
     owner(ownerId: ID): User
     getChat(roomID: String): Chat
+    getUserChats(userId: ID): User
   }
 
   type Mutation {

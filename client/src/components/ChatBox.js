@@ -3,11 +3,14 @@ import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
 import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
 import BasicTabs from './mobileChatBox'
+import { useQuery, useLazyQuery } from '@apollo/client'
+import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST, QUERY_CHAT } from '../utils/queries';
 
 import auth from '../utils/auth'
 
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:3001');
+
 
 // Colored avatars with initials
 function stringToColor(string) {
@@ -38,7 +41,6 @@ function ChatBox() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
-        joinRoom()
     };
     const handleClose = () => setOpen(false);
 
@@ -64,19 +66,44 @@ function ChatBox() {
         overflowWrap: "break-word"
     }
 
-    const [message, setMessage] = React.useState('');
-    const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('test room 1')
+    // Getting array of user's chats
+    const { loading: userChatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
+    const myId = userChats?.getUserChats._id || "";
 
-    const joinRoom = () => {
-        socket.emit('joinRoom', room);
+    // Getting array of friends object ID
+    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
+        variables: { ownerId: myId }
+    })
+    const userFriendsList = userFriends?.owner.friends || []
+
+    // Socket.io stuff
+    const [message, setMessage] = React.useState('');
+    const [sender, setSender] = React.useState('')
+    const [messageReceived, setMessageReceived] = React.useState([]);
+    const [room, setRoom] = React.useState('')
+    const [chatAnnounce, setChatAnnounce] = React.useState('')
+
+    // Logic to create chatroom ID
+    const createChatRoomID = (event) => {
+        const IdArr = []
+        IdArr.push(event.target.firstElementChild.id)
+        IdArr.push(myId)
+        IdArr.sort()
+        const roomID = IdArr.toString()
+
+        setChatAnnounce(`You're in a chat with ${event.target.id}`)
+        setRoom(roomID)
+        socket.emit('joinRoom', roomID);
     }
 
     const sendMessage = () => {
         if (message === '') {
             return
+        } else if (room === '') {
+            console.log("You're not in a room!");
+            return
         }
-        socket.emit("sendMessage", { message, room });
+        socket.emit("sendMessage", { message, myId, room });
     }
 
     React.useEffect(() => {
@@ -86,11 +113,21 @@ function ChatBox() {
         })
     }, [socket])
 
+    // React components to map
+    function DisplayChats(props) {
+        return (
+            <Button variant='outlined' sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
+                <input hidden={true} id={props.friendID}/>
+                {props.fullName}
+            </Button>
+        )
+    }
+
     function ChatBubble(props) {
         return (
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent={props.sender === myId ? "flex-end" : 'flex-start'}>
                 <Typography variant="h6" component="div"
-                    sx={userMessageStyle}>
+                    sx={props.sender === myId ? userMessageStyle : friendMessageStyle}>
                     {props.message}
                 </Typography>
             </Grid>
@@ -146,27 +183,20 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {/* TODO: Map over chats */}
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('John Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
-                                    </Grid>
-                                </Stack>
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('Tim Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from Tim Doe.</Typography>
-                                    </Grid>
-                                </Stack>
+                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id}/>)}
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
                                 height: "100%"
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
-                                    <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
+                                    <Grid item>
+                                        <Typography>
+                                            {chatAnnounce}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item sx={{ overflow: "auto" }}>
+                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt}/>)}
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
