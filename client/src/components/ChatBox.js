@@ -93,12 +93,6 @@ function ChatBox() {
 	);
 	const userFriendsList = userFriends?.owner.friends || [];
 
-	// Query for chats based on given roomID
-	const [getChatData, { loading: chatLoading, data: chatData }] =
-		useLazyQuery(QUERY_CHAT);
-	const chat = !chatLoading ? chatData : {};
-	console.log(chat);
-
 	// Socket.io stuff
 	const [message, setMessage] = React.useState("");
 	const [sender, setSender] = React.useState("");
@@ -117,9 +111,6 @@ function ChatBox() {
 		setChatAnnounce(`You're in a chat with ${event.target.id}`);
 		setRoom(roomID);
 		socket.emit("joinRoom", roomID);
-
-		getChatData({ variables: { roomID: roomID } });
-		console.log(chat);
 	};
 
 	const sendMessage = () => {
@@ -258,7 +249,7 @@ function ChatBox() {
 									<Grid item>
 										<Typography>{chatAnnounce}</Typography>
 									</Grid>
-									<Grid item sx={{ overflow: "auto" }} id='messageField'>
+									<Grid item sx={{ overflow: "auto" }}>
 										{messageReceived.map((data) => (
 											<ChatBubble
 												key={data._id}
