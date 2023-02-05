@@ -49,12 +49,9 @@ io.on("connection", (socket) => {
 		socket.join(data);
 	});
 
-  socket.on("sendMessage", (message) => {
-    messageArr.push({ message: message.message })
-    console.log(messageArr);
-    
-    io.to(message.room).emit("receiveMessage", messageArr);
-  });
+	socket.on("sendMessage", (message) => {
+		messageArr.push({ message: message.message });
+		console.log(messageArr);
 
 		io.to(message.room).emit("receiveMessage", messageArr);
 	});
@@ -62,6 +59,7 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log(`Client ${socket.id} disconnected`);
 	});
+});
 
 const startApolloServer = async (typeDefs, resolvers) => {
 	await apolloServer.start();

@@ -78,8 +78,9 @@ const resolvers = {
       return { token, user };
     },
     login: async (parent, { email, password }) => {
+      // can do manipulation work here.
       const user = await User.findOne({ email });
-
+        // dropbox// logic can go here // image applies to pet, id to dropbox image data, put same id for pet field, when grab pet, go to dropbox, find img with those id's find and attach to pet// fetch by running fetch request line 10 of match.js for fetch
 			if (!user) {
 				throw new AuthenticationError("No user with this email found!");
 			}
@@ -122,78 +123,6 @@ const resolvers = {
 			if (context.user) {
 				const existingChat = await Chat.findOne({ roomID });
 
-<<<<<<< HEAD
-				// If chat exists, return error
-				if (existingChat) {
-					throw new AuthenticationError(
-						"Chat with this roomID already exists!"
-					);
-				}
-
-				// Create a new chat with roomID
-				const chatId = await Chat.create({ roomID });
-
-				// Add the chat to each users
-				const usersId = chatId.roomID.split(",");
-				usersId.map(async (userId) => {
-					const updateUserChats = await User.findByIdAndUpdate(
-						userId,
-						{ $push: { chats: { roomID } } },
-						{ new: true }
-					);
-				});
-
-				// Add user to your friends list
-				const myIdIndex = usersId.indexOf(context.user._id);
-				usersId.splice(myIdIndex, 1);
-				const userData = await User.findById(usersId[0]);
-
-				const addToYourFriends = await User.findByIdAndUpdate(
-					context.user._id,
-					{
-						$push: {
-							friends: {
-								_id: usersId[0],
-								first_name: userData.first_name,
-								last_name: userData.last_name,
-							},
-						},
-					},
-					{ new: true }
-				);
-
-				// // Add you to the other user's friends list
-				const addToOtherFriends = await User.findByIdAndUpdate(
-					usersId[0],
-					{
-						$push: {
-							friends: {
-								_id: context.user._id,
-								first_name: context.user.first_name,
-								last_name: context.user.last_name,
-							},
-						},
-					},
-					{ new: true }
-				);
-
-				return;
-			}
-			throw new AuthenticationError("You need to be logged in!");
-		},
-		addMessage: async (parent, { roomID, message }, context) => {
-			if (context.user) {
-				return await Chat.findOneAndUpdate(
-					{ roomID },
-					{ $push: { messages: message } },
-					{ new: true }
-				);
-			}
-			throw new AuthenticationError("You need to be logged in!");
-		},
-	},
-	Date: dateResolver,
-=======
         // If chat exists, return error
         if (existingChat) {
           throw new AuthenticationError("Chat with this roomID already exists!")
@@ -246,7 +175,6 @@ const resolvers = {
     },
   },
   Date: dateResolver,
->>>>>>> e77d2653b395b55c18b8ac262e1eba9b00593c1e
 };
 
 module.exports = resolvers;

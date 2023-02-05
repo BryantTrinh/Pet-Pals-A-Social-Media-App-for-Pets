@@ -2,7 +2,6 @@ const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
 	scalar Date
-  scalar Upload
 
 	type User {
 		_id: ID
@@ -67,28 +66,6 @@ const typeDefs = gql`
 		getUserChats(userId: ID): User
 	}
 
-<<<<<<< HEAD
-	type Mutation {
-		register(
-			first_name: String!
-			last_name: String!
-			email: String!
-			password: String!
-			location: String!
-		): Auth
-		login(email: String!, password: String!): Auth
-		addPet(
-			name: String!
-			species: String!
-			birthday: Date!
-			pictures: String!
-			owner: ID
-		): Pet
-		addMatch(pet1: String!, pet2: String!): Matches
-		createChat(roomID: String): Chat
-		addMessage(roomID: String, message: MessageInput): Chat
-	}
-=======
   type Query {
     user: User
     pets: [Pet]
@@ -119,7 +96,6 @@ const typeDefs = gql`
     createChat(roomID: String): Chat
     addMessage(roomID: String, message: MessageInput): Chat
   }
->>>>>>> e77d2653b395b55c18b8ac262e1eba9b00593c1e
 `;
 
 module.exports = typeDefs;
