@@ -24,7 +24,7 @@ export default function RecipeReviewCard() {
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
 
-  const [createChat] = useMutation(CREATE_CHAT);
+	const [createChat] = useMutation(CREATE_CHAT);
 
   // Creating roomID using pet's owner and user ID
   const addToChat = async (event) => {
