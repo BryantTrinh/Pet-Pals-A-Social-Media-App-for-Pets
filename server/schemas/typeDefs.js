@@ -35,23 +35,21 @@ const typeDefs = gql`
 		user: User
 	}
 
-	type Message {
-		sender: ID
-		receiver: ID
-		message: String
-		createdAt: String
-	}
+  type Message {
+    sender: ID
+    message: String
+    createdAt: String
+  }
 
 	type Chat {
 		roomID: String
 		messages: [Message]
 	}
 
-	input MessageInput {
-		sender: String
-		receiver: String
-		message: String
-	}
+  input MessageInput {
+    sender: String
+    message: String
+  }
 
 	type Query {
 		user: User
