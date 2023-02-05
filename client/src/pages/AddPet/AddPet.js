@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import UploadWidget from "../../components/UploadWidget";
+import CloudinaryUploadWidget from "../../components/UploadWidget";
 import auth from "../../utils/auth";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from 'react';
@@ -32,19 +32,19 @@ const RecipeReviewCard = () => {
 			setFormState({ ...formState, pictureURL });
 		};
 
-	const handleFormSubmit = (event) => {
-		event.preventDefault();
-		if (!pictureURL) {
-			alert("Please upload a picture of your pet.");
-			return;
-		}
-		console.log("Form data:", { ...formState, pictureURL });
+	  const handleFormSubmit = (event) => {
+	  	event.preventDefault();
+		    if (!pictureURL) {
+			    alert("Please upload a picture of your pet.");
+			  return;
+	  	}
+		  console.log("Form data:", { ...formState, pictureURL });
 	};
 
-	const handleInputChange = (event) => {
-		const { name, value } = event.target;
-		setFormState({ ...formState, [name]: value });
-	};
+	  const handleInputChange = (event) => {
+		  const { name, value } = event.target;
+		  setFormState({ ...formState, [name]: value });
+	  };
 
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>
@@ -94,7 +94,7 @@ const RecipeReviewCard = () => {
 						<Grid item xs={12}>
 							<div>
 								<h2>Upload an Image</h2>
-								<UploadWidget setPictureURL={setPictureURL} />
+								<CloudinaryUploadWidget setPictureURL={setPictureURL} />
 								<br />
 								<Button
 									variant='contained'
@@ -107,14 +107,6 @@ const RecipeReviewCard = () => {
 						</Grid>
 					</Grid>
 					<Grid container justifyContent='center'>
-						<Button
-							type='submit'
-							variant='contained'
-							sx={{ mt: 3, mb: 2, backgroundColor: "#405C96", right: "0" }}
-							onClick={handleFormSubmit}
-						>
-							Save
-						</Button>
 					</Grid>
 				</Box>
 			</CardContent>
