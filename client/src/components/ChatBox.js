@@ -117,7 +117,7 @@ function ChatBox() {
     function DisplayChats(props) {
         return (
             <Button variant='outlined' sx={{ width: '100%' }} onClick={createChatRoomID} id={props.fullName}>
-                <input hidden={true} id={props.friendID} />
+                <input hidden={true} id={props.friendID}/>
                 {props.fullName}
             </Button>
         )
@@ -183,7 +183,7 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
+                                {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id}/>)}
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
@@ -195,8 +195,8 @@ function ChatBox() {
                                             {chatAnnounce}
                                         </Typography>
                                     </Grid>
-                                    <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                    <Grid item sx={{ overflow: "auto" }}>
+                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt}/>)}
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
