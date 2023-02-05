@@ -73,7 +73,6 @@ export const QUERY_USER_CHATS = gql`
         roomID
         messages {
           sender
-          receiver
           message
           createdAt
         }
@@ -91,7 +90,6 @@ export const QUERY_CHAT = gql`
       roomID
       messages {
         sender
-        receiver
         message
         createdAt
       }

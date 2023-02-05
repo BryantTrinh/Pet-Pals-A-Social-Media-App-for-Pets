@@ -77,7 +77,6 @@ export const CREATE_CHAT = gql`
       roomID
       messages {
         sender
-        receiver
         message
       }
     }
@@ -90,7 +89,6 @@ export const ADD_MESSAGE = gql`
       roomID
       messages {
         sender
-        receiver
         message
       }
     }

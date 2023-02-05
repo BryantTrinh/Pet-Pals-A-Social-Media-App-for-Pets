@@ -37,7 +37,6 @@ const typeDefs = gql`
 
   type Message {
     sender: ID
-    receiver: ID
     message: String
     createdAt: String
   }
@@ -49,7 +48,6 @@ const typeDefs = gql`
 
   input MessageInput {
     sender: String
-    receiver: String
     message: String
   }
 

@@ -135,7 +135,7 @@ const resolvers = {
         usersId.map(async (userId) => {
           const updateUserChats = await User.findByIdAndUpdate(
             userId,
-            { $push: { chats: { roomID } } },
+            { $push: { chats: { _id: chatId._id, roomID } } },
             { new: true }
           )
         })
