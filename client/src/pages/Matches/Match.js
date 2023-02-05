@@ -37,11 +37,11 @@ async function distanceCalc(userLocation, otherLocation) {
 
 function Match(props) {
   const [distance, setDistance] = useState(0);
-  const { loading: ownerLoading, data: ownerData } = useQuery(QUERY_OWNER, {
-    variables: { ownerId: props.pet.owner },
-  });
-  const owner = ownerData?.owner || {};
-  const ownerLocation = owner.location;
+  // const { loading: ownerLoading, data: ownerData } = useQuery(QUERY_OWNER, {
+  //   variables: { ownerId: props.pet.owner },
+  // });
+  // const owner = ownerData?.owner || {};
+  const ownerLocation = props.pet.owner.location;
   const userLocation = props.userData.user.location;
   function calculateDistance() {
     distanceCalc(ownerLocation, userLocation).then((res) => {
@@ -49,21 +49,21 @@ function Match(props) {
     });
   }
   return (
-    <>
-      {ownerLoading ? (
-        <div>Loading...</div>
-      ) : (
+    // <>
+    //   {ownerLoading ? (
+    //     <div>Loading...</div>
+    //   ) : (
         <>
           {calculateDistance()}
           <Typography variant="body2" color="text.secondary">
-            Owner: {owner.first_name} {owner.last_name}
+            Owner: {props.pet.owner.first_name} {props.pet.owner.last_name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {distance} Miles Away
           </Typography>
         </>
-      )}
-    </>
+      // )}
+    // </>
   );
 }
 

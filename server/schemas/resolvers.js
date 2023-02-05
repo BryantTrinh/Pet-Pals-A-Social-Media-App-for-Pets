@@ -2,6 +2,7 @@ const { AuthenticationError } = require("apollo-server-express");
 const { User, Pet, Chat } = require("../models");
 const { signToken } = require("../utils/auth.js");
 const { GraphQLScalarType } = require("graphql");
+const { sort } = require("fast-sort");
 
 const dateResolver = new GraphQLScalarType({
   name: "Date",
@@ -26,7 +27,9 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        return Pet.find({ owner: { $ne: context.user._id } });
+        let pets = await Pet.find({ owner: { $ne: context.user._id } }).populate('owner');
+        pets = await sort(pets).asc(pet => pet.owner.last_name)
+        return pets
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -117,26 +120,28 @@ const resolvers = {
         const existingChat = await Chat.findOne({ roomID });
 
         if (existingChat) {
-          throw new AuthenticationError("Chat with this roomID already exists!")
+          throw new AuthenticationError(
+            "Chat with this roomID already exists!"
+          );
         }
 
         const chatId = await Chat.create({ roomID });
-        const usersId = chatId.roomID.split(',')
+        const usersId = chatId.roomID.split(",");
 
         console.log(chatId);
-        console.log(usersId); 
+        console.log(usersId);
 
-        usersId.map(item => console.log(item))
+        usersId.map((item) => console.log(item));
 
         usersId.map(async (userId) => {
           const updateUserChats = await User.findByIdAndUpdate(
             userId,
             { $push: { chats: { roomID } } },
             { new: true }
-          )
-        })
+          );
+        });
 
-        return chatId
+        return chatId;
       }
       throw new AuthenticationError("You need to be logged in!");
     },

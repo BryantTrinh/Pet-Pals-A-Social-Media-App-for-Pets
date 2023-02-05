@@ -33,7 +33,11 @@ export const QUERY_PETS = gql`
       species
       birthday
       pictures
-      owner
+      owner {
+        first_name
+        last_name
+        location
+      }
     }
   }
 `;

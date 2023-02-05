@@ -20,7 +20,7 @@ const typeDefs = gql`
     species: String
     birthday: Date
     pictures: String
-    owner: ID
+    owner: User
   }
 
   type Matches {
