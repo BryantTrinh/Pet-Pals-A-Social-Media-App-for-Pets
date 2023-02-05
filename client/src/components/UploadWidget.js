@@ -1,7 +1,7 @@
 import React, { useState, Component } from "react";
 import ImageUpload from "../components/ImageUpload";
 
-import "../app.css";
+import "../widgetApp.css";
 
 
 

@@ -14,13 +14,14 @@ import AddIcon from "@mui/icons-material/Add";
 
 import CloudinaryUploadWidget from "../../components/UploadWidget";
 import auth from "../../utils/auth";
+import { useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { ADD_PET } from "../../utils/mutations";
 
 const RecipeReviewCard = () => {
-	const [pictureURL, setPictureURL] = React.useState("");
-	const [formState, setFormState] = React.useState({
+	const [ pictureURL, setPictureURL] = React.useState("");
+	const  [formState, setFormState] = React.useState({
 		pet_name: "",
 		species: "",
 		birthday: "",
@@ -34,10 +35,10 @@ const RecipeReviewCard = () => {
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 		if (!pictureURL) {
-			alert("Please upload a picture of your pet.");
 			return;
 		}
 		console.log("Form data:", { ...formState, pictureURL });
+    window.location.replace("/profile");
 	};
 
 	const handleInputChange = (event) => {
@@ -48,6 +49,20 @@ const RecipeReviewCard = () => {
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>
 			<CardHeader title='Add a new pet!' sx={{ textAlign: "center" }} />
+			{pictureURL && (
+				<CardMedia
+					sx={{ 
+            width: "75%", 
+            height: 350,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "50px auto"
+           }}
+					image={pictureURL}
+					title='Pet Image'
+				/>
+			)}
 			<CardContent>
 				<Box
 					component='form'
@@ -94,6 +109,7 @@ const RecipeReviewCard = () => {
 							<div>
 								<h2>Upload an Image</h2>
 								<CloudinaryUploadWidget setPictureURL={setPictureURL} />
+								<br />
 								<br />
 								<Button
 									variant='contained'
