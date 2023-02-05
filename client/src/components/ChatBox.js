@@ -276,60 +276,42 @@ function ChatBox() {
                                     </Tabs>
                                 </Grid>
                                 <TabPanel value={value} index={0}>
-                                    {/* TODO: Map over individual chats */}
-                                    <Stack direction="row" spacing={2} sx={{ width: "100%", borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                        <Avatar {...stringAvatar('John Doe')} />
-                                        <Grid container alignItems="center">
-                                            <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
-                                        </Grid>
-                                    </Stack>
-                                    <Stack direction="row" spacing={2} sx={{ width: "100%", borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                        <Avatar {...stringAvatar('Tim Doe')} />
-                                        <Grid container alignItems="center">
-                                            <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from Tim Doe.</Typography>
-                                        </Grid>
-                                    </Stack>
+                                    {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
                                 </TabPanel>
                                 <TabPanel value={value} index={1} >
                                     <Grid container direction="column" justifyContent="flex-end" flexWrap="nowrap" height="100%">
-                                        <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                            {/* TODO: Map over individual messages */}
-                                            <Grid container justifyContent="flex-start">
-                                                <Typography variant="h6" component="div"
-                                                    sx={friendMessageStyle}>
-                                                    Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                                </Typography>
-                                            </Grid>
-                                            <Grid container justifyContent="flex-start">
-                                                <Typography variant="h6" component="div"
-                                                    sx={friendMessageStyle}>
-                                                    Hi, I'm a friend! I'm writing a paragraph to showcase the text wrapping feature of this chat bubble!
-                                                </Typography>
-                                            </Grid>
-                                            <Grid container justifyContent="flex-end">
-                                                <Typography variant="h6" component="div"
-                                                    sx={userMessageStyle}>
-                                                    Hi, friend!
-                                                </Typography>
-                                            </Grid>
+                                        <Grid item>
+                                            <Typography>
+                                                {chatAnnounce}
+                                            </Typography>
                                         </Grid>
-                                        <Grid item width="100%">
-                                            <Grid container justifyContent="center">
-                                                <Grid item xs={11}>
-                                                    <TextField fullWidth size='small' placeholder='Your message here...' />
-                                                </Grid>
-                                                <Grid item xs={1}>
-                                                    <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
-                                                        <SendIcon sx={{ color: "#405C96", "&:hover": { cursor: "pointer" } }}
-                                                            onClick={() => {
-                                                                console.log("Send")
-                                                                const messageField = document.getElementById("messageField");
-                                                                messageField.scrollTop = messageField.scrollHeight;
+                                        <Grid item sx={{ overflow: "auto" }} id="messageField">
+                                            {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                        </Grid>
+                                        <Grid item>
+                                            <Box component="form"
+                                                onSubmit={(event) => {
+                                                    event.preventDefault();
+                                                    sendMessage()
+                                                }}
+                                            >
+                                                <Grid container justifyContent="center" gap={1}>
+                                                    <Grid item xs>
+                                                        <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
+                                                            onChange={(event) => {
+                                                                setMessage(event.target.value)
                                                             }}
                                                         />
                                                     </Grid>
+                                                    <Grid item xs={2}>
+                                                        <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
+                                                            <Button variant="contained" type='submit'>
+                                                                <SendIcon />
+                                                            </Button>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </Box>
                                         </Grid>
                                     </Grid>
                                 </TabPanel>
