@@ -15,12 +15,11 @@ import AddIcon from "@mui/icons-material/Add";
 import CloudinaryUploadWidget from "../../components/UploadWidget";
 import auth from "../../utils/auth";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { ADD_PET } from "../../utils/mutations";
 
-
 const RecipeReviewCard = () => {
-  const [pictureURL, setPictureURL ] = React.useState("");
+	const [pictureURL, setPictureURL] = React.useState("");
 	const [formState, setFormState] = React.useState({
 		pet_name: "",
 		species: "",
@@ -28,23 +27,23 @@ const RecipeReviewCard = () => {
 		pictureURL: pictureURL,
 	});
 
-    const handlePictureUpload = (pictureURL) => {
-			setFormState({ ...formState, pictureURL });
-		};
-
-	  const handleFormSubmit = (event) => {
-	  	event.preventDefault();
-		    if (!pictureURL) {
-			    alert("Please upload a picture of your pet.");
-			  return;
-	  	}
-		  console.log("Form data:", { ...formState, pictureURL });
+	const handlePictureUpload = (pictureURL) => {
+		setFormState({ ...formState, pictureURL });
 	};
 
-	  const handleInputChange = (event) => {
-		  const { name, value } = event.target;
-		  setFormState({ ...formState, [name]: value });
-	  };
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+		if (!pictureURL) {
+			alert("Please upload a picture of your pet.");
+			return;
+		}
+		console.log("Form data:", { ...formState, pictureURL });
+	};
+
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setFormState({ ...formState, [name]: value });
+	};
 
 	return (
 		<Card sx={{ maxWidth: 500, margin: "50px auto" }}>
@@ -101,17 +100,16 @@ const RecipeReviewCard = () => {
 									type='submit'
 									onClick={handleFormSubmit}
 								>
-									Submit Photo
+									Save Pet
 								</Button>
 							</div>
 						</Grid>
 					</Grid>
-					<Grid container justifyContent='center'>
-					</Grid>
+					<Grid container justifyContent='center'></Grid>
 				</Box>
 			</CardContent>
 		</Card>
 	);
 };
 
-export default RecipeReviewCard;
+export default RecipeReviewCard; 

@@ -1,8 +1,8 @@
 import React, { useState, Component } from "react";
 import ImageUpload from "../components/ImageUpload";
+
 import "../app.css";
-// import CldGallery from "../components/CldGallery";
-// import { Cloudinary } from "@cloudinary/url-gen";
+
 
 
 class CloudinaryUploadWidget extends Component {
@@ -40,19 +40,5 @@ class CloudinaryUploadWidget extends Component {
 		);
 	}
 }
-
-
-
-// 	render() {
-// 		return (
-//       <div>
-//         <script type="text/javascript" src="UploadWidgetScript.html"></script>
-// 			    <button id='upload_widget' className='cloudinary-button'>
-// 				  Add a Photo
-// 			</button>
-//       </div>
-// 		);
-// 	}
-// }
 
 export default CloudinaryUploadWidget;
