@@ -15,17 +15,14 @@ const typeDefs = gql`
 		friends: [User]
 	}
 
-  type User {
-    _id: ID
-    first_name: String
-    last_name: String
-    email: String
-    password: String
-    location: String
-    pets: [Pet]
-    chats: [Chat]
-    friends: [User]
-  }
+	type Pet {
+		_id: ID
+		name: String
+		species: String
+		birthday: Date
+		pictures: String
+		owner: ID
+	}
 
 	type Matches {
 		_id: ID
@@ -66,36 +63,26 @@ const typeDefs = gql`
 		getUserChats(userId: ID): User
 	}
 
-  type Query {
-    user: User
-    pets: [Pet]
-    myPets: [Pet]
-    pet: Pet
-    owner(ownerId: ID): User
-    getChat(roomID: String): Chat
-    getUserChats(userId: ID): User
-  }
-
-  type Mutation {
-    register(
-      first_name: String!
-      last_name: String!
-      email: String!
-      password: String!
-      location: String!
-    ): Auth
-    login(email: String!, password: String!): Auth
-    addPet(
-      name: String!
-      species: String!
-      birthday: Date!
-      pictures: String!
-      owner: ID
-    ): Pet
-    addMatch(pet1: String!, pet2: String!): Matches
-    createChat(roomID: String): Chat
-    addMessage(roomID: String, message: MessageInput): Chat
-  }
+	type Mutation {
+		register(
+			first_name: String!
+			last_name: String!
+			email: String!
+			password: String!
+			location: String!
+		): Auth
+		login(email: String!, password: String!): Auth
+		addPet(
+			name: String!
+			species: String!
+			birthday: Date!
+			pictures: String!
+			owner: ID
+		): Pet
+		addMatch(pet1: String!, pet2: String!): Matches
+		createChat(roomID: String): Chat
+		addMessage(roomID: String, message: MessageInput): Chat
+	}
 `;
 
 module.exports = typeDefs;

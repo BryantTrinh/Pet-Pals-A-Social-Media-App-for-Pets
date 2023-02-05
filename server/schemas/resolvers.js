@@ -78,9 +78,7 @@ const resolvers = {
       return { token, user };
     },
     login: async (parent, { email, password }) => {
-      // can do manipulation work here.
       const user = await User.findOne({ email });
-        // dropbox// logic can go here // image applies to pet, id to dropbox image data, put same id for pet field, when grab pet, go to dropbox, find img with those id's find and attach to pet// fetch by running fetch request line 10 of match.js for fetch
 			if (!user) {
 				throw new AuthenticationError("No user with this email found!");
 			}
