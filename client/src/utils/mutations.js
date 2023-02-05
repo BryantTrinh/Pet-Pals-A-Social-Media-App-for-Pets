@@ -53,7 +53,7 @@ export const ADD_PET = gql`
     $species: String!
     $birthday: Date!
     $pictures: String!
-    $owner: ID!
+    $owner: ID
   ) {
     addPet(
       name: $name
@@ -67,18 +67,16 @@ export const ADD_PET = gql`
       species
       birthday
       pictures
-      owner
     }
   }
 `;
 
 export const CREATE_CHAT = gql`
-  mutation createChat($roomID: String, $messages: [MessageInput]) {
-    createChat (roomID: $roomID, messages: $messages) {
+  mutation createChat($roomID: String) {
+    createChat (roomID: $roomID) {
       roomID
       messages {
         sender
-        receiver
         message
       }
     }
@@ -91,7 +89,6 @@ export const ADD_MESSAGE = gql`
       roomID
       messages {
         sender
-        receiver
         message
       }
     }

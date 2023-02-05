@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
 const Pet = require("./Pet.js");
+const Chat = require('./Chat.js')
 
 const userSchema = new Schema({
   first_name: {
@@ -29,6 +30,12 @@ const userSchema = new Schema({
     required: true,
   },
   pets: [Pet.schema],
+  chats: [Chat.schema],
+  friends: [{
+    _id: { type: Schema.Types.ObjectId, ref: "User" },
+    first_name: { type: String },
+    last_name: {type: String},
+  }] 
 });
 
 userSchema.pre("save", async function (next) {

@@ -12,6 +12,33 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const QUERY_FRIENDS_LIST = gql`
+  query friendsList($ownerId: ID) {
+    owner(ownerId: $ownerId) {
+      friends {
+        _id
+        first_name
+        last_name
+      }
+    }
+  }
+`
+
+export const QUERY_OWNER = gql`
+  query Owner($ownerId: ID) {
+    owner(ownerId: $ownerId) {
+      _id
+      first_name
+      last_name
+      email
+      password
+      location
+    }
+  }
+`;
+
+
+
 export const QUERY_PETS = gql`
   query Pets {
     pets {
@@ -20,40 +47,52 @@ export const QUERY_PETS = gql`
       species
       birthday
       pictures
+      owner
     }
   }
 `;
 
-export const QUERY_PET = gql`
-  query pets {
-    pets {
+export const QUERY_MYPETS = gql`
+  query MyPets {
+    myPets {
       _id
       name
       species
       birthday
       pictures
+      owner
     }
   }
 `;
 
-export const QUERY_MATCH = gql`
-  query matches {
-  _id
-  pet1
-  pet2: String
-}
+export const QUERY_USER_CHATS = gql`
+  query Query($userId: ID) {
+    getUserChats(userId: $userId) {
+      _id
+      chats {
+        roomID
+        messages {
+          sender
+          message
+          createdAt
+        }
+      }
+      friends {
+        _id
+      }
+    }
+  }
 `
 
 export const QUERY_CHAT = gql`
   query getChat($roomId: String) {
-    getChat (roomID: $roomId) {
+    getChat(roomID: $roomId) {
       roomID
       messages {
         sender
-        receiver
         message
         createdAt
       }
     }
-}
-`
+  }
+`;

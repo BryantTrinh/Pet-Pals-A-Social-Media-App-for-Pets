@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "./Profile.css";
+import { QUERY_MYPETS } from "../../utils/queries";
+import { useQuery } from "@apollo/client";
 
 const style = {
   position: "absolute",

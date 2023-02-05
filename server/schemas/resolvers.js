@@ -21,9 +21,18 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    owner: async (parent, { ownerId }, context) => {
+      return User.findOne({ _id: ownerId });
+    },
     pets: async (parent, args, context) => {
       if (context.user) {
         return Pet.find({ owner: { $ne: context.user._id } });
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    myPets: async (parent, args, context) => {
+      if (context.user) {
+        return Pet.find({ owner: { $eq: context.user._id } });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -46,6 +55,12 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    getUserChats: async (parent, args , context) => {
+      if (context.user) {
+        return await User.findOne({ _id: context.user._id })        
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    }
   },
   Mutation: {
     register: async (
@@ -103,9 +118,47 @@ const resolvers = {
     //   }
     //   throw new AuthenticationError("Please login to create a match.");
     // },
-    createChat: async (parent, { roomID, messages }, context) => {
+    createChat: async (parent, { roomID }, context) => {
       if (context.user) {
-        return await Chat.create({ roomID, messages });
+        const existingChat = await Chat.findOne({ roomID });
+
+        // If chat exists, return error
+        if (existingChat) {
+          throw new AuthenticationError("Chat with this roomID already exists!")
+        }
+
+        // Create a new chat with roomID
+        const chatId = await Chat.create({ roomID });
+
+        // Add the chat to each users
+        const usersId = chatId.roomID.split(',')
+        usersId.map(async (userId) => {
+          const updateUserChats = await User.findByIdAndUpdate(
+            userId,
+            { $push: { chats: { _id: chatId._id, roomID } } },
+            { new: true }
+          )
+        })
+        
+        // Add user to your friends list
+        const myIdIndex = usersId.indexOf(context.user._id)
+        usersId.splice(myIdIndex, 1)
+        const userData = await User.findById(usersId[0])
+
+        const addToYourFriends = await User.findByIdAndUpdate(
+          context.user._id,
+          { $push: { friends: { _id: usersId[0], first_name: userData.first_name, last_name: userData.last_name } } },
+          { new: true }
+        )
+
+        // // Add you to the other user's friends list
+        const addToOtherFriends = await User.findByIdAndUpdate(
+          usersId[0],
+          { $push: { friends: { _id: context.user._id, first_name: context.user.first_name, last_name: context.user.last_name } } },
+          { new: true }
+        )
+
+        return
       }
       throw new AuthenticationError("You need to be logged in!");
     },

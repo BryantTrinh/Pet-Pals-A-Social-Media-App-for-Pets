@@ -1,35 +1,46 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
-import { Modal, Typography, Box, Grid, TextField, Backdrop, Avatar, Stack, Button } from '@mui/material';
-import BasicTabs from './mobileChatBox'
+import { Modal, Typography, Box, Grid, TextField, Backdrop, Button, Tabs, Tab } from '@mui/material';
+import { useQuery } from '@apollo/client'
+import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from '../utils/queries';
 
 import auth from '../utils/auth'
 
 import io from 'socket.io-client'
 const socket = io.connect('http://localhost:3001');
 
-// Colored avatars with initials
-function stringToColor(string) {
-    let hash = 0;
-    let i;
-    for (i = 0; i < string.length; i += 1) {
-        hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let color = '#';
-    for (i = 0; i < 3; i += 1) {
-        const value = (hash >> (i * 8)) & 0xff;
-        color += `00${value.toString(16)}`.slice(-2);
-    }
-    return color;
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+            style={{ height: "92%" }}
+        >
+            {value === index && (
+                <Box sx={{ height: "100%" }}>
+                    <Box sx={{ height: "100%" }}>{children}</Box>
+                </Box>
+            )}
+        </div>
+    );
 }
 
-function stringAvatar(name) {
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
     return {
-        sx: {
-            bgcolor: stringToColor(name),
-        },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
     };
 }
 
@@ -38,9 +49,14 @@ function ChatBox() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
-        joinRoom()
     };
     const handleClose = () => setOpen(false);
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     const userMessageStyle = {
         color: "white",
@@ -64,19 +80,49 @@ function ChatBox() {
         overflowWrap: "break-word"
     }
 
+    // Getting array of user's chats
+    const { loading: userChatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
+    const myId = userChats?.getUserChats._id || "";
+
+    // Getting array of friends object ID
+    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
+        variables: { ownerId: myId }
+    })
+    const userFriendsList = userFriends?.owner.friends || []
+
+    // Socket.io stuff
     const [message, setMessage] = React.useState('');
     const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('TestRoom')
+    const [room, setRoom] = React.useState('')
+    const [chatAnnounce, setChatAnnounce] = React.useState('')
+    const [chatStyle, setChatStyle] = React.useState('')
 
-    const joinRoom = () => {
-        socket.emit('joinRoom', room);
+    const ChatBubblesRef = React.useRef(null);
+
+    // Logic to create chatroom ID
+    const createChatRoomID = (event) => {
+        const IdArr = []
+        IdArr.push(event.target.firstElementChild.id)
+        IdArr.push(myId)
+        IdArr.sort()
+        const roomID = IdArr.toString()
+
+        setChatAnnounce(`You're in a chat with ${event.target.id}`)
+        setRoom(roomID)
+        setChatStyle(event.target.firstElementChild.id)
+        setValue(1)
+
+        socket.emit('joinRoom', roomID);
     }
 
     const sendMessage = () => {
         if (message === '') {
             return
+        } else if (room === '') {
+            console.log("You're not in a room!");
+            return
         }
-        socket.emit("sendMessage", { message, room });
+        socket.emit("sendMessage", { message, myId, room });
     }
 
     React.useEffect(() => {
@@ -86,14 +132,44 @@ function ChatBox() {
         })
     }, [socket])
 
-    function ChatBubble(props) {
+    React.useEffect(() => {
+        ChatBubblesRef.current?.scrollIntoView()
+    }, [messageReceived])
+
+    // React components to map
+    function DisplayChats(props) {
         return (
-            <Grid container justifyContent="flex-end">
-                <Typography variant="h6" component="div"
-                    sx={userMessageStyle}>
-                    {props.message}
-                </Typography>
-            </Grid>
+            <>
+                <Box sx={{ height: '2px', marginBottom: '5px', backgroundColor: '#E4E4E4' }}></Box>
+                <Button variant={chatStyle === props.friendID ? 'contained' : 'text'} sx={{ width: '100%', marginBottom: '5px' }} onClick={createChatRoomID} id={props.fullName}>
+                    <input hidden={true} id={props.friendID} />
+                    {props.fullName}
+                </Button>
+            </>
+        )
+    }
+
+    function ChatBubble(props) {
+        const timeStamp = new Date(props.timeStamp)
+        const timeSetting = {
+            month: "2-digit",
+            day: "2-digit",
+            year: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+        const newTimeStamp = timeStamp.toLocaleDateString('en-US', timeSetting).split(',').join('')
+
+        return (
+            <>
+                <Box textAlign={props.sender === myId ? "right" : 'left'} fontSize="14px" color="grey.400">{newTimeStamp}</Box>
+                <Grid container justifyContent={props.sender === myId ? "flex-end" : 'flex-start'} >
+                    <Typography variant="h6" component="div"
+                        sx={props.sender === myId ? userMessageStyle : friendMessageStyle}>
+                        {props.message}
+                    </Typography>
+                </Grid>
+            </>
         )
     }
 
@@ -146,27 +222,23 @@ function ChatBox() {
                                 <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
                                     Chats
                                 </Typography>
-                                {/* TODO: Map over chats */}
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('John Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from John Doe.</Typography>
-                                    </Grid>
-                                </Stack>
-                                <Stack direction="row" spacing={2} sx={{ borderTop: "2px solid #E4E4E4", p: "5px", "&:hover": { cursor: "pointer" } }}>
-                                    <Avatar {...stringAvatar('Tim Doe')} />
-                                    <Grid container alignItems="center">
-                                        <Typography sx={{ lineHeight: "1", fontSize: "14px" }}>Last message from Tim Doe.</Typography>
-                                    </Grid>
-                                </Stack>
+                                <Box overflow="auto">
+                                    {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
+                                </Box>
                             </Grid>
                             <Grid item sm={9} sx={{
                                 p: "0 0 0 16px",
                                 height: "100%"
                             }}>
                                 <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
-                                    <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                        {messageReceived.map((data) => <ChatBubble key={data.message} socketID={data.socketID} message={data.message} />)}
+                                    <Grid item>
+                                        <Typography>
+                                            {chatAnnounce}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item sx={{ overflow: "auto" }} >
+                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                        <div ref={ChatBubblesRef} />
                                     </Grid>
                                     <Grid item>
                                         <Box component="form"
@@ -198,11 +270,54 @@ function ChatBox() {
                         </Grid>
                         {/* Small screen breakpoint chat layout */}
                         <Grid container sx={{ height: "100%", display: { xs: "flex", md: "none" } }}>
-                            <BasicTabs
-                                stringAvatar={stringAvatar}
-                                friendMessageStyle={friendMessageStyle}
-                                userMessageStyle={userMessageStyle}
-                            />
+                            <Grid container direction="column" flexWrap='nowrap' sx={{ height: "100%" }}>
+                                <Grid item xs={1} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                    <Tabs value={value} onChange={handleChange} centered>
+                                        <Tab label="Chats" {...a11yProps(0)} />
+                                        <Tab label="Message" {...a11yProps(1)} />
+                                    </Tabs>
+                                </Grid>
+                                <TabPanel value={value} index={0}>
+                                    {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
+                                </TabPanel>
+                                <TabPanel value={value} index={1} >
+                                    <Grid container direction="column" justifyContent="flex-end" flexWrap="nowrap" height="100%">
+                                        <Grid item>
+                                            <Typography>
+                                                {chatAnnounce}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item sx={{ overflow: "auto" }} id="messageField">
+                                            {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                        </Grid>
+                                        <Grid item>
+                                            <Box component="form"
+                                                onSubmit={(event) => {
+                                                    event.preventDefault();
+                                                    sendMessage()
+                                                }}
+                                            >
+                                                <Grid container justifyContent="center">
+                                                    <Grid item xs>
+                                                        <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
+                                                            onChange={(event) => {
+                                                                setMessage(event.target.value)
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
+                                                            <Button variant="contained" type='submit'>
+                                                                <SendIcon />
+                                                            </Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </TabPanel>
+                            </Grid>
                         </Grid>
                     </Box>
                 </Modal >
