@@ -1,53 +1,59 @@
 import React, { useState } from "react";
-import { AdvancedImage } from "@cloudinary/react";
+import ImageUpload from "../components/ImageUpload";
+import "../app.css";
+import CldGallery from "../components/CldGallery";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { Transformation } from "@cloudinary/url-gen";
-import { thumbnail, scale } from "@cloudinary/url-gen/actions/resize";
-import { image } from "@cloudinary/url-gen/qualifiers/source";
 
-const UploadWidget = () => {
-	const [pictureURL, setPictureURL] = useState("");
-	const [isMounted, setIsMounted] = useState(false);
+const App = () => {
+	const [imagesUploadedList, setImagesUploadedList] = useState([]);
 
-	// Create a Cloudinary instance and set your cloud name.
 	const cld = new Cloudinary({
 		cloud: {
-			cloudName: "dkm1ip3w2",
+			cloud_name: "dkm1ip3w2", //Your cloud name
+			upload_preset: "ABCDE12345", //Create an unsigned upload preset and update this
 		},
 	});
 
-	const handleUpload = (error, result) => {
-		if (error) {
-			console.error(error);
-			return;
-		}
-		setPictureURL(result.secure_url);
+	const onImageUploadHandler = (publicId) => {
+		setImagesUploadedList((prevState) => [...prevState, publicId]);
 	};
 
-	React.useEffect(() => {
-		setIsMounted(true);
-		return () => setIsMounted(false);
-	}, []);
-
-	if (!isMounted) {
-		return null;
-	}
+	const deleteAllImages = async () => {
+		try {
+			//You can call an API in your backend if you want to delete images.
+			//This is the API you should call:
+			//https://cloudinary.com/documentation/image_upload_api_reference#destroy
+			// const responseData = await fetch(
+			// "http://localhost:5000/api/photos/delete"
+			// );
+			setImagesUploadedList([]);
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
 
 	return (
-		<div>
-			<div>
-				<input
-					type='file'
-					name='file'
-					data-cloudinary-field='image_id'
-					data-form-data="{ 'upload_preset': 'ABCDE12345' }"
-					onChange={handleUpload}
-				/>
-			</div>
-			{pictureURL && <AdvancedImage cldImg={cld.image(pictureURL)} />}
+		<div className='App'>
+			<button className='redButton' onClick={deleteAllImages}>
+				Delete all images
+			</button>
+			<ImageUpload
+				cloud_name={cld.cloudinaryConfig.cloud.cloud_name}
+				upload_preset={cld.cloudinaryConfig.cloud.upload_preset}
+				onImageUpload={(publicId) => onImageUploadHandler(publicId)}
+			/>
+			<p>
+				This mini project demonstrates the use of Upload widget +
+				transformations on uploaded images in responsive way using hooks in
+				React
+			</p>
+			<CldGallery
+				imagesUploaded={imagesUploadedList}
+				{...cld}
+				cloud_name={cld.cloudinaryConfig.cloud.cloud_name}
+			/>
 		</div>
 	);
 };
 
-export default UploadWidget;
-
+export default App;
