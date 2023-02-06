@@ -22,6 +22,20 @@ const style = {
   pb: 3,
 };
 
+// UNFINISHED! TODO
+const petProfiles = () => (
+  <>
+    <div className="modal-body">
+      <div className="profile-posts-center">
+        <img></img>
+      </div>
+    </div>
+    <div className="modal-footer">
+      <img></img>
+      <h1>example name</h1>
+    </div>
+  </>
+);
 
 export default function Profile() {
   const [open, setOpen] = React.useState(false);
@@ -49,6 +63,7 @@ export default function Profile() {
                     backgroundColor: "rgba(0, 0, 0, 0.484)",
                     backgroundBlendMode: "soft-light",
                     transitionDuration: "1s",
+                    // modal profile picture image ADD!
                     backgroundImage:
                       'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
                     "&:hover": {
@@ -69,26 +84,7 @@ export default function Profile() {
                   className="modal"
                 >
                   <Box sx={style}>
-                    <div className="modal-body">
-                      <div className="profile-posts-center">
-                        <div className="profile-posts">
-                          <img src="https://i.pinimg.com/564x/a9/dd/d5/a9ddd5dcd620e17c3f2932e272837ca7.jpg"></img>
-                        </div>
-                        <div className="profile-posts">
-                          <img src="https://i.pinimg.com/564x/da/e0/3b/dae03bf3e58a5fa50ace50b6e9d88ca9.jpg"></img>
-                        </div>
-                        <div className="profile-posts">
-                          <img src="https://i.pinimg.com/564x/d5/7b/0d/d57b0d640c784655c100c4cf08d1ae1c.jpg"></img>
-                        </div>
-                        <div className="profile-posts">
-                          <img src="https://i.pinimg.com/originals/59/54/b4/5954b408c66525ad932faa693a647e3f.jpg"></img>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="modal-footer">
-                      <img src="https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg"></img>
-                      <h1>Kuro</h1>                      
-                    </div>
+                    <petProfiles />
                   </Box>
                 </Modal>
               </div>
