@@ -19,7 +19,8 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://pet-pals.herokuapp.com/",
+    // origin: "https://pet-pals.herokuapp.com/",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });

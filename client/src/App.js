@@ -46,6 +46,7 @@ function App() {
 						<Route path='/feed' element={<Feed />} />
 						<Route path='/profile' element={<Profile />} />
 						<Route path='/add-pet' element={<AddPet />} />
+						<Route path="/*" element={<Home />} />
 					</Routes>
 				</div>
 			</Router>

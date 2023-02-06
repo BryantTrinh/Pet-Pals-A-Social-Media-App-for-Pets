@@ -1,14 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import "./Profile.css";
 import { QUERY_MYPETS } from "../../utils/queries";
 import { useQuery } from "@apollo/client";
 import PetProfile from "../PetProfile";
 import { Grid } from "@mui/material";
-import { Block } from "@material-ui/icons";
 
 const style = {
   position: "absolute",
@@ -31,8 +29,8 @@ export default function Profile() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { loading, data } = useQuery(QUERY_MYPETS);
-  console.log(data);
   const petList = data?.myPets || [];
+  console.log(petList);
   return (
     <Grid item xs={12} sm={6} md={3}>
       <section className="page">
@@ -46,12 +44,12 @@ export default function Profile() {
             <>
               {petList.map((pet) => {
                 return (
-                  <div className="pets-container">
+                  <div className="pets-container" key={pet._id}>
                     <ul>
                       <li>
                         <div>
                           <Button
-                            item
+                            // item
                             xs={12}
                             sm={8}
                             md={5}

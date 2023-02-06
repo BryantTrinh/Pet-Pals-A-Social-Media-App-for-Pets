@@ -12,9 +12,8 @@ import {
 import ChatIcon from "@mui/icons-material/Chat";
 import Match from "../Matches";
 import { useQuery, useMutation } from "@apollo/client";
-import { QUERY_PETS, QUERY_USER, QUERY_OWNER } from "../../utils/queries.js";
+import { QUERY_PETS, QUERY_USER } from "../../utils/queries.js";
 import { CREATE_CHAT } from "../../utils/mutations";
-import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 export default function RecipeReviewCard() {
@@ -39,6 +38,8 @@ export default function RecipeReviewCard() {
       const addChat = await createChat({
         variables: { roomID: roomID },
       });
+
+      window.location.reload()
     }
   };
   console.log(petList);

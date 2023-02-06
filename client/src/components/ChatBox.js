@@ -120,6 +120,7 @@ function ChatBox() {
   const createChatRoomID = (event) => {
     const IdArr = [];
     IdArr.push(event.target.firstElementChild.id);
+    console.log(event.target.firstElementChild.id)
     IdArr.push(myId);
     IdArr.sort();
     const roomID = IdArr.toString();
