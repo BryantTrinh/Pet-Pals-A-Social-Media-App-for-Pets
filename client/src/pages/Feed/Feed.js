@@ -82,7 +82,7 @@ export default function RecipeReviewCard() {
                       endIcon={<ChatIcon />}
                       onClick={addToChat}
                     >
-                      ADD TO CHAT
+                      ADD {`${pet.owner.first_name}`} TO CHAT
                       <input hidden={true} id={pet.owner}></input>
                     </Button>
                   </CardActions>

@@ -27,11 +27,11 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        const pets = await Pet.find({
+        let pets = await Pet.find({
           owner: { $ne: context.user._id },
         }).populate("owner");
-        newPets = await sort(pets).asc((pet) => pet.owner.last_name);
-        return newPets;
+        pets = await sort(pets).asc((pet) => pet.owner.last_name);
+        return pets;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -113,7 +113,13 @@ const resolvers = {
         });
         const updatedUserPets = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { pets: pet } },
+          { $push: { pets: {
+            name: pet.name,
+            species: pet.species,
+            birthday: pet.birthday,
+            picturesURL: pet.picturesURL,
+            owner: pet.owner
+          } } },
           { new: true }
         );
         return pet;
