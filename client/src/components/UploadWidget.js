@@ -13,7 +13,7 @@ class CloudinaryUploadWidget extends Component {
 				uploadPreset: "ABCDE12345",
 				sources: ["url", "camera", "local"],
 				showSkipCropButton: false,
-				multiple: false,
+				multiple: true,
 				defaultSource: "local",
 			},
 			(error, result) => {

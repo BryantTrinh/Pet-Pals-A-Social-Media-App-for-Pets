@@ -70,75 +70,75 @@ const RecipeReviewCard = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            margin: "50px auto",
-          }}
-          image={pictureURL}
-          title="Pet Image"
-        />
-      )}
-      <CardContent>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleFormSubmit}
-          sx={{ mt: 3 }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="pet_name"
-                required
-                fullWidth
-                id="petName"
-                label="Pet Name"
-                autoFocus
-                value={formState.pet_name}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="species"
-                label="Species"
-                name="species"
-                value={formState.species}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="birthday"
-                label="Birthday"
-                name="birthday"
-                value={formState.birthday}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <div>
-                <h2>Upload an Image</h2>
-                <CloudinaryUploadWidget setPictureURL={setPictureURL} />
-                <br />
-                <br />
-                <Button
-                  variant="contained"
-                  type="submit"
-                  onClick={handleFormSubmit}
-                >
-                  Save Pet
-                </Button>
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="center"></Grid>
-        </Box>
-      </CardContent>
-    </Card>
-  );
+            margin: "50px auto"
+           }}
+					image={pictureURL}
+					title='Pet Image'
+				/>
+			)}
+			<CardContent>
+				<Box
+					component='form'
+					noValidate
+          onSubmit={event => event.preventDefault()}
+					sx={{ mt: 3 }}
+				>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<TextField
+								name='pet_name'
+								required
+								fullWidth
+								id='petName'
+								label='Pet Name'
+								autoFocus
+								value={formState.pet_name}
+								onChange={handleInputChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id='species'
+								label='Species'
+								name='species'
+								value={formState.species}
+								onChange={handleInputChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								fullWidth
+								id='birthday'
+								label='Birthday'
+								name='birthday'
+								value={formState.birthday}
+								onChange={handleInputChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<div>
+								<h2>Upload an Image</h2>
+								<CloudinaryUploadWidget setPictureURL={setPictureURL} />
+								<br />
+								<br />
+								<Button
+									variant='contained'
+									type='submit'
+									onClick={handleFormSubmit}
+								>
+									Save Pet
+								</Button>
+							</div>
+						</Grid>
+					</Grid>
+					<Grid container justifyContent='center'></Grid>
+				</Box>
+			</CardContent>
+		</Card>
+	);
 };
 
 export default RecipeReviewCard;
