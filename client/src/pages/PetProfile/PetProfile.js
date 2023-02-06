@@ -2,7 +2,7 @@ import * as dayjs from "dayjs";
 
 function PetProfile(props) {
   const birthday = dayjs(props.pet.birthday).format("MM/DD/YYYY");
-  console.log(birthday);
+  const now = dayjs().format("YYYY-MM-DD");
   return (
     <>
       <div className="modal-body">
@@ -16,6 +16,7 @@ function PetProfile(props) {
             <h1>{props.pet.name}</h1>
             <h4>species: {props.pet.species}</h4>
             <h4>birthday: {birthday}</h4>
+            <h4>age: {dayjs(now).diff(dayjs(props.pet.birthday), "year")}</h4>
           </div>
         </div>
       </div>
