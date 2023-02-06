@@ -1,45 +1,99 @@
 import { gql } from "@apollo/client";
 
-const QUERY_USER = gql`
-  query user {
-    user {
+export const QUERY_USER = gql`
+	query user {
+		user {
+			_id
+			first_name
+			last_name
+			email
+			location
+		}
+	}
+`;
+
+export const QUERY_FRIENDS_LIST = gql`
+	query friendsList($ownerId: ID) {
+		owner(ownerId: $ownerId) {
+			friends {
+				_id
+				first_name
+				last_name
+			}
+		}
+	}
+`;
+
+export const QUERY_OWNER = gql`
+	query Owner($ownerId: ID) {
+		owner(ownerId: $ownerId) {
+			_id
+			first_name
+			last_name
+			email
+			password
+			location
+		}
+	}
+`;
+
+export const QUERY_PETS = gql`
+  query Pets {
+    pets {
       _id
-      first_name
-      last_name
-      email
-      location
+      name
+      species
+      birthday
+      picturesURL
+      owner {
+        first_name
+        last_name
+        location
+      }
     }
   }
 `;
 
-const QUERY_PETS = gql`
-  query pets {
-    pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
-    }
-  }
+export const QUERY_MYPETS = gql`
+	query MyPets {
+		myPets {
+			_id
+			name
+			species
+			birthday
+			picturesURL
+		}
+	}
 `;
 
-const QUERY_PET = gql`
-  query pets {
-    pets {
-      _id: ID
-      name: String
-      species: String
-      birthday: Date
-      pictures: String
-    }
-  }
+export const QUERY_USER_CHATS = gql`
+	query Query($userId: ID) {
+		getUserChats(userId: $userId) {
+			_id
+			chats {
+				roomID
+				messages {
+					sender
+					message
+					createdAt
+				}
+			}
+			friends {
+				_id
+			}
+		}
+	}
 `;
 
-const QUERY_MATCH = gql`
-  query matches {
-  _id: ID
-  pet1: String
-  pet2: String
-}
-`
+export const QUERY_CHAT = gql`
+	query getChat($roomId: String) {
+		getChat(roomID: $roomId) {
+			roomID
+			messages {
+				sender
+				message
+				createdAt
+			}
+		}
+	}
+`;

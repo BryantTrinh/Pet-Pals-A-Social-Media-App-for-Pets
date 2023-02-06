@@ -25,7 +25,7 @@ const chat = () => {
 				))}
 			</ul>
 			<input
-				type="text"
+				type='text'
 				value={message}
 				onChange={(e) => setMessage(e.target.value)}
 			/>
