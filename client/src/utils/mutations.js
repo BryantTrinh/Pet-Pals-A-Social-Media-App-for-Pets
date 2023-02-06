@@ -52,21 +52,21 @@ export const ADD_PET = gql`
     $name: String!
     $species: String!
     $birthday: Date!
-    $pictureUrl: String!
+    $picturesURL: String!
     $owner: ID
   ) {
     addPet(
       name: $name
       species: $species
       birthday: $birthday
-      pictureURL: $pictureUrl
+      picturesURL: $picturesURL
       owner: $owner
     ) {
       _id
       name
       species
       birthday
-      pictureURL
+      picturesURL
       owner {
         _id
       }

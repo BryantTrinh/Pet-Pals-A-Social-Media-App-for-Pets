@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import "./Profile.css";
 import { QUERY_MYPETS } from "../../utils/queries";
 import { useQuery } from "@apollo/client";
+import PetProfile from "../PetProfile";
 
 const style = {
   position: "absolute",
@@ -48,7 +49,8 @@ export default function Profile() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { loading, data } = useQuery(QUERY_MYPETS);
-  const petList = data?.pets || [];
+  console.log(data);
+  const petList = data?.myPets || [];
   return (
     <section className="page">
       <div id="pets-header">
@@ -78,7 +80,7 @@ export default function Profile() {
                             backgroundBlendMode: "soft-light",
                             transitionDuration: "1s",
                             // profile picture SAME IN FUNC OBJ unsure how to display here :(
-                            backgroundImage: `${pet.pictureURL}`,
+                            backgroundImage: `${pet.picturesURL}`,
                             "&:hover": {
                               transition: "1s",
                               backgroundColor: "rgba(0,0,0,0)",
@@ -97,7 +99,7 @@ export default function Profile() {
                           className="modal"
                         >
                           <Box sx={style}>
-                            <petProfiles pet={pet} />
+                            <PetProfile pet={pet} />
                           </Box>
                         </Modal>
                       </div>
