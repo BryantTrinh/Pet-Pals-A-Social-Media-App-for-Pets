@@ -100,7 +100,7 @@ const resolvers = {
     },
     addPet: async (
       parent,
-      { name, species, birthday, pictureURL },
+      { name, species, birthday, picturesURL },
       context
     ) => {
       if (context.user) {
@@ -108,7 +108,7 @@ const resolvers = {
           name,
           species,
           birthday,
-          pictureURL,
+          picturesURL,
           owner: context.user._id,
         });
         const updatedUserPets = await User.findByIdAndUpdate(
