@@ -24,7 +24,7 @@ const style = {
 };
 
 // should display on page below using <PetProfiles /> ?
-const petProfiles = () => (
+const petProfiles = (props) => (
   <>
     <div className="modal-body">
       <div className="flex-body">
@@ -34,10 +34,9 @@ const petProfiles = () => (
         </div>
         {/* contents to fetch to? */}
         <div className="profile-posts-center">
-          <h1>insert name here</h1>
-          <h4>species: </h4>
-          <h4>birthday: </h4>
-          <h4>location: </h4>
+          <h1>{props.pet.name}</h1>
+          <h4>species: {props.pet.species}</h4>
+          <h4>birthday: {props.pet.birthday}</h4>
         </div>
       </div>
     </div>
@@ -48,56 +47,67 @@ export default function Profile() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { loading, data } = useQuery(QUERY_MYPETS);
+  const petList = data?.pets || [];
   return (
     <section className="page">
       <div id="pets-header">
         <h1>Your Pets</h1>
       </div>
       <div className="pets-section">
-        <div className="pets-container">
-          <ul>
-            <li>
-              <div>
-                <Button
-                  onClick={handleOpen}
-                  sx={{
-                    padding: "32em 32em 0 0",
-                    margin: "8em",
-                    display: "flex",
-                    alignItems: "flex-end",
-                    textDecoration: "none",
-                    backgroundSize: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.484)",
-                    backgroundBlendMode: "soft-light",
-                    transitionDuration: "1s",
-                    // profile picture SAME IN FUNC OBJ unsure how to display here :(
-                    backgroundImage:
-                      'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
-                    "&:hover": {
-                      transition: "1s",
-                      backgroundColor: "rgba(0,0,0,0)",
-                    },
-                  }}
-                >
-                  <div className="text-background">
-                    <h3>Kuro</h3>
-                  </div>
-                </Button>
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                  className="modal"
-                >
-                  <Box sx={style}>
-                    <petProfiles />
-                  </Box>
-                </Modal>
-              </div>
-            </li>
-          </ul>
-        </div>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            {petList.map((pet) => {
+              return (
+                <div className="pets-container">
+                  <ul>
+                    <li>
+                      <div>
+                        <Button
+                          onClick={handleOpen}
+                          sx={{
+                            padding: "32em 32em 0 0",
+                            margin: "8em",
+                            display: "flex",
+                            alignItems: "flex-end",
+                            textDecoration: "none",
+                            backgroundSize: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.484)",
+                            backgroundBlendMode: "soft-light",
+                            transitionDuration: "1s",
+                            // profile picture SAME IN FUNC OBJ unsure how to display here :(
+                            backgroundImage: `${pet.pictureURL}`,
+                            "&:hover": {
+                              transition: "1s",
+                              backgroundColor: "rgba(0,0,0,0)",
+                            },
+                          }}
+                        >
+                          <div className="text-background">
+                            <h3>{pet.name}</h3>
+                          </div>
+                        </Button>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                          className="modal"
+                        >
+                          <Box sx={style}>
+                            <petProfiles pet={pet} />
+                          </Box>
+                        </Modal>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
     </section>
   );
