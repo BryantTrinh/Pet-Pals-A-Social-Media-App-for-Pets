@@ -4,10 +4,12 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
-    "seed": "cd server && npm run seed",
+    "heroku-postbuild": "npm run install && npm run build",
+    "server": "nodemon server/server.js",
+    "develop": "concurrently --kill-others-on-fail \"npm run sever\" \"npm run start --prefix client\"",
     "build": "cd client && npm run build"
   },
   "keywords": [],
