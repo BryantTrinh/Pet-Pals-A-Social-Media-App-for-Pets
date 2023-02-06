@@ -80,7 +80,7 @@ export default function Profile() {
                             backgroundBlendMode: "soft-light",
                             transitionDuration: "1s",
                             // profile picture SAME IN FUNC OBJ unsure how to display here :(
-                            backgroundImage: `${pet.picturesURL}`,
+                            backgroundImage: `url(${pet.picturesURL})`,
                             "&:hover": {
                               transition: "1s",
                               backgroundColor: "rgba(0,0,0,0)",
