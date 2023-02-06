@@ -23,7 +23,7 @@ function Login() {
     password: "",
   });
 
-  const [Login, { error, data }] = useMutation(LOGIN_USER);
+  const [userLogin, { error, data }] = useMutation(LOGIN_USER);
 
   const handleInputChange = ({ target: { name, value } }) => {
     setFormState({ ...formState, [name]: value });
@@ -33,12 +33,16 @@ function Login() {
     event.preventDefault();
 
     try {
-      const { data } = await Login({
+      console.log("hi");
+      const { data } = await userLogin({
         variables: { ...formState },
       });
+      console.log(data);
       Auth.login(data.login.token);
+      console.log("hi");
       console.log(Auth.getProfile());
     } catch (err) {
+      window.alert("Unable to login. Please try again or register.");
       console.error(err);
     }
   };

@@ -20,12 +20,12 @@ import dayjs from "dayjs";
 export default function RecipeReviewCard() {
   const { loading: petsLoading, data: petsData } = useQuery(QUERY_PETS);
   let petList = petsData?.pets || [];
-  console.log("-----petList: ", petList)
+  console.log("-----petList: ", petList);
 
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
 
-	const [createChat] = useMutation(CREATE_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT);
 
   // Creating roomID using pet's owner and user ID
   const addToChat = async (event) => {
@@ -41,7 +41,7 @@ export default function RecipeReviewCard() {
       });
     }
   };
-
+  console.log(petList);
   return (
     <Grid
       container
@@ -83,7 +83,7 @@ export default function RecipeReviewCard() {
                       onClick={addToChat}
                     >
                       ADD {`${pet.owner.first_name}`} TO CHAT
-                      <input hidden={true} id={pet.owner}></input>
+                      <input hidden={true} id={pet.owner._id}></input>
                     </Button>
                   </CardActions>
                 </Card>
