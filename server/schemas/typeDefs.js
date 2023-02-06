@@ -20,8 +20,8 @@ const typeDefs = gql`
     name: String
     species: String
     birthday: Date
-    pictures: String
-    owner: ID
+    pictureURL: String
+    owner: User
   }
 
   type Matches {
@@ -69,14 +69,17 @@ const typeDefs = gql`
       password: String!
       location: String!
     ): Auth
+
     login(email: String!, password: String!): Auth
+
     addPet(
       name: String!
       species: String!
       birthday: Date!
-      pictures: String!
+      pictureURL: String!
       owner: ID
     ): Pet
+
     addMatch(pet1: String!, pet2: String!): Matches
     createChat(roomID: String): Chat
     addMessage(roomID: String, message: MessageInput): Chat
