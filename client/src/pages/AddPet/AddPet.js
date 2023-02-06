@@ -19,6 +19,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { ADD_PET } from "../../utils/mutations";
 
+import AddPet from '../AddPet/AddPet.css';
+
 const RecipeReviewCard = () => {
   const [picturesURL, setPicturesURL] = React.useState("");
   const [formState, setFormState] = React.useState({
@@ -61,7 +63,7 @@ const RecipeReviewCard = () => {
 
   return (
     <Card sx={{ maxWidth: 500, margin: "50px auto" }}>
-      <CardHeader title="Add a new pet!" sx={{ textAlign: "center" }} />
+      <CardHeader title="Add a new pet!" sx={{ textAlign: "center", textTransform: "uppercase" }} />
       {picturesURL && (
         <CardMedia
           sx={{
@@ -83,7 +85,7 @@ const RecipeReviewCard = () => {
           onSubmit={event => event.preventDefault()}
 					sx={{ mt: 3 }}
 				>
-					<Grid container spacing={2}>
+					<Grid container spacing={4}>
 						<Grid item xs={12}>
 							<TextField
 								name='pet_name'
@@ -118,9 +120,8 @@ const RecipeReviewCard = () => {
 								onChange={handleInputChange}
 							/>
 						</Grid>
-						<Grid item xs={12}>
-							<div>
-								<h2>Upload an Image</h2>
+						<Grid item xs={12} >
+							<div className="button-flex">
 								<CloudinaryUploadWidget setPicturesURL={setPicturesURL} />
 								<br />
 								<br />
@@ -128,6 +129,8 @@ const RecipeReviewCard = () => {
 									variant='contained'
 									type='submit'
 									onClick={handleFormSubmit}
+									className="save-pet-btn"
+									id="save"
 								>
 									Save Pet
 								</Button>

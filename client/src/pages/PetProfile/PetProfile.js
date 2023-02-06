@@ -14,9 +14,11 @@ function PetProfile(props) {
           {/* contents to fetch to? */}
           <div className="profile-posts-center">
             <h1>{props.pet.name}</h1>
-            <h4>species: {props.pet.species}</h4>
-            <h4>birthday: {birthday}</h4>
-            <h4>age: {dayjs(now).diff(dayjs(props.pet.birthday), "year")}</h4>
+            <div className="profile-card-contents">
+              <h4>AGE: {dayjs(now).diff(dayjs(props.pet.birthday), "year")}</h4>
+              <h4>BIRTHDAY: {birthday}</h4>
+              <h4>SPECIES: {props.pet.species}</h4>
+            </div>
           </div>
         </div>
       </div>

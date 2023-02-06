@@ -64,15 +64,20 @@ function Login() {
         square
         sx={{
           backgroundColor: "#F8F5F2",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Box
           sx={{
             my: 8,
             mx: 4,
+            marginTop: "-10em",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
             backgroundColor: "#F8F5F2",
           }}
         >
@@ -116,7 +121,12 @@ function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: "#405C96" }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: "#405C96",
+                "&:hover": { backgroundColor: "#2d426c" },
+              }}
             >
               LOG IN
             </Button>

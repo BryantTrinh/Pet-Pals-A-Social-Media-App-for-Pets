@@ -1,5 +1,9 @@
-* {
-  font-family: "Lato", sans-serif;
+p,
+h1, 
+h2, 
+h3,
+h4 {
+  font-family: 'Lato', sans-serif;
 }
 
 #pets-header {
@@ -9,44 +13,50 @@
   padding-bottom: 0.3em;
   text-transform: uppercase;
   font-weight: 600;
+  font-family: 'Lato', sans-serif;
+}
+
+.pets-container {
+  margin-left: 0;
+}
+
+.pets-section {
+  padding-bottom: 5em;
 }
 
 .pets-container ul {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: block;
   list-style-type: none;
   margin: 0 auto;
-  max-width: 95%;
+  max-width: 90%;
 }
 
 .text-background {
   background-color: black;
   color: white;
-  padding-left: 1em;
-  padding-right: 1em;
   opacity: 80%;
+  width: 5em;
+  font-size: 0;
 }
-
 
 .modal-body {
   height: 290px;
-  overflow-y: auto;
   background-color: #f8f5f2;
   padding: 2em;
   border: .3px solid black;
-  border-radius:2em;
+  border-radius:.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* .profile-posts {
-  padding: 2em;
-} */
 
 .modal-body img {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
+  border: 2px solid black;
+  margin-top: 1.5em;
 }
 
 .profile-posts-center {
@@ -55,23 +65,44 @@
   margin-left: 3em;
 }
 
+.profile-posts-center h1, h4 {
+  text-transform: uppercase;
+}
+
+.profile-posts-center h4 {
+  font-weight: lighter;
+}
+
 .flex-body {
   display: flex;
   flex-direction: row;
 }
 
-/* .modal-footer {
-  display: flex;
-  flex-direction: row;
-  gap: 2em;
-  overflow: hidden;
-  padding: 1em;
-} */
+.profile-card-contents {
+  line-height: 1em;
+}
 
-/* .modal-footer img {
-  height: 100px;
-  width: 100px;
-  object-fit: cover;
-  border-radius: 3em;
-} */
-
+@media (max-width: 640px) {
+  #modal-button {
+    padding: 12em;
+    margin-left: -1em;
+  }
+  .modal-body {
+    height: 183px;
+    padding: 1em;
+  }
+  .modal-body img {
+    width: 120px;
+    height: 120px;
+  }
+  .MuiBox-root.css-1rxi6q3 {
+    height: 210px;
+    width: 300px;
+  }
+  .profile-posts-center h1 {
+    font-size: 16px;
+  }
+  .profile-posts-center h4 {
+    font-size: 10px;
+  }
+}
