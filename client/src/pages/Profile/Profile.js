@@ -12,27 +12,34 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "1200px",
-  height: "1200px",
+  width: "600px",
+  height: "350px",
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "1px solid #000",
   boxShadow: 24,
   pt: 2,
-  px: 4,
+  px: 2.5,
   pb: 3,
+  borderRadius: "2em",
 };
 
-// UNFINISHED! TODO
+// should display on page below using <PetProfiles /> ?
 const petProfiles = () => (
   <>
     <div className="modal-body">
-      <div className="profile-posts-center">
-        <img></img>
+      <div className="flex-body">
+        {/* profile picture SAME ON MODAL BUTTON BELOW*/}
+        <div className="profile-posts-picture">
+          <img src=""></img>
+        </div>
+        {/* contents to fetch to? */}
+        <div className="profile-posts-center">
+          <h1>insert name here</h1>
+          <h4>species: </h4>
+          <h4>birthday: </h4>
+          <h4>location: </h4>
+        </div>
       </div>
-    </div>
-    <div className="modal-footer">
-      <img></img>
-      <h1>example name</h1>
     </div>
   </>
 );
@@ -63,7 +70,7 @@ export default function Profile() {
                     backgroundColor: "rgba(0, 0, 0, 0.484)",
                     backgroundBlendMode: "soft-light",
                     transitionDuration: "1s",
-                    // modal profile picture image ADD!
+                    // profile picture SAME IN FUNC OBJ unsure how to display here :(
                     backgroundImage:
                       'url("https://i.pinimg.com/564x/a5/e3/d7/a5e3d756ae332a8ca01f3ad7c0c54aa8.jpg")',
                     "&:hover": {
