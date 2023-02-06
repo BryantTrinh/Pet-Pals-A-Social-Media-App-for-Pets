@@ -27,11 +27,11 @@ const resolvers = {
     },
     pets: async (parent, args, context) => {
       if (context.user) {
-        let pets = await Pet.find({
+        const pets = await Pet.find({
           owner: { $ne: context.user._id },
         }).populate("owner");
-        pets = await sort(pets).asc((pet) => pet.owner.last_name);
-        return pets;
+        newPets = await sort(pets).asc((pet) => pet.owner.last_name);
+        return newPets;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -62,7 +62,7 @@ const resolvers = {
     },
     getUserChats: async (parent, args, context) => {
       if (context.user) {
-        return await User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: '63ddcf875171052970e4c26c' });
       }
       throw new AuthenticationError("You need to be logged in!");
     },

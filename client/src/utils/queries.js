@@ -44,7 +44,7 @@ export const QUERY_PETS = gql`
       name
       species
       birthday
-      pictures
+      pictureURL
       owner {
         first_name
         last_name

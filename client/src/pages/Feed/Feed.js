@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 export default function RecipeReviewCard() {
   const { loading: petsLoading, data: petsData } = useQuery(QUERY_PETS);
   let petList = petsData?.pets || [];
+  console.log("-----petList: ", petList)
 
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
@@ -60,7 +61,7 @@ export default function RecipeReviewCard() {
                   <CardMedia
                     component="img"
                     height="194"
-                    image={pet.picture}
+                    image={pet.pictureURL}
                     alt="pet profile picture"
                   />
                   <CardContent>
