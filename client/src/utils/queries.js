@@ -44,7 +44,7 @@ export const QUERY_PETS = gql`
       name
       species
       birthday
-      pictures
+      picturesURL
       owner {
         first_name
         last_name
@@ -62,7 +62,6 @@ export const QUERY_MYPETS = gql`
 			species
 			birthday
 			picturesURL
-			owner
 		}
 	}
 `;

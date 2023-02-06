@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 export default function RecipeReviewCard() {
   const { loading: petsLoading, data: petsData } = useQuery(QUERY_PETS);
   let petList = petsData?.pets || [];
+  console.log("-----petList: ", petList)
 
   const now = dayjs().format("YYYY-MM-DD");
   const { loading: userLoading, data: userData } = useQuery(QUERY_USER);
@@ -60,7 +61,7 @@ export default function RecipeReviewCard() {
                   <CardMedia
                     component="img"
                     height="194"
-                    image={pet.picture}
+                    image={pet.picturesURL}
                     alt="pet profile picture"
                   />
                   <CardContent>
@@ -81,7 +82,7 @@ export default function RecipeReviewCard() {
                       endIcon={<ChatIcon />}
                       onClick={addToChat}
                     >
-                      ADD TO CHAT
+                      ADD {`${pet.owner.first_name}`} TO CHAT
                       <input hidden={true} id={pet.owner}></input>
                     </Button>
                   </CardActions>

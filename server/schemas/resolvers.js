@@ -62,7 +62,7 @@ const resolvers = {
     },
     getUserChats: async (parent, args, context) => {
       if (context.user) {
-        return await User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: '63ddcf875171052970e4c26c' });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -100,7 +100,7 @@ const resolvers = {
     },
     addPet: async (
       parent,
-      { name, species, birthday, pictureURL },
+      { name, species, birthday, picturesURL },
       context
     ) => {
       if (context.user) {
@@ -108,12 +108,18 @@ const resolvers = {
           name,
           species,
           birthday,
-          pictureURL,
+          picturesURL,
           owner: context.user._id,
         });
         const updatedUserPets = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { pets: pet } },
+          { $push: { pets: {
+            name: pet.name,
+            species: pet.species,
+            birthday: pet.birthday,
+            picturesURL: pet.picturesURL,
+            owner: pet.owner
+          } } },
           { new: true }
         );
         return pet;

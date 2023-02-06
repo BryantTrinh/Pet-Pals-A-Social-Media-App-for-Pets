@@ -20,7 +20,7 @@ const typeDefs = gql`
     name: String
     species: String
     birthday: Date
-    pictureURL: String
+    picturesURL: String
     owner: User
   }
 
@@ -76,7 +76,7 @@ const typeDefs = gql`
       name: String!
       species: String!
       birthday: Date!
-      pictureURL: String!
+      picturesURL: String!
       owner: ID
     ): Pet
 

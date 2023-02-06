@@ -7,7 +7,6 @@ const { User, Chat } = require("./models");
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config");
-// const Chat = require('./config/Chat')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
