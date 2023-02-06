@@ -35,6 +35,8 @@ const client = new ApolloClient({
 });
 
 function App() {
+  // Use effect hook in App component?
+
   return (
     <ApolloProvider client={client}>
       <Router>
