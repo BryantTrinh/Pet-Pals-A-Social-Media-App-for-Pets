@@ -36,7 +36,6 @@ function Login() {
       const { data } = await Login({
         variables: { ...formState },
       });
-
       Auth.login(data.login.token);
       console.log(Auth.getProfile());
     } catch (err) {

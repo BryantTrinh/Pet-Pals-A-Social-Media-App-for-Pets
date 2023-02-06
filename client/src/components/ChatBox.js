@@ -1,15 +1,25 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import ForumIcon from '@mui/icons-material/Forum';
-import SendIcon from '@mui/icons-material/Send';
-import { Modal, Typography, Box, Grid, TextField, Backdrop, Button, Tabs, Tab } from '@mui/material';
-import { useQuery } from '@apollo/client'
-import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from '../utils/queries';
+import * as React from "react";
+import PropTypes from "prop-types";
+import ForumIcon from "@mui/icons-material/Forum";
+import SendIcon from "@mui/icons-material/Send";
+import {
+    Modal,
+    Typography,
+    Box,
+    Grid,
+    TextField,
+    Backdrop,
+    Button,
+    Tabs,
+    Tab,
+} from "@mui/material";
+import { useQuery } from "@apollo/client";
+import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from "../utils/queries";
 
-import auth from '../utils/auth'
+import auth from "../utils/auth";
 
-import io from 'socket.io-client'
-const socket = io.connect('http://localhost:3001');
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:3001");
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -40,7 +50,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
     };
 }
 
@@ -67,7 +77,7 @@ function ChatBox() {
         borderRadius: "16px 16px 0 16px",
         maxWidth: "40%",
         overflowWrap: "break-word",
-    }
+    };
 
     const friendMessageStyle = {
         color: "black",
@@ -77,100 +87,131 @@ function ChatBox() {
         p: "5px 20px",
         borderRadius: "16px 16px 16px 0px",
         maxWidth: "40%",
-        overflowWrap: "break-word"
-    }
+        overflowWrap: "break-word",
+    };
 
     // Getting array of user's chats
-    const { loading: userChatLoading, data: userChats } = useQuery(QUERY_USER_CHATS);
-    const myId = userChats?.getUserChats._id || "";
+    const { loading: userChatLoading, data: userChats } =
+        useQuery(QUERY_USER_CHATS);
+    const myId = userChats?.getUserChats._id || {};
 
     // Getting array of friends object ID
-    const { loading: friendsLoading, data: userFriends } = useQuery(QUERY_FRIENDS_LIST, {
-        variables: { ownerId: myId }
-    })
-    const userFriendsList = userFriends?.owner.friends || []
+    const { loading: friendsLoading, data: userFriends } = useQuery(
+        QUERY_FRIENDS_LIST,
+        {
+            variables: { ownerId: myId },
+        }
+    );
+    const userFriendsData = userFriends?.owner || {};
+    const userFriendsList = userFriendsData.friends || [];
 
     // Socket.io stuff
-    const [message, setMessage] = React.useState('');
+    const [message, setMessage] = React.useState("");
     const [messageReceived, setMessageReceived] = React.useState([]);
-    const [room, setRoom] = React.useState('')
-    const [chatAnnounce, setChatAnnounce] = React.useState('')
-    const [chatStyle, setChatStyle] = React.useState('')
+    const [room, setRoom] = React.useState("");
+    const [chatAnnounce, setChatAnnounce] = React.useState("");
+    const [chatStyle, setChatStyle] = React.useState("");
 
     const ChatBubblesRef = React.useRef(null);
 
     // Logic to create chatroom ID
     const createChatRoomID = (event) => {
-        const IdArr = []
-        IdArr.push(event.target.firstElementChild.id)
-        IdArr.push(myId)
-        IdArr.sort()
-        const roomID = IdArr.toString()
+        const IdArr = [];
+        IdArr.push(event.target.firstElementChild.id);
+        IdArr.push(myId);
+        IdArr.sort();
+        const roomID = IdArr.toString();
 
-        setChatAnnounce(`You're in a chat with ${event.target.id}`)
-        setRoom(roomID)
-        setChatStyle(event.target.firstElementChild.id)
-        setValue(1)
+        setChatAnnounce(`You're in a chat with ${event.target.id}`);
+        setRoom(roomID);
+        setChatStyle(event.target.firstElementChild.id);
+        setValue(1);
 
-        socket.emit('joinRoom', roomID);
-    }
+        socket.emit("joinRoom", roomID);
+    };
 
     const sendMessage = () => {
-        if (message === '') {
-            return
-        } else if (room === '') {
+        if (message === "") {
+            return;
+        } else if (room === "") {
             console.log("You're not in a room!");
-            return
+            return;
         }
         socket.emit("sendMessage", { message, myId, room });
-    }
+    };
 
     React.useEffect(() => {
         socket.on("receiveMessage", (data) => {
             setMessageReceived(data);
-            setMessage('')
-        })
-    }, [socket])
+            setMessage("");
+        });
+    }, [socket]);
 
     React.useEffect(() => {
-        ChatBubblesRef.current?.scrollIntoView()
-    }, [messageReceived])
+        ChatBubblesRef.current?.scrollIntoView();
+    }, [messageReceived]);
 
     // React components to map
     function DisplayChats(props) {
         return (
             <>
-                <Box sx={{ height: '2px', marginBottom: '5px', backgroundColor: '#E4E4E4' }}></Box>
-                <Button variant={chatStyle === props.friendID ? 'contained' : 'text'} sx={{ width: '100%', marginBottom: '5px' }} onClick={createChatRoomID} id={props.fullName}>
+                <Box
+                    sx={{
+                        height: "2px",
+                        marginBottom: "5px",
+                        backgroundColor: "#E4E4E4",
+                    }}
+                ></Box>
+                <Button
+                    variant={chatStyle === props.friendID ? "contained" : "text"}
+                    sx={{ width: "100%", marginBottom: "5px" }}
+                    onClick={createChatRoomID}
+                    id={props.fullName}
+                >
                     <input hidden={true} id={props.friendID} />
                     {props.fullName}
                 </Button>
             </>
-        )
+        );
     }
 
     function ChatBubble(props) {
-        const timeStamp = new Date(props.timeStamp)
+        const timeStamp = new Date(props.timeStamp);
         const timeSetting = {
             month: "2-digit",
             day: "2-digit",
             year: "2-digit",
             hour: "2-digit",
-            minute: "2-digit"
-        }
-        const newTimeStamp = timeStamp.toLocaleDateString('en-US', timeSetting).split(',').join('')
+            minute: "2-digit",
+        };
+        const newTimeStamp = timeStamp
+            .toLocaleDateString("en-US", timeSetting)
+            .split(",")
+            .join("");
 
         return (
             <>
-                <Box textAlign={props.sender === myId ? "right" : 'left'} fontSize="14px" color="grey.400">{newTimeStamp}</Box>
-                <Grid container justifyContent={props.sender === myId ? "flex-end" : 'flex-start'} >
-                    <Typography variant="h6" component="div"
-                        sx={props.sender === myId ? userMessageStyle : friendMessageStyle}>
+                <Box
+                    textAlign={props.sender === myId ? "right" : "left"}
+                    fontSize="14px"
+                    color="grey.400"
+                >
+                    {newTimeStamp}
+                </Box>
+                <Grid
+                    container
+                    justifyContent={props.sender === myId ? "flex-end" : "flex-start"}
+                >
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={props.sender === myId ? userMessageStyle : friendMessageStyle}
+                    >
                         {props.message}
                     </Typography>
                 </Grid>
             </>
-        )
+        );
     }
 
     return (
@@ -185,15 +226,15 @@ function ChatBox() {
                         width: 40,
                         height: 40,
                         "&:hover": {
-                            cursor: "pointer"
-                        }
+                            cursor: "pointer",
+                        },
                     }}
                     onClick={handleOpen}
                 />
-            ) : (<></>)}
-            <Backdrop sx={{ color: '#fff', zIndex: 10 }}
-                open={open}
-            >
+            ) : (
+                <></>
+            )}
+            <Backdrop sx={{ color: "#fff", zIndex: 10 }} open={open}>
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -201,63 +242,111 @@ function ChatBox() {
                     aria-describedby="modal-modal-description"
                     sx={{ height: "100vh" }}
                 >
-                    <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: "70%",
-                        height: "70%",
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 2,
-                        borderRadius: 5
-                    }}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "70%",
+                            height: "70%",
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 2,
+                            borderRadius: 5,
+                        }}
+                    >
                         {/* Medium screen breakpoint chat layout */}
-                        <Grid container sx={{ height: "100%", display: { xs: "none", md: "flex" } }}>
-                            <Grid item sm={3} sx={{
-                                borderRight: "2px solid #E4E4E4",
-                                p: "0 16px 0 0"
-                            }}>
-                                <Typography variant="h6" component="h2" sx={{ textAlign: "center", marginBottom: "20px" }}>
+                        <Grid
+                            container
+                            sx={{ height: "100%", display: { xs: "none", md: "flex" } }}
+                        >
+                            <Grid
+                                item
+                                sm={3}
+                                sx={{
+                                    borderRight: "2px solid #E4E4E4",
+                                    p: "0 16px 0 0",
+                                }}
+                            >
+                                <Typography
+                                    variant="h6"
+                                    component="h2"
+                                    sx={{ textAlign: "center", marginBottom: "20px" }}
+                                >
                                     Chats
                                 </Typography>
                                 <Box overflow="auto">
-                                    {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
+                                    {userFriendsList.map((friend) => (
+                                        <DisplayChats
+                                            key={friend._id}
+                                            fullName={`${friend.first_name} ${friend.last_name}`}
+                                            friendID={friend._id}
+                                        />
+                                    ))}
                                 </Box>
                             </Grid>
-                            <Grid item sm={9} sx={{
-                                p: "0 0 0 16px",
-                                height: "100%"
-                            }}>
-                                <Grid container direction="column" justifyContent="flex-end" sx={{ height: "100%", flexWrap: "nowrap" }}>
+                            <Grid
+                                item
+                                sm={9}
+                                sx={{
+                                    p: "0 0 0 16px",
+                                    height: "100%",
+                                }}
+                            >
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-end"
+                                    sx={{ height: "100%", flexWrap: "nowrap" }}
+                                >
                                     <Grid item>
-                                        <Typography>
-                                            {chatAnnounce}
-                                        </Typography>
+                                        <Typography>{chatAnnounce}</Typography>
                                     </Grid>
-                                    <Grid item sx={{ overflow: "auto" }} >
-                                        {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                    <Grid item sx={{ overflow: "auto" }}>
+                                        {messageReceived.map((data) => (
+                                            <ChatBubble
+                                                key={data._id}
+                                                sender={data.sender}
+                                                message={data.message}
+                                                timeStamp={data.createdAt}
+                                            />
+                                        ))}
                                         <div ref={ChatBubblesRef} />
                                     </Grid>
                                     <Grid item>
-                                        <Box component="form"
+                                        <Box
+                                            component="form"
                                             onSubmit={(event) => {
                                                 event.preventDefault();
-                                                sendMessage()
+                                                sendMessage();
                                             }}
                                         >
                                             <Grid container justifyContent="center" gap={1}>
                                                 <Grid item xs>
-                                                    <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
+                                                    <TextField
+                                                        fullWidth
+                                                        size="small"
+                                                        placeholder="Your message here..."
+                                                        id="textfield"
+                                                        value={message}
                                                         onChange={(event) => {
-                                                            setMessage(event.target.value)
+                                                            setMessage(event.target.value);
                                                         }}
                                                     />
                                                 </Grid>
                                                 <Grid item xs={2}>
-                                                    <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
-                                                        <Button variant="contained" endIcon={<SendIcon />} type='submit'>
+                                                    <Grid
+                                                        container
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        sx={{ height: 1 }}
+                                                    >
+                                                        <Button
+                                                            variant="contained"
+                                                            endIcon={<SendIcon />}
+                                                            type="submit"
+                                                        >
                                                             Send
                                                         </Button>
                                                     </Grid>
@@ -269,45 +358,85 @@ function ChatBox() {
                             </Grid>
                         </Grid>
                         {/* Small screen breakpoint chat layout */}
-                        <Grid container sx={{ height: "100%", display: { xs: "flex", md: "none" } }}>
-                            <Grid container direction="column" flexWrap='nowrap' sx={{ height: "100%" }}>
-                                <Grid item xs={1} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Grid
+                            container
+                            sx={{ height: "100%", display: { xs: "flex", md: "none" } }}
+                        >
+                            <Grid
+                                container
+                                direction="column"
+                                flexWrap="nowrap"
+                                sx={{ height: "100%" }}
+                            >
+                                <Grid
+                                    item
+                                    xs={1}
+                                    sx={{ borderBottom: 1, borderColor: "divider" }}
+                                >
                                     <Tabs value={value} onChange={handleChange} centered>
                                         <Tab label="Chats" {...a11yProps(0)} />
                                         <Tab label="Message" {...a11yProps(1)} />
                                     </Tabs>
                                 </Grid>
                                 <TabPanel value={value} index={0}>
-                                    {userFriendsList.map((friend) => <DisplayChats key={friend._id} fullName={`${friend.first_name} ${friend.last_name}`} friendID={friend._id} />)}
+                                    {userFriendsList.map((friend) => (
+                                        <DisplayChats
+                                            key={friend._id}
+                                            fullName={`${friend.first_name} ${friend.last_name}`}
+                                            friendID={friend._id}
+                                        />
+                                    ))}
                                 </TabPanel>
-                                <TabPanel value={value} index={1} >
-                                    <Grid container direction="column" justifyContent="flex-end" flexWrap="nowrap" height="100%">
+                                <TabPanel value={value} index={1}>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        justifyContent="flex-end"
+                                        flexWrap="nowrap"
+                                        height="100%"
+                                    >
                                         <Grid item>
-                                            <Typography>
-                                                {chatAnnounce}
-                                            </Typography>
+                                            <Typography>{chatAnnounce}</Typography>
                                         </Grid>
                                         <Grid item sx={{ overflow: "auto" }} id="messageField">
-                                            {messageReceived.map((data) => <ChatBubble key={data._id} sender={data.sender} message={data.message} timeStamp={data.createdAt} />)}
+                                            {messageReceived.map((data) => (
+                                                <ChatBubble
+                                                    key={data._id}
+                                                    sender={data.sender}
+                                                    message={data.message}
+                                                    timeStamp={data.createdAt}
+                                                />
+                                            ))}
                                         </Grid>
                                         <Grid item>
-                                            <Box component="form"
+                                            <Box
+                                                component="form"
                                                 onSubmit={(event) => {
                                                     event.preventDefault();
-                                                    sendMessage()
+                                                    sendMessage();
                                                 }}
                                             >
                                                 <Grid container justifyContent="center">
                                                     <Grid item xs>
-                                                        <TextField fullWidth size='small' placeholder='Your message here...' id="textfield" value={message}
+                                                        <TextField
+                                                            fullWidth
+                                                            size="small"
+                                                            placeholder="Your message here..."
+                                                            id="textfield"
+                                                            value={message}
                                                             onChange={(event) => {
-                                                                setMessage(event.target.value)
+                                                                setMessage(event.target.value);
                                                             }}
                                                         />
                                                     </Grid>
                                                     <Grid item>
-                                                        <Grid container justifyContent="center" alignItems="center" sx={{ height: 1 }}>
-                                                            <Button variant="contained" type='submit'>
+                                                        <Grid
+                                                            container
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            sx={{ height: 1 }}
+                                                        >
+                                                            <Button variant="contained" type="submit">
                                                                 <SendIcon />
                                                             </Button>
                                                         </Grid>
@@ -320,10 +449,10 @@ function ChatBox() {
                             </Grid>
                         </Grid>
                     </Box>
-                </Modal >
+                </Modal>
             </Backdrop>
         </>
-    )
+    );
 }
 
 export default ChatBox;
