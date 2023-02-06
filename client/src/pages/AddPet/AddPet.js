@@ -20,7 +20,7 @@ import { useEffect } from "react";
 import { ADD_PET } from "../../utils/mutations";
 
 const RecipeReviewCard = () => {
-  const [pictureURL, setPictureURL] = React.useState("");
+  const [picturesURL, setPicturesURL] = React.useState("");
   const [formState, setFormState] = React.useState({
     pet_name: "",
     species: "",
@@ -29,8 +29,8 @@ const RecipeReviewCard = () => {
 
   const [addPet] = useMutation(ADD_PET);
 
-  const handlePictureUpload = (pictureURL) => {
-    setFormState({ ...formState, pictureURL });
+  const handlePictureUpload = picturesURL => {
+    setPicturesURL(picturesURL);
   };
 
   const handleInputChange = ({ target: { name, value } }) => {
@@ -39,20 +39,20 @@ const RecipeReviewCard = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if (!pictureURL) {
+    if (!picturesURL) {
       return;
     }
     try {
       console.log(formState);
-      console.log(`This is a string ${pictureURL}`);
+      console.log(`This is a string ${picturesURL}`);
       const addPetForm = await addPet({
-        variables: {
-          name: formState.pet_name,
-          species: formState.species,
-          birthday: formState.birthday,
-          pictureURL: `${pictureURL}`,
-        },
-      });
+				variables: {
+					name: formState.pet_name,
+					species: formState.species,
+					birthday: formState.birthday,
+					picturesURL: `${picturesURL}`,
+				},
+			});
       window.location.replace("/profile");
     } catch (err) {
       console.error(err);
@@ -62,7 +62,7 @@ const RecipeReviewCard = () => {
   return (
     <Card sx={{ maxWidth: 500, margin: "50px auto" }}>
       <CardHeader title="Add a new pet!" sx={{ textAlign: "center" }} />
-      {pictureURL && (
+      {picturesURL && (
         <CardMedia
           sx={{
             width: "75%",
@@ -72,7 +72,7 @@ const RecipeReviewCard = () => {
             alignItems: "center",
             margin: "50px auto"
            }}
-					image={pictureURL}
+					image={picturesURL}
 					title='Pet Image'
 				/>
 			)}
@@ -121,7 +121,7 @@ const RecipeReviewCard = () => {
 						<Grid item xs={12}>
 							<div>
 								<h2>Upload an Image</h2>
-								<CloudinaryUploadWidget setPictureURL={setPictureURL} />
+								<CloudinaryUploadWidget setPicturesURL={setPicturesURL} />
 								<br />
 								<br />
 								<Button

@@ -60,7 +60,7 @@ export default function RecipeReviewCard() {
                   <CardMedia
                     component="img"
                     height="194"
-                    image={pet.picture}
+                    image={pet.picturesURL}
                     alt="pet profile picture"
                   />
                   <CardContent>
