@@ -41,11 +41,6 @@ export default function Profile() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { loading, data } = useQuery(QUERY_MYPETS);
-  const petList = data?.myPets || [];
-  if (!loading) {
-    console.log(data);
-  }
   return (
     <section className="page">
       <div id="pets-header">
