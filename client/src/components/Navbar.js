@@ -16,7 +16,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import LogoutForm from "../pages/Logout/";
 import auth from "../utils/auth";
 
-const pages = ["Feed", "Profile", "Add Pet"];
+const pages = ["feed", "profile", "add-pet"];
 
 function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

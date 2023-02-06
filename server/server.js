@@ -19,7 +19,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://hidden-headland-00556.herokuapp.com/",
+    origin: "https://pet-pals.herokuapp.com/",
     methods: ["GET", "POST"],
   },
 });
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "client", "build", "index.html"));
+  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
 });
 
 // Socket server side code
