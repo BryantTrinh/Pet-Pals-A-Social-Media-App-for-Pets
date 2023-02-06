@@ -43,9 +43,9 @@ function App() {
 					<ChatBox />
 					<Routes>
 						<Route path='/' element={<Home />} />
-						<Route path='/Feed' element={<Feed />} />
-						<Route path='/Profile' element={<Profile />} />
-						<Route path='/Add Pet' element={<AddPet />} />
+						<Route path='/feed' element={<Feed />} />
+						<Route path='/profile' element={<Profile />} />
+						<Route path='/add-pet' element={<AddPet />} />
 					</Routes>
 				</div>
 			</Router>
