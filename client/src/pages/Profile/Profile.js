@@ -7,6 +7,8 @@ import "./Profile.css";
 import { QUERY_MYPETS } from "../../utils/queries";
 import { useQuery } from "@apollo/client";
 import PetProfile from "../PetProfile";
+import { Grid } from "@mui/material";
+import { Block } from "@material-ui/icons";
 
 const style = {
   position: "absolute",
@@ -21,28 +23,8 @@ const style = {
   pt: 2,
   px: 2.5,
   pb: 3,
-  borderRadius: "2em",
+  borderRadius: ".5em",
 };
-
-// should display on page below using <PetProfiles /> ?
-const petProfiles = (props) => (
-  <>
-    <div className="modal-body">
-      <div className="flex-body">
-        {/* profile picture SAME ON MODAL BUTTON BELOW*/}
-        <div className="profile-posts-picture">
-          <img src=""></img>
-        </div>
-        {/* contents to fetch to? */}
-        <div className="profile-posts-center">
-          <h1>{props.pet.name}</h1>
-          <h4>species: {props.pet.species}</h4>
-          <h4>birthday: {props.pet.birthday}</h4>
-        </div>
-      </div>
-    </div>
-  </>
-);
 
 export default function Profile() {
   const [open, setOpen] = React.useState(false);
@@ -52,65 +34,74 @@ export default function Profile() {
   console.log(data);
   const petList = data?.myPets || [];
   return (
-    <section className="page">
-      <div id="pets-header">
-        <h1>Your Pets</h1>
-      </div>
-      <div className="pets-section">
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <>
-            {petList.map((pet) => {
-              return (
-                <div className="pets-container">
-                  <ul>
-                    <li>
-                      <div>
-                        <Button
-                          onClick={handleOpen}
-                          sx={{
-                            padding: "32em 32em 0 0",
-                            margin: "8em",
-                            display: "flex",
-                            alignItems: "flex-end",
-                            textDecoration: "none",
-                            backgroundSize: "100%",
-                            backgroundColor: "rgba(0, 0, 0, 0.484)",
-                            backgroundBlendMode: "soft-light",
-                            transitionDuration: "1s",
-                            // profile picture SAME IN FUNC OBJ unsure how to display here :(
-                            backgroundImage: `url(${pet.picturesURL})`,
-                            "&:hover": {
-                              transition: "1s",
-                              backgroundColor: "rgba(0,0,0,0)",
-                            },
-                          }}
-                        >
-                          <div className="text-background">
-                            <h3>{pet.name}</h3>
-                          </div>
-                        </Button>
-                        <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                          className="modal"
-                        >
-                          <Box sx={style}>
-                            <PetProfile pet={pet} />
-                          </Box>
-                        </Modal>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              );
-            })}
-          </>
-        )}
-      </div>
-    </section>
+    <Grid item xs={12} sm={6} md={3}>
+      <section className="page">
+        <div id="pets-header">
+          <h1>Your Pets</h1>
+        </div>
+        <div className="pets-section">
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              {petList.map((pet) => {
+                return (
+                  <div className="pets-container">
+                    <ul>
+                      <li>
+                        <div>
+                          <Button
+                            item
+                            xs={12}
+                            sm={8}
+                            md={5}
+                            onClick={handleOpen}
+                            id="modal-button"
+                            sx={{
+                              display: "block",
+                              margin: "0 auto",
+                              border: "3px solid black",
+                              padding: "20em",
+                              marginBottom: "5em",
+                              textDecoration: "none",
+                              backgroundSize: "100%",
+                              backgroundColor: "rgba(0,0,0,0.12)",
+                              backgroundBlendMode: "soft-light",
+                              transitionDuration: ".5s",
+                              // profile picture SAME IN FUNC OBJ unsure how to display here :(
+                              backgroundImage: `url(${pet.picturesURL})`,
+                              "&:hover": {
+                                transition: "1s",
+                                backgroundColor: "rgba(0,0,0,0.484)",
+                              },
+                              
+                            }}
+                          >
+                            <div className="text-background">
+                              <h3>{pet.name}</h3>
+                            </div>
+                          </Button>
+                          <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            className="modal"
+                          >
+                            <Box sx={style}>
+                              <PetProfile pet={pet} />
+                            </Box>
+                          </Modal>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+      </section>
+    </Grid>
   );
 }

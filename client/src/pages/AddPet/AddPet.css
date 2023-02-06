@@ -1,0 +1,32 @@
+.button-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#save {
+    background-color: #405C96;
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 10px 14px;
+    box-shadow: none;
+}
+
+#save:hover {
+    background-color: #2d426c;
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}
+
+#upload_widget {
+    background-color: #405C96;
+    margin-right: 2em;
+    border: none;
+    text-transform: uppercase;
+    transition: .3s;
+}
+
+#upload_widget:hover {
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+    background-color: #2d426c;
+}

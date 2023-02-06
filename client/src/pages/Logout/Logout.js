@@ -35,12 +35,13 @@ function LogoutForm() {
 			onClick={handleSubmit}
 			variant='outlined'
 			sx={{
+				fontWeight: "700",
 				color: "white",
-				borderColor: "white",
+				border: "2px solid white",
 				ml: "20px",
 				"&:hover": {
-					color: "#DE4567",
-					borderColor: "#DE4567",
+					color: "gainsboro",
+					border: "2px solid gainsboro"
 				},
 			}}
 		>

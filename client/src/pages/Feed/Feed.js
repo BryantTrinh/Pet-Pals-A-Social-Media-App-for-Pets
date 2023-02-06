@@ -60,11 +60,12 @@ export default function RecipeReviewCard() {
                   <CardHeader title={pet.name} />
                   <CardMedia
                     component="img"
-                    height="194"
+                    height="350"
+                    width="350"
                     image={pet.picturesURL}
                     alt="pet profile picture"
                   />
-                  <CardContent>
+                  <CardContent sx={{float: "left"}}>
                     <Match pet={pet} userData={userData} />
                     <Typography variant="body2" color="text.secondary">
                       Age: {dayjs(now).diff(dayjs(pet.birthday), "year")}
@@ -75,14 +76,14 @@ export default function RecipeReviewCard() {
                   </CardContent>
                   <CardActions
                     disableSpacing
-                    sx={{ display: "flex", justifyContent: "flex-end" }}
                   >
                     <Button
                       variant="contained"
                       endIcon={<ChatIcon />}
                       onClick={addToChat}
+                      sx={{ fontSize: "10px", marginTop: "1.5em", backgroundColor: "#405C96", "&:hover": { backgroundColor: "#2d426c"}}}
                     >
-                      ADD {`${pet.owner.first_name}`} TO CHAT
+                      CHAT WITH {`${pet.owner.first_name}`}
                       <input hidden={true} id={pet.owner._id}></input>
                     </Button>
                   </CardActions>
