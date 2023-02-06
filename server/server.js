@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "client", "build", "index.html"));
+  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
 });
 
 // Socket server side code
