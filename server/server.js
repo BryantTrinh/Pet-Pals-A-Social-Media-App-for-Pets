@@ -31,24 +31,13 @@ const apolloServer = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(join("client", "build")));
-}
-
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
-});
-
 // Socket server side code
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
   socket.on("joinRoom", async (data) => {
     socket.join(data);
-
+    
     const chatData = await Chat.findOne({ roomID: data });
 
     io.to(data).emit("receiveMessage", chatData.messages);
@@ -67,6 +56,17 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`Client ${socket.id} disconnected`);
   });
+});
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(join("client", "build")));
+}
+
+app.get("/", (req, res) => {
+  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
 });
 
 const startApolloServer = async (typeDefs, resolvers) => {
