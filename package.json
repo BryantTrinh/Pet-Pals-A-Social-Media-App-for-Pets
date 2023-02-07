@@ -4,16 +4,15 @@
   "description": "",
   "main": "server/server.js",
   "engines": {
-    "node":">=18.12.1"
+    "node": ">=18.12.1"
   },
   "scripts": {
     "build": "cd client && npm run build",
     "install": "cd server && npm i && cd ../client && npm i",
-    "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "server": "nodemon server.js",
+    "server": "node server.js",
     "develop": "concurrently --kill-others-on-fail 'npm run server' 'npm run start --prefix client'",
-    "start": "concurrently --kill-others-on-fail 'npm run server' 'npm run start --prefix client'"
+    "start": "node server/server.js"
   },
   "keywords": [],
   "author": "",
@@ -31,7 +30,6 @@
     "@mui/joy": "^5.0.0-alpha.65",
     "@mui/material": "^5.11.6",
     "geolib": "^3.3.3",
-    "react-icons": "^4.7.1",
-    "concurrently": "^7.6.0"
+    "react-icons": "^4.7.1"
   }
 }
