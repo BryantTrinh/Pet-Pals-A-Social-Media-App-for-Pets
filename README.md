@@ -28,17 +28,17 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ![Signup Page](/assets/images/signup.png)
 
-![Feed Page](assets/images/feed.png)
+![Feed Page](/assets/images/feed.png)
 
-![Profile Page](assets/images/profile.png)
+![Profile Page](/assets/images/profile.png)
 
-![Pet Card](assets/images/petcard.png)
+![Pet Card](/assets/images/petcard.png)
 
-![Add Pet Page](assets/images/addpet.png)
+![Add Pet Page](/assets/images/addpet.png)
 
-![Upload Widget](assets/images/uploadwidget.png)
+![Upload Widget](/assets/images/uploadwidget.png)
 
-![Chat Functionality](assets/images/chatbox.png)
+![Chat Functionality](/assets/images/chatbox.png)
 
 
 ## Credits
