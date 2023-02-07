@@ -40,13 +40,13 @@ function App() {
 			<Router>
 				<div>
 					<Navbar />
-					<ChatBox />
+					{/* <ChatBox /> */}
 					<Routes>
 						<Route path='/' element={<Home />} />
 						<Route path='/feed' element={<Feed />} />
 						<Route path='/profile' element={<Profile />} />
 						<Route path='/add-pet' element={<AddPet />} />
-						<Route path="/*" element={<Home />} />
+						<Route path="*" element={<Home />} />
 					</Routes>
 				</div>
 			</Router>
