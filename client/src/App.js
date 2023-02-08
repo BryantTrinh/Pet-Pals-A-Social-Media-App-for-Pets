@@ -43,10 +43,9 @@ function App() {
 					<ChatBox />
 					<Routes>
 						<Route path='/' element={<Home />} />
-						<Route path='https://hidden-headland-00556.herokuapp.com/feed' element={<Feed />} />
-						<Route path='https://hidden-headland-00556.herokuapp.com/profile' element={<Profile />} />
-						<Route path='https://hidden-headland-00556.herokuapp.com/add-pet' element={<AddPet />} />
-						<Route path="*" element={<Home />} />
+						<Route path='/feed' element={<Feed />} />
+						<Route path='/profile' element={<Profile />} />
+						<Route path='/add-pet' element={<AddPet />} />
 					</Routes>
 				</div>
 			</Router>
