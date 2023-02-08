@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
-const { join } = require("path");
+const { join, resolve } = require("path");
 const { authMiddleware } = require("./utils/auth.js");
 const { User, Chat } = require("./models");
 
@@ -65,10 +65,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(join("client", "build")));
 }
 
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(resolve(__dirname, "../client/build")));
 
 app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  response.sendFile(resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.get("/", (req, res) => {
