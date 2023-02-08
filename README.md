@@ -43,10 +43,10 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ## Credits
 
-Jeremiah Piromgraipakd - https://github.com/cytoplasma
-Mony Sary - https://github.com/monysary
-Bryant Trinh - https://github.com/BryantTrinh
-Brian Wang - https://github.com/wangbrian26
+Jeremiah Piromgraipakd - https://github.com/cytoplasma\
+Mony Sary - https://github.com/monysary\
+Bryant Trinh - https://github.com/BryantTrinh\
+Brian Wang - https://github.com/wangbrian26\
 
 ## License
 
