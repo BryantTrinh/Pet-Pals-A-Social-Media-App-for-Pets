@@ -63,17 +63,17 @@ app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(join("client", "build")));
+
+  app.get("*", function (request, response) {
+    response.sendFile(resolve(__dirname, "../client/build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
+  });
 }
 
-app.use(express.static(resolve(__dirname, "../client/build")));
-
-app.get("*", function (request, response) {
-  response.sendFile(resolve(__dirname, "../client/build", "index.html"));
-});
-
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
-});
+// app.use(express.static(resolve(__dirname, "../client/build")));
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await apolloServer.start();
