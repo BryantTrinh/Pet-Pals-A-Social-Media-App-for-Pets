@@ -19,7 +19,7 @@ import { QUERY_USER_CHATS, QUERY_FRIENDS_LIST } from "../utils/queries";
 import auth from "../utils/auth";
 
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://hidden-headland-00556.herokuapp.com/");
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -120,6 +120,7 @@ function ChatBox() {
   const createChatRoomID = (event) => {
     const IdArr = [];
     IdArr.push(event.target.firstElementChild.id);
+    console.log(event.target.firstElementChild.id)
     IdArr.push(myId);
     IdArr.sort();
     const roomID = IdArr.toString();
