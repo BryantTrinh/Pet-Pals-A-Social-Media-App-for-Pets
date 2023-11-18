@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
-const { join } = require("path");
+const { join, resolve } = require("path");
 const { authMiddleware } = require("./utils/auth.js");
 const { User, Chat } = require("./models");
 
@@ -19,7 +19,8 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://pet-pals.herokuapp.com/",
+    origin: "https://hidden-headland-00556.herokuapp.com/",
+    // origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -30,24 +31,13 @@ const apolloServer = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(join("client", "build")));
-}
-
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
-});
-
 // Socket server side code
 io.on("connection", (socket) => {
   console.log(`Client is connected with ID: ${socket.id}`);
 
   socket.on("joinRoom", async (data) => {
     socket.join(data);
-
+    
     const chatData = await Chat.findOne({ roomID: data });
 
     io.to(data).emit("receiveMessage", chatData.messages);
@@ -67,6 +57,23 @@ io.on("connection", (socket) => {
     console.log(`Client ${socket.id} disconnected`);
   });
 });
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(join("client", "build")));
+
+  app.get("*", function (request, response) {
+    response.sendFile(resolve(__dirname, "../client/build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.sendFile(join(__dirname, "..", "client", "build", "index.html"));
+  });
+}
+
+// app.use(express.static(resolve(__dirname, "../client/build")));
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await apolloServer.start();
