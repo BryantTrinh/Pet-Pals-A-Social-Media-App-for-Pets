@@ -4,7 +4,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { join, resolve } = require("path");
 const { authMiddleware } = require("./utils/auth.js");
 const { User, Chat } = require("./models");
-
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config");
 
@@ -89,3 +89,27 @@ const startApolloServer = async (typeDefs, resolvers) => {
 };
 
 startApolloServer(typeDefs, resolvers);
+
+// MongoDB Atlas
+
+const uri = process.env.MONGODB_URI;
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    await client.close();
+  }
+}
+
+run().catch(console.dir);

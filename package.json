@@ -31,6 +31,7 @@
     "@mui/joy": "^5.0.0-alpha.65",
     "@mui/material": "^5.11.6",
     "geolib": "^3.3.3",
+    "mongodb": "^6.3.0",
     "react-icons": "^4.7.1"
   }
 }
