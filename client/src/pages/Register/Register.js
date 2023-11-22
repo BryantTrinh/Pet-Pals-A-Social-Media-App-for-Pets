@@ -21,20 +21,38 @@ function Register(props) {
 		setFormState({ ...formState, [name]: value });
 	};
 
-	const handleFormSubmit = async (event) => {
-		event.preventDefault();
+	// const handleFormSubmit = async (event) => {
+	// 	event.preventDefault();
 
-		try {
-			const { data } = await register({
-				variables: { ...formState },
-			});
-			console.log(data);
-			Auth.login(data.register.token);
-			window.location("/Feed");
-		} catch (err) {
-			console.error(err);
-		}
-	};
+	// 	try {
+	// 		const { data } = await register({
+	// 			variables: { ...formState },
+	// 		});
+	// 		console.log(data);
+	// 		Auth.login(data.register.token);
+	// 		window.location("/Feed");
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// };
+
+const handleFormSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    const { data } = await register({
+      variables: { ...formState },
+    });
+    if (data && data.register && data.register.token) {
+      Auth.login(data.register.token);
+      window.location.href = "/Feed";
+    } else {
+      console.error('Token not found in mutation response:', data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
 	return (
 		// Sign up modal
