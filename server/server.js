@@ -19,7 +19,8 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://hidden-headland-00556.herokuapp.com/",
+    // origin: "https://hidden-headland-00556.herokuapp.com/",
+    origin: "https://pet-pals-00001-f61bff49f636.herokuapp.com/",
     // origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
